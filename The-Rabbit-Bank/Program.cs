@@ -9,7 +9,6 @@
             Console.WriteLine("                                            The Rabbit Bank");
             Console.ReadKey();
             //TODO: Create Class that gets data from DB
-            Console.WriteLine("Testing to merge");
         }
     }
 }
