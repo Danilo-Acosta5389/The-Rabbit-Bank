@@ -9,6 +9,7 @@
             Console.WriteLine("                                            The Rabbit Bank");
             Console.ReadKey();
             //TODO: Print users from DB to console
+            //hejhej
         }
     }
 }
