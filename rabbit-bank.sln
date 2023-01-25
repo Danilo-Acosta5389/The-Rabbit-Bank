@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The-Rabbit-Bank", "The-Rabbit-Bank\The-Rabbit-Bank.csproj", "{050FC2D1-6B34-467A-BFA2-D3ECAD2E3EB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rabbit-bank", "rabbit-bank.csproj", "{3E4B18CF-57E1-4A43-9688-47E863D74C76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{050FC2D1-6B34-467A-BFA2-D3ECAD2E3EB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{050FC2D1-6B34-467A-BFA2-D3ECAD2E3EB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{050FC2D1-6B34-467A-BFA2-D3ECAD2E3EB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{050FC2D1-6B34-467A-BFA2-D3ECAD2E3EB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4B18CF-57E1-4A43-9688-47E863D74C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4B18CF-57E1-4A43-9688-47E863D74C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4B18CF-57E1-4A43-9688-47E863D74C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4B18CF-57E1-4A43-9688-47E863D74C76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {542A2655-3064-40C9-9518-150046781763}
+		SolutionGuid = {33BA39CB-8FCA-45CF-A9FF-624903AB6A2A}
 	EndGlobalSection
 EndGlobal
