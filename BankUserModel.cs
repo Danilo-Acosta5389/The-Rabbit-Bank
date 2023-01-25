@@ -19,7 +19,7 @@ namespace rabbit_bank
 
         public bool is_client { get; set; }
 
-        //public List<BankAccountModel> accounts { get; set; }
+        public List<BankAccountModel> accounts { get; set; }
     }
 }
     
