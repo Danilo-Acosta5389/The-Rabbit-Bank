@@ -5,9 +5,6 @@
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to\nThe Rabbit Bank");
-            Console.ReadLine();
-
-
             List<BankUserModel> users = DBdataAccess.OldLoadBankUsers();
             Console.WriteLine($"users length: {users.Count}");
             foreach (BankUserModel user in users)
