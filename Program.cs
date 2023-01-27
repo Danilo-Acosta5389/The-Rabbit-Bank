@@ -1,4 +1,5 @@
 ﻿using Npgsql.Replication;
+using System.Security;
 
 namespace rabbit_bank
 {
@@ -23,8 +24,25 @@ namespace rabbit_bank
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
-                    int pinCode = int.Parse(Console.ReadLine());
-                    Login.LoginTry(firstName, pinCode);
+                    SecureString pin = HidePin();
+                    string pinCode = new System.Net.NetworkCredential(String.Empty, pin).Password;
+                    Console.WriteLine();
+
+                    int inputPIN = 0;
+                    bool success = int.TryParse(pinCode, out inputPIN);
+                    if (success)
+                    {
+                        Login.LoginTry(firstName, inputPIN);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("Tryck enter för att fortsätta.");
+                        Console.ReadKey();
+                        //logOut = true;
+                    }
                 }
                 catch (Exception)
                 {
@@ -51,5 +69,31 @@ namespace rabbit_bank
             Console.WriteLine(prompt);
             Console.WriteLine("                             The most rabbid bank in the world");
         }
+
+        static SecureString HidePin()
+        {
+            SecureString pin = new SecureString();
+            ConsoleKeyInfo keyInfo;
+
+            do
+            {
+                keyInfo = Console.ReadKey(true);
+                if (!char.IsControl(keyInfo.KeyChar))
+                {
+                    pin.AppendChar(keyInfo.KeyChar);
+                    Console.Write("*");
+                }
+                else if (keyInfo.Key == ConsoleKey.Backspace && pin.Length > 0)
+                {
+                    pin.RemoveAt(pin.Length - 1);
+                    Console.Write("\b \b");
+                }
+            }
+            while (keyInfo.Key != ConsoleKey.Enter);
+            {
+                return pin;
+            }
+        }
+
     }
 }
