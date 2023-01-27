@@ -13,7 +13,6 @@ namespace rabbit_bank
             bool loginRunning = true;
             while (loginRunning)
             {
-                //List<BankUserModel> users = DBdataAccess.LoadBankUsers();
                 List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(first_Name, pin_Code);
                 if (checkedUsers.Count < 1)
                 {
