@@ -14,6 +14,7 @@ namespace rabbit_bank
             while (loginRunning)
             {
                 List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(first_Name, pin_Code);
+
                 if (checkedUsers.Count < 1)
                 {
                     Console.WriteLine("Login failed, please try again");
@@ -28,7 +29,7 @@ namespace rabbit_bank
                     Console.WriteLine($"User account list length: {user.accounts.Count}");
                     if(user.is_admin == true)
                     {
-                        Console.WriteLine("is admin");
+                        Console.WriteLine("is admin"); 
                     }
                     else
                     {
