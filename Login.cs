@@ -19,6 +19,7 @@ namespace rabbit_bank
                 {
                     Console.WriteLine("Login failed, please try again");
                     loginRunning = false;
+                    break;
                 }
                 foreach (BankUserModel user in checkedUsers)
                 {
