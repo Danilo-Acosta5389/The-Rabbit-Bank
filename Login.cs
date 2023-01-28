@@ -14,7 +14,7 @@ namespace rabbit_bank
             string nameToLower = first_Name.ToLower();
             TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
             string capInput = currentTextInfo.ToTitleCase(nameToLower);
-            //Above is converting firstName input to match the way it is capitalized in DB. Thank you Tim Corey!
+            //Above is converting firstName input to match the way it is capitalized in DB.
 
             bool loginRunning = true;
             while (loginRunning)
