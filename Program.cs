@@ -57,40 +57,39 @@ namespace rabbit_bank
         static void WelcomeRabbit()
         {
             string rabbit = @"                                                                                                    
-                                                                                                    
                                  ..::^~~!!!!!~~~^^.                                         
-                          .:~!???77~~JGGGGGPGPGGGGPP?.          .^7!                        
-                      :~7?7JPPGPY?!..JGGPPPPP5GGGGBBP         .~?Y5?                       
-                   :7YPGG5?75PGGPY!:.7PGGPGP55GPGBBBJ..     .!7?JY?^                        
-                ^?5GGGGGPPP??PGGG5?^ ~5GGGGP5PGGGBBB?:. .:^~~7JYJ~                         
-              ^5GBGBGGGGGP55?J5PP5Y!.^?PGPPPPPPGBBBB7.:^!!~!?YYY^                           
-              :5BGGBGGGPGGP55JJ5PPPJ~.!5GPPPPPGBBBBG7~!!^~?JJ?!7^                          
-               .?GGGGGPPPGPP55JYPPP5!:~?PGPPPPGBBBG57~::!JYJ!^^!                         
-                 ~GGGGGGPPPP55Y?YPP5J~^75GGPPGBBBPY7^.:!YY?!~:^~                        
+                          .:~!???77~~JGGGGGPGPGGGGPP?.          .^7!
+                      :~7?7JPPGPY?!..JGGPPPPP5GGGGBBP         .~?Y5?
+                   :7YPGG5?75PGGPY!:.7PGGPGP55GPGBBBJ..     .!7?JY?^
+                ^?5GGGGGPPP??PGGG5?^ ~5GGGGP5PGGGBBB?:. .:^~~7JYJ~
+              ^5GBGBGGGGGP55?J5PP5Y!.^?PGPPPPPPGBBBB7.:^!!~!?YYY^
+              :5BGGBGGGPGGP55JJ5PPPJ~.!5GPPPPPGBBBBG7~!!^~?JJ?!7^
+               .?GGGGGPPPGPP55JYPPP5!:~?PGPPPPGBBBG57~::!JYJ!^^!
+                 ~GGGGGGPPPP55Y?YPP5J~^75GGPPGBBBPY7^.:!YY?!~:^~
                   ~PGGGGGPGPP55J?5GP57^~JGGGPGGBGJ~^.:~J5J77^^!^                      
-                   ^PGGGGPGPPPP5JYGGPY~^7PGGGGGPJ?^.:^?5Y?7!^!!^                      
-                    ~GGGGGGGGPP5YJYPGPJ^!5GGGGPY?^.:^~Y5Y?7~~7^^                      
-                     ?GGGGGGBGGPG5YPP5JJY5PPBGYJ7^~~!!55Y??7JG5?~^^                     
-                      YBBBBBGGP5YJ!!?YJ?JPGBBP57~~7~~!5JJ???PBP557^^                   
-                      ~GGGGP555YJ?!7JJ!~?PGBBPY777!^!?Y77??5PYJPPP!^^                  
-                       YGGBGPPPP5YYYPPY!!5GGP5J7~~:~!?JJ!??GPPGGGY~^                  
-                    .^!JGBBBGGGP5PBBBGP55YJ?J?7~~~~~!7?7?JGGBBB57^^^                  
-                 :!J5GBGGBBBGPPGB##BG5YJ?7~!7!!~~!^~!7?7?YGG5J!^^^^                   
-               :!JYPGGBGGPP55GBBBG5J?77~^^^:^~~~^!!~!!7!7?J57^^^^                   
-              ^Y5Y??JY5555PGBBGPY?7!^^::^^^:.::~7!!!^~~!!7?YY~^^^                 
-              75PG5YJJY5GBBGPYJ7!!^^..^^^~7??!::~^^^^~!!!77YY7~^^                 
-              !JPPPGGBBBG5YJ?7!!^~^^^^~^?PPPPY^:^^^.:^~~~7?JY!^^                
-                ^!77??7YYJ?7!~!:::::^~!7?Y5PY!^..:^^^!~!!7?J?^:^                
-                      ^JJ7~^~^^::^::^!~^^^^^^::. :^~!!!?!7JY7^^^                
-                      7Y?!^^^^:::::::::^^^::::. :^~7?7?YJYJY7~^^              
-                    .:YJ7~~^^::^:......:~!~^^..:~!7???7!~^::~               
-                     ~5J7~^^!~:..:^^:...:~77!~~!77~::...  :?!^^^              
-                     75J?7~7?7:.::^!?!^^^^7?J????.   .:^:~7JY??^^              
-                     !Y5YYYY!~^^^:^!?J?!!~7??JJ?: .:.^7:?~J^??5Y!               
-                     :7YYYY?7!!~!~7??YJ?????JJY7^^?JJY^~7!?~?Y5YP^               
-                       ~YP5YJJ??JJ?JYYYYYYJJJJYJ7?7!Y7 !:^.^?J!YG?                
-                       ^!^7Y?YJYY5YYYJ?J?JJJ???7!7?J5^.^.!^J?!YGPP!                
-                         ^ 7??77!7JYY???7?7^^^^:!77Y!:777YJ7!Y5J7JGY!^                ";
+                   ^PGGGGPGPPPP5JYGGPY~^7PGGGGGPJ?^.:^?5Y?7!^!!^
+                    ~GGGGGGGGPP5YJYPGPJ^!5GGGGPY?^.:^~Y5Y?7~~7^^
+                     ?GGGGGGBGGPG5YPP5JJY5PPBGYJ7^~~!!55Y??7JG5?~^^
+                      YBBBBBGGP5YJ!!?YJ?JPGBBP57~~7~~!5JJ???PBP557^^
+                      ~GGGGP555YJ?!7JJ!~?PGBBPY777!^!?Y77??5PYJPPP!^^
+                       YGGBGPPPP5YYYPPY!!5GGP5J7~~:~!?JJ!??GPPGGGY~^
+                    .^!JGBBBGGGP5PBBBGP55YJ?J?7~~~~~!7?7?JGGBBB57^^^
+                 :!J5GBGGBBBGPPGB##BG5YJ?7~!7!!~~!^~!7?7?YGG5J!^^^^
+               :!JYPGGBGGPP55GBBBG5J?77~^^^:^~~~^!!~!!7!7?J57^^^^
+              ^Y5Y??JY5555PGBBGPY?7!^^::^^^:.::~7!!!^~~!!7?YY~^^^
+              75PG5YJJY5GBBGPYJ7!!^^..^^^~7??!::~^^^^~!!!77YY7~^^
+              !JPPPGGBBBG5YJ?7!!^~^^^^~^?PPPPY^:^^^.:^~~~7?JY!^^
+                ^!77??7YYJ?7!~!:::::^~!7?Y5PY!^..:^^^!~!!7?J?^:^
+                      ^JJ7~^~^^::^::^!~^^^^^^::. :^~!!!?!7JY7^^^
+                      7Y?!^^^^:::::::::^^^::::. :^~7?7?YJYJY7~^^
+                    .:YJ7~~^^::^:......:~!~^^..:~!7???7!~^::~
+                     ~5J7~^^!~:..:^^:...:~77!~~!77~::...  :?!^^^
+                     75J?7~7?7:.::^!?!^^^^7?J????.   .:^:~7JY??^^
+                     !Y5YYYY!~^^^:^!?J?!!~7??JJ?: .:.^7:?~J^??5Y!
+                     :7YYYY?7!!~!~7??YJ?????JJY7^^?JJY^~7!?~?Y5YP^
+                       ~YP5YJJ??JJ?JYYYYYYJJJJYJ7?7!Y7 !:^.^?J!YG?
+                       ^!^7Y?YJYY5YYYJ?J?JJJ???7!7?J5^.^.!^J?!YGPP!
+                         ^ 7??77!7JYY???7?7^^^^:!77Y!:777YJ7!Y5J7JGY!^";
             Console.WriteLine(rabbit);
             //Original image: "Regency Rabbit", drawing by Adam Zebediah Joseph.
             Console.WriteLine("                                    .:Welcome to:.");
