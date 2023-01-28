@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +11,16 @@ namespace rabbit_bank
     {
         public static void LoginTry(string first_Name, int pin_Code)
         {
+            string nameToLower = first_Name.ToLower();
+            TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
+            string capInput = currentTextInfo.ToTitleCase(nameToLower);
+            //Above is converting firstName input to match the way it is capitalized in DB. Thank you Tim Corey!
+
             bool loginRunning = true;
             while (loginRunning)
             {
-                List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(first_Name, pin_Code);
-                //if (checkedUsers.first_name.ToLower() == first_Name.ToLower())
-                //{
-                //    Console.WriteLine("Success!");
-                //}
+                List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(capInput, pin_Code);
+                
                 if (checkedUsers.Count < 1)
                 {
                     Console.WriteLine("Login failed, please try again");
@@ -26,10 +29,6 @@ namespace rabbit_bank
                 }
                 foreach (BankUserModel user in checkedUsers)
                 {
-
-
-
-
                     user.accounts = DBdataAccess.GetUserAccounts(user.id);
                     Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                     Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
