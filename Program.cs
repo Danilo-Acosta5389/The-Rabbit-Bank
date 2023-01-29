@@ -7,7 +7,6 @@ namespace rabbit_bank
     {
         static void Main(string[] args)
         {
-            int attempts = 3;
             bool isRunning = true;
             while (isRunning)
             {
@@ -20,7 +19,7 @@ namespace rabbit_bank
                 }
                 try
                 {
-                    Console.Write($"Login attemtps: {attempts}\nPlease enter FirstName: ");
+                    Console.Write($"Login attemtps: {globalItems.attempts}\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -32,9 +31,7 @@ namespace rabbit_bank
                     bool success = int.TryParse(pinCode, out inputPIN);
                     if (success)
                     {
-                        attempts = 3;
                         Login.LoginTry(firstName, inputPIN);
-                        
                     }
                     else
                     {
@@ -43,7 +40,7 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-                        attempts--;
+                        globalItems.attempts--;
                     }
                 }
                 catch (Exception)
@@ -51,7 +48,7 @@ namespace rabbit_bank
 
                     Console.WriteLine("ERROR, please try again.");
                 }
-                if (attempts == 0) 
+                if (globalItems.attempts == 0) 
                 {
                     break;
                 }
