@@ -20,7 +20,7 @@ namespace rabbit_bank
             while (loginRunning)
             {
                 List<UserModel> checkedUsers = DBdataAccess.CheckLogin(capInput, pin_Code);
-                
+                Console.WriteLine();
                 if (checkedUsers.Count < 1)
                 {
                     Console.WriteLine("Login failed, please try again");
