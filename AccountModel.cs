@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace rabbit_bank
 {
-    public class BankAccountModel
+    public class AccountModel
     {
         public int id { get; set; }
 

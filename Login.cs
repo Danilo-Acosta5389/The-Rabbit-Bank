@@ -19,7 +19,7 @@ namespace rabbit_bank
             bool loginRunning = true;
             while (loginRunning)
             {
-                List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(capInput, pin_Code);
+                List<UserModel> checkedUsers = DBdataAccess.CheckLogin(capInput, pin_Code);
                 
                 if (checkedUsers.Count < 1)
                 {
@@ -27,7 +27,7 @@ namespace rabbit_bank
                     loginRunning = false;
                     break;
                 }
-                foreach (BankUserModel user in checkedUsers)
+                foreach (UserModel user in checkedUsers)
                 {
                     user.accounts = DBdataAccess.GetUserAccounts(user.id);
                     Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
@@ -45,7 +45,7 @@ namespace rabbit_bank
 
                     if (user.accounts.Count > 0)
                     {
-                        foreach (BankAccountModel account in user.accounts)
+                        foreach (AccountModel account in user.accounts)
                         {
                             Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
                             Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");

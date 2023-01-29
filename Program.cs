@@ -8,14 +8,13 @@ namespace rabbit_bank
         static void Main(string[] args)
         {
             WelcomeRabbit();
-            List<BankUserModel> users = DBdataAccess.LoadBankUsers();
+            List<UserModel> users = DBdataAccess.LoadBankUsers();
             Console.WriteLine($"\nusers length: {users.Count}");
-            foreach (BankUserModel user in users)
+            foreach (UserModel user in users)
             {
                 Console.WriteLine($"Hello {user.first_name} your pincode is {user.pin_code}");
             }
             
-            Console.ReadKey();
             bool loggedIn = true;
             while (loggedIn)
             {
@@ -24,7 +23,7 @@ namespace rabbit_bank
 
                 Console.Write("Please enter PinCode: ");
                 int pinCode = int.Parse(Console.ReadLine());
-                List<BankUserModel> checkedUsers = DBdataAccess.CheckLogin(firstName, pinCode);
+                List<UserModel> checkedUsers = DBdataAccess.CheckLogin(firstName, pinCode);
                 if (checkedUsers.Count < 1)
                 {
                     Console.WriteLine("Login failed, please try again");
@@ -42,7 +41,7 @@ namespace rabbit_bank
                 //        UserLoginMenu();
                 //    }
                 //}
-                foreach (BankUserModel user in checkedUsers)
+                foreach (UserModel user in checkedUsers)
                 {
 
                     if (user.is_admin)
@@ -63,7 +62,7 @@ namespace rabbit_bank
                     Console.WriteLine($"User account list length: {user.accounts}");
                     if (user.accounts.Count > 0)
                     {
-                        foreach (BankAccountModel account in user.accounts)
+                        foreach (AccountModel account in user.accounts)
                         {
                             Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
                             Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
@@ -184,6 +183,9 @@ namespace rabbit_bank
             }
 
 
+
+            //Danilos code here below
+
             bool isRunning = true;
             while(isRunning)
             {
@@ -210,7 +212,6 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-                        //logOut = true;
                     }
                 }
                 catch (Exception)
@@ -221,6 +222,7 @@ namespace rabbit_bank
                 
             }
 
+            //Danilos code here above
             
         }
         

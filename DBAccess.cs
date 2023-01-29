@@ -12,12 +12,12 @@ namespace rabbit_bank
 {
     public class DBdataAccess
     {
-        public static List<BankUserModel> OldLoadBankUsers()
+        public static List<UserModel> OldLoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
 
-                var output = cnn.Query<BankUserModel>("select * from bank_user", new DynamicParameters());
+                var output = cnn.Query<UserModel>("select * from bank_user", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -25,12 +25,12 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
-        public static List<BankUserModel> LoadBankUsers()
+        public static List<UserModel> LoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
 
-                var output = cnn.Query<BankUserModel>("select * from bank_user", new DynamicParameters());
+                var output = cnn.Query<UserModel>("select * from bank_user", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -38,12 +38,12 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
-        public static List<BankUserModel> CheckLogin(string firstName, int pinCode)
+        public static List<UserModel> CheckLogin(string firstName, int pinCode)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
 
-                var output = cnn.Query<BankUserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}' AND pin_code = '{pinCode}' AND bank_user.role_id = bank_role.id", new DynamicParameters());
+                var output = cnn.Query<UserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}' AND pin_code = '{pinCode}' AND bank_user.role_id = bank_role.id", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -52,11 +52,11 @@ namespace rabbit_bank
             // Returnerar en lista av Users
         }
 
-        public static List<BankAccountModel> GetUserAccounts(int user_id)
+        public static List<AccountModel> GetUserAccounts(int user_id)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                var output = cnn.Query<BankAccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE user_id = '{user_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
+                var output = cnn.Query<AccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE user_id = '{user_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -68,7 +68,7 @@ namespace rabbit_bank
 
         }
 
-        public static void SaveBankUser(BankUserModel user)
+        public static void SaveBankUser(UserModel user)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {

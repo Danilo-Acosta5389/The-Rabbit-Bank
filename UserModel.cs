@@ -1,7 +1,7 @@
 ﻿using System;
 namespace rabbit_bank
 {
-    public class BankUserModel
+    public class UserModel
     {
         public int id { get; set; }
 
@@ -19,7 +19,7 @@ namespace rabbit_bank
 
         public bool is_client { get; set; }
 
-        public List<BankAccountModel> accounts { get; set; }
+        public List<AccountModel> accounts { get; set; }
     }
 }
     
