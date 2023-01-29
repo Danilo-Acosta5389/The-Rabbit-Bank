@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace rabbit_bank
 {
-    public class DBdataAccess
+    public class DBAccess
     {
         public static List<UserModel> OldLoadBankUsers()
         {

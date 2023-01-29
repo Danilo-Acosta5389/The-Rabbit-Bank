@@ -11,9 +11,15 @@ namespace rabbit_bank
             bool isRunning = true;
             while (isRunning)
             {
+                WelcomeRabbit();
+                List<UserModel> users = DBAccess.LoadBankUsers();
+                Console.WriteLine($"users length: {users.Count}");
+                foreach (UserModel user in users)
+                {
+                    Console.WriteLine($"Excisting user: {user.first_name} with pincode: {user.pin_code}");
+                }
                 try
                 {
-                    WelcomeRabbit();
                     Console.Write("\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
@@ -48,7 +54,7 @@ namespace rabbit_bank
 
 
 
-            //Moved below code to Login class by Danilo
+            //Moved below code to Login class
 
             //bool loggedIn = true;
             //while (loggedIn)
@@ -58,7 +64,7 @@ namespace rabbit_bank
 
             //    Console.Write("Please enter PinCode: ");
             //    int pinCode = int.Parse(Console.ReadLine());
-            //    List<UserModel> checkedUsers = DBdataAccess.CheckLogin(firstName, pinCode);
+            //    List<UserModel> checkedUsers = DBAccess.CheckLogin(firstName, pinCode);
             //    if (checkedUsers.Count < 1)
             //    {
             //        Console.WriteLine("Login failed, please try again");
@@ -90,7 +96,7 @@ namespace rabbit_bank
                 //    }
 
 
-                //    user.accounts = DBdataAccess.GetUserAccounts(user.id);
+                //    user.accounts = DBAccess.GetUserAccounts(user.id);
                 //    Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                 //    Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
                 //    Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");

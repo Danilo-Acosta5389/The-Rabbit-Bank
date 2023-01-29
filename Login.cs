@@ -19,7 +19,7 @@ namespace rabbit_bank
             bool loginRunning = true;
             while (loginRunning)
             {
-                List<UserModel> checkedUsers = DBdataAccess.CheckLogin(capInput, pin_Code);
+                List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
                 Console.WriteLine();
                 if (checkedUsers.Count < 1)
                 {
@@ -29,7 +29,7 @@ namespace rabbit_bank
                 }
                 foreach (UserModel user in checkedUsers)
                 {
-                    user.accounts = DBdataAccess.GetUserAccounts(user.id);
+                    user.accounts = DBAccess.GetUserAccounts(user.id);
                     Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                     Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
                     Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
@@ -80,7 +80,7 @@ namespace rabbit_bank
             while (loggedIn)
             {
                 Console.WriteLine("Make your choice with 1-6");
-                Console.WriteLine("1. See your accounts and balances\n2. Transfer money\n3. Add a new account\n4. Make a bank loan\n5. Transaction history\n6. Log out");
+                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [CURRENTLY WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
@@ -128,7 +128,7 @@ namespace rabbit_bank
             while (loggedIn)
             {
                 Console.WriteLine("Make your choice with 1-8");
-                Console.WriteLine("1. See your accounts and balances\n2. Transfer money\n3. Add a new account\n4. Make a bank loan\n5. Transaction history\n6. Create new user\n7. Set exchange rate\n8. Log out");
+                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Create new user [NOT WORKING]\n7. Set exchange rate [NOT WORKING]\n8. Log out [CURRENTLY WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
