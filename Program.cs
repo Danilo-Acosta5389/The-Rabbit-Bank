@@ -7,12 +7,13 @@ namespace rabbit_bank
     {
         static void Main(string[] args)
         {
-            WelcomeRabbit();
+            
             bool isRunning = true;
             while (isRunning)
             {
                 try
                 {
+                    WelcomeRabbit();
                     Console.Write("\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
