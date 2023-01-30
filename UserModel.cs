@@ -19,6 +19,8 @@ namespace rabbit_bank
 
         public bool is_client { get; set; }
 
+        public bool locked_user { get; set; }
+
         public List<AccountModel> accounts { get; set; }
     }
 }
