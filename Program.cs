@@ -15,7 +15,7 @@ namespace rabbit_bank
                 Console.WriteLine($"users length: {users.Count}");
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}");
+                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.locked_user}");
                 }
                 try
                 {

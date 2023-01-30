@@ -34,45 +34,55 @@ namespace rabbit_bank
                 }
                 foreach (UserModel user in checkedUsers)
                 {
-                    globalItems.attempts = 3;
-                    user.accounts = DBAccess.GetUserAccounts(user.id);
-                    Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
-                    Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
-                    Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
-                    Console.WriteLine($"User account list length: {user.accounts.Count}");
-
-                    if (user.accounts.Count > 0)
+                    if (user.locked_user == true)
                     {
-                        foreach (AccountModel account in user.accounts)
+                        Console.WriteLine("Your account is locked, contact a admin!");
+                        Console.ReadLine();
+                        loginRunning = false;
+                        break;
+                    }
+                    else
+                    {
+                        globalItems.attempts = 3;
+                        user.accounts = DBAccess.GetUserAccounts(user.id);
+                        Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
+                        Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
+                        Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
+                        Console.WriteLine($"User account list length: {user.accounts.Count}");
+
+                        if (user.accounts.Count > 0)
                         {
-                            Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
-                            Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                            foreach (AccountModel account in user.accounts)
+                            {
+                                Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
+                                Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                            }
                         }
-                    }
 
-                    Console.WriteLine();
+                        Console.WriteLine();
 
-                    if (user.is_admin)
-                    {
-                        AdminLoginMenu();
-                    }
-                    else if(user.is_client)
-                    {
-                        UserLoginMenu();
-                    }
+                        if (user.is_admin)
+                        {
+                            AdminLoginMenu();
+                        }
+                        else if(user.is_client)
+                        {
+                            UserLoginMenu();
+                        }
 
 
                     
-                    Console.WriteLine("Do you wish to exit? Y/N");
-                    string yesNo = Console.ReadLine();
+                        Console.WriteLine("Do you wish to exit? Y/N");
+                        string yesNo = Console.ReadLine();
 
-                    if (yesNo.ToLower() == "y")
-                    {
-                        loginRunning = false;
-                    }
-                    else if (yesNo.ToLower() == "n")
-                    {
-                        continue;
+                        if (yesNo.ToLower() == "y")
+                        {
+                            loginRunning = false;
+                        }
+                        else if (yesNo.ToLower() == "n")
+                        {
+                            continue;
+                        }
                     }
                 }
             }
