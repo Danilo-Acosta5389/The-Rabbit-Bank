@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,9 +13,9 @@ namespace rabbit_bank
     }
     public class Login
     {
-        public static void LoginTry(string first_Name, int pin_Code)
+        public static void LoginTry(string first_Name, int pin_Code) //Arguments store user input from login screen
         {
-            //string nameToLower = first_Name.ToLower();
+
             TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
             string capInput = currentTextInfo.ToTitleCase(first_Name.ToLower());
             //Above is converting firstName input to match the way it is capitalized in DB.
@@ -23,7 +23,8 @@ namespace rabbit_bank
             bool loginRunning = true;
             while (loginRunning)
             {
-                List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
+                List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code); //User input from log in screen is passed in here.
+                                                                                        //CheckLogin checks if input name and pin matches with bank_user in DB
                 Console.WriteLine();
                 if (checkedUsers.Count < 1)
                 {
@@ -32,8 +33,8 @@ namespace rabbit_bank
                     globalItems.attempts--;
                     break;
                 }
-                foreach (UserModel user in checkedUsers)
-                {
+                foreach (UserModel user in checkedUsers) //This itarates through all data in DB that matches UserModel class(Look in UserModel.cs). 
+                { //user is the variable that is used to indikate index
                     if (user.locked_user == true)
                     {
                         Console.WriteLine("Your account is locked, contact a admin!");
@@ -63,11 +64,13 @@ namespace rabbit_bank
 
                         if (user.is_admin)
                         {
-                            AdminLoginMenu();
+                            AdminLoginMenu(user);  //the variable user is passed in here
                         }
                         else if (user.is_client)
                         {
-                            UserLoginMenu(user);
+
+                            UserLoginMenu(user); //the variable user is passed in here
+
                         }
                         //else if(user.is_blocked)  //Blocked
                         //{
@@ -96,19 +99,29 @@ namespace rabbit_bank
         //    Console.WriteLine("This account is blocket. Please Contact admin for help.");
         //}
 
-        static void UserLoginMenu(string user)
+        static void UserLoginMenu(UserModel userIndex) // the user variable is stored in userIndex
+
         {
             bool loggedIn = true;
             while (loggedIn)
             {
 
                 Console.WriteLine("Make your choice with 1-6");
-                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [CURRENTLY WORKING]");
+                Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
-                        Console.WriteLine("");
+
+                        Console.WriteLine("\nAccounts and balances\n");
+                        //Todo: skapa funktion för att visa konton. showAccounts();
+                        foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+                        {
+                            Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
+                            Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                        }
+                        Console.WriteLine();
+
                         break;
 
                     case "2":
@@ -144,19 +157,24 @@ namespace rabbit_bank
         }
 
 
-        static void AdminLoginMenu()
+        static void AdminLoginMenu(UserModel userIndex) // the user variable is stored in userIndex
         {
             bool loggedIn = true;
             while (loggedIn)
             {
                 Console.WriteLine("Make your choice with 1-8");
-                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7.  Create new user [IS KINDA WORKING]\n8. Log out [CURRENTLY WORKING]");
+                Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7.  Create new user [WORKING]\n8. Log out [WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
-                        Console.WriteLine("");
-                        //Todo: skapa funktion för att visa konton. showAccounts();
+                        Console.WriteLine("\nAccounts and balances\n");
+                        foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+                        {
+                            Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
+                            Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                        }
+                        Console.WriteLine();
                         break;
 
                     case "2":
@@ -227,6 +245,7 @@ namespace rabbit_bank
             };
             DBAccess.SaveBankUser(newUser);
         }
+
         //public static List<AccountModel> GetUserAccounts(int user_id)
         //{
         //    using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -238,6 +257,14 @@ namespace rabbit_bank
         //    }
         //}
         //public NpgsqlConnection(string connectionString)//Initializes a new instance of NpgsqlConnection with the given connection string.
+
+        //Todo: Put See account and balances in a method
+
+        //static void ShowAccountsAndBalances(UserModel user) 
+        //{
+            //for example this
+        //}
+
     }
 }
         
