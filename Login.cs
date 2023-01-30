@@ -9,7 +9,7 @@ namespace rabbit_bank
 {
     public static class globalItems
     {
-        public static int attempts = 3;       
+        public static int attempts = 3;
     }
     public class Login
     {
@@ -65,16 +65,16 @@ namespace rabbit_bank
                         {
                             AdminLoginMenu();
                         }
-                        else if(user.is_client)
+                        else if (user.is_client)
                         {
-                            UserLoginMenu();
+                            UserLoginMenu(user);
                         }
                         //else if(user.is_blocked)  //Blocked
                         //{
                         //    UserBlockedScreen();
                         //}
 
-                    
+
                         Console.WriteLine("Do you wish to exit? Y/N");
                         string yesNo = Console.ReadLine();
 
@@ -96,12 +96,12 @@ namespace rabbit_bank
         //    Console.WriteLine("This account is blocket. Please Contact admin for help.");
         //}
 
-        static void UserLoginMenu()
+        static void UserLoginMenu(string user)
         {
             bool loggedIn = true;
             while (loggedIn)
             {
-                
+
                 Console.WriteLine("Make your choice with 1-6");
                 Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [CURRENTLY WORKING]");
                 string userChoice = Console.ReadLine();
@@ -109,7 +109,6 @@ namespace rabbit_bank
                 {
                     case "1":
                         Console.WriteLine("");
-                        //Todo: skapa funktion för att visa konton. showAccounts();
                         break;
 
                     case "2":
@@ -132,7 +131,7 @@ namespace rabbit_bank
                         break;
 
                     case "6":
-                        // ToDo: Skapa en funktion för användare att se överföringshistorik
+                        // ToDo: Skapa en funktion för användare att se överföringshistorik TransferHistory();
                         Console.WriteLine("");
                         loggedIn = false;
                         break;
@@ -228,5 +227,17 @@ namespace rabbit_bank
             };
             DBAccess.SaveBankUser(newUser);
         }
+        //public static List<AccountModel> GetUserAccounts(int user_id)
+        //{
+        //    using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+        //    {
+
+        //        var output = cnn.Query<AccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE user_id = '{user_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
+        //        //Console.WriteLine(output);
+        //        return output.ToList();
+        //    }
+        //}
+        //public NpgsqlConnection(string connectionString)//Initializes a new instance of NpgsqlConnection with the given connection string.
     }
 }
+        
