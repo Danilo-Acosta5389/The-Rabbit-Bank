@@ -77,6 +77,15 @@ namespace rabbit_bank
             }
         }
 
+        public static void SaveNewAccount(AccountModel user)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute("insert into bank_account (name, balance) values (@name, @balance)", user);
+
+            }
+        }
+
 
         private static string LoadConnectionString(string id = "Default")
         {

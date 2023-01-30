@@ -118,12 +118,16 @@ namespace rabbit_bank
                         break;
                     case "3":
                         Console.WriteLine("");
+                        Console.WriteLine("==========\nSkapa nytt konto\n========");
+                        CreateAccount();
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
 
                     case "4":
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
+                        Console.WriteLine("==========\nSkapa nytt konto\n========");
+                        CreateAccount();
                         Console.WriteLine("");
                         break;
                     case "5":
@@ -227,6 +231,36 @@ namespace rabbit_bank
                 branch_id = branchId
             };
             DBAccess.SaveBankUser(newUser);
+        }
+
+        static void CreateAccount()
+        {
+            Console.WriteLine("Välj vilket konto du vill skapa.");
+            Console.WriteLine("1. Lönekonto");
+            Console.WriteLine("2. Sparkonto");
+            Console.WriteLine("3. Valutakonto");
+            string userChoice = Console.ReadLine();
+            switch (userChoice)
+            {
+                case "1":
+                    Console.WriteLine("Case 1");
+                    Console.WriteLine("Skapa lönekonto");
+                    string _name = "Lönekonto";
+                    int _balance = 0;
+
+                    AccountModel newAccount = new AccountModel
+                    {
+                        name = _name,
+                        balance = _balance
+
+                    };
+                    DBAccess.SaveNewAccount(newAccount);
+
+                    break;
+                case "2":
+                    Console.WriteLine("case 2");
+                    break;
+            }
         }
     }
 }
