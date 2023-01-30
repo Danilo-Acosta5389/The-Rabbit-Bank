@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace rabbit_bank
 {
     public static class globalItems
     {
-        public static int attempts = 3;       
+        public static int attempts = 3;
     }
     public class Login
     {
@@ -66,16 +66,18 @@ namespace rabbit_bank
                         {
                             AdminLoginMenu(user);  //the variable user is passed in here
                         }
-                        else if(user.is_client)
+                        else if (user.is_client)
                         {
+
                             UserLoginMenu(user); //the variable user is passed in here
+
                         }
                         //else if(user.is_blocked)  //Blocked
                         //{
                         //    UserBlockedScreen();
                         //}
 
-                    
+
                         Console.WriteLine("Do you wish to exit? Y/N");
                         string yesNo = Console.ReadLine();
 
@@ -98,17 +100,19 @@ namespace rabbit_bank
         //}
 
         static void UserLoginMenu(UserModel userIndex) // the user variable is stored in userIndex
+
         {
             bool loggedIn = true;
             while (loggedIn)
             {
-                
+
                 Console.WriteLine("Make your choice with 1-6");
                 Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
+
                         Console.WriteLine("\nAccounts and balances\n");
                         //Todo: skapa funktion för att visa konton. showAccounts();
                         foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
@@ -117,6 +121,7 @@ namespace rabbit_bank
                             Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
                         }
                         Console.WriteLine();
+
                         break;
 
                     case "2":
@@ -139,7 +144,7 @@ namespace rabbit_bank
                         break;
 
                     case "6":
-                        // ToDo: Skapa en funktion för användare att se överföringshistorik
+                        // ToDo: Skapa en funktion för användare att se överföringshistorik TransferHistory();
                         Console.WriteLine("");
                         loggedIn = false;
                         break;
@@ -241,11 +246,25 @@ namespace rabbit_bank
             DBAccess.SaveBankUser(newUser);
         }
 
+        //public static List<AccountModel> GetUserAccounts(int user_id)
+        //{
+        //    using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+        //    {
+
+        //        var output = cnn.Query<AccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE user_id = '{user_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
+        //        //Console.WriteLine(output);
+        //        return output.ToList();
+        //    }
+        //}
+        //public NpgsqlConnection(string connectionString)//Initializes a new instance of NpgsqlConnection with the given connection string.
+
         //Todo: Put See account and balances in a method
 
         //static void ShowAccountsAndBalances(UserModel user) 
         //{
             //for example this
         //}
+
     }
 }
+        
