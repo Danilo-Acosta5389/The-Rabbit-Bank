@@ -69,7 +69,10 @@ namespace rabbit_bank
                         {
                             UserLoginMenu();
                         }
-
+                        //else if(user.is_blocked)  //Blocked
+                        //{
+                        //    UserBlockedScreen();
+                        //}
 
                     
                         Console.WriteLine("Do you wish to exit? Y/N");
@@ -87,8 +90,11 @@ namespace rabbit_bank
                 }
             }
         }
-
-
+        //TODO: Creates blocked user screen
+        //static void UserBlockedScreen()
+        //{
+        //    Console.WriteLine("This account is blocket. Please Contact admin for help.");
+        //}
 
         static void UserLoginMenu()
         {
@@ -145,7 +151,7 @@ namespace rabbit_bank
             while (loggedIn)
             {
                 Console.WriteLine("Make your choice with 1-8");
-                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Create new user [NOT WORKING]\n7. Set exchange rate [NOT WORKING]\n8. Log out [CURRENTLY WORKING]");
+                Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7.  Create new user [IS KINDA WORKING]\n8. Log out [CURRENTLY WORKING]");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
@@ -182,7 +188,9 @@ namespace rabbit_bank
 
                     case "7":
                         // ToDo: Skapa en funktion för admin att skapa nya användare i systemet
-                        Console.WriteLine("");
+
+                        Console.WriteLine("Create new user\n");
+                        CreateUser();
                         break;
 
                     case "8":
@@ -196,6 +204,29 @@ namespace rabbit_bank
                         continue;
                 }
             }
+        }
+
+        static void CreateUser()
+        {
+            Console.Write("Please enter FirstName: ");
+            string firstName = Console.ReadLine();
+            Console.Write("Please enter LastName: ");
+            string lastName = Console.ReadLine();
+            Console.Write("Please enter PinCode: ");
+            string pinCode = Console.ReadLine();
+            Console.Write("Enter roleId");
+            int roleId = int.Parse(Console.ReadLine());
+            Console.Write("Enter branchId");
+            int branchId = int.Parse(Console.ReadLine());
+            UserModel newUser = new UserModel
+            {
+                first_name = firstName,
+                last_name = lastName,
+                pin_code = pinCode,
+                role_id = roleId,
+                branch_id = branchId
+            };
+            DBAccess.SaveBankUser(newUser);
         }
     }
 }
