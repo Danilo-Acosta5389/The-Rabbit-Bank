@@ -19,7 +19,7 @@ namespace rabbit_bank
                 }
                 try
                 {
-                    Console.Write($"Login attemtps: {globalItems.attempts}\nPlease enter FirstName: ");
+                    Console.Write($"Login attemtps: {GlobalItems.attempts}\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -40,7 +40,7 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-                        globalItems.attempts--;
+                        GlobalItems.attempts--;
                     }
                 }
                 catch (Exception)
@@ -48,7 +48,7 @@ namespace rabbit_bank
 
                     Console.WriteLine("ERROR, please try again.");
                 }
-                if (globalItems.attempts == 0) 
+                if (GlobalItems.attempts == 0) 
                 {
                     break;
                 }
