@@ -258,8 +258,9 @@ namespace rabbit_bank
 
                     break;
                 case "2":
-                    Console.WriteLine("case 2");
+                    Console.WriteLine("2. Sparkonto");
                     break;
+
             }
         }
     }
