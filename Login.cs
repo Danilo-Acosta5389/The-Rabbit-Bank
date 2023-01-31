@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace rabbit_bank
 {
-    public static class globalItems
-    {
-        public static int attempts = 3;       
-    }
     public class Login
     {
         public static void LoginTry(string first_Name, int pin_Code)
@@ -27,23 +23,26 @@ namespace rabbit_bank
                 Console.WriteLine();
                 if (checkedUsers.Count < 1)
                 {
+                    Console.WriteLine($"Your input was {capInput} {pin_Code}");
                     Console.WriteLine("Login failed, please try again");
+                    Console.ReadLine();
                     loginRunning = false;
-                    globalItems.attempts--;
                     break;
                 }
                 foreach (UserModel user in checkedUsers)
                 {
-                    if (user.locked_user == true)
+                    DBAccess.updateBlockedUser();
+                    if (user.blocked_user == true)
                     {
                         Console.WriteLine("Your account is locked, contact a admin!");
                         Console.ReadLine();
                         loginRunning = false;
                         break;
                     }
+                    string inpsut = capInput.ToString();
+                    /*else if ()*/
                     else
                     {
-                        globalItems.attempts = 3;
                         user.accounts = DBAccess.GetUserAccounts(user.id);
                         Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
@@ -95,7 +94,6 @@ namespace rabbit_bank
             bool loggedIn = true;
             while (loggedIn)
             {
-                
                 Console.WriteLine("Make your choice with 1-6");
                 Console.WriteLine("1. See your accounts and balances [NOT WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [CURRENTLY WORKING]");
                 string userChoice = Console.ReadLine();

@@ -15,11 +15,11 @@ namespace rabbit_bank
                 Console.WriteLine($"users length: {users.Count}");
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.locked_user}");
+                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}");
                 }
                 try
                 {
-                    Console.Write($"Login attemtps: {globalItems.attempts}\nPlease enter FirstName: ");
+                    Console.Write("\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -40,19 +40,12 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-                        globalItems.attempts--;
                     }
                 }
                 catch (Exception)
                 {
-
                     Console.WriteLine("ERROR, please try again.");
                 }
-                if (globalItems.attempts == 0) 
-                {
-                    break;
-                }
-
             }
             
 

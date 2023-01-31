@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -81,6 +82,19 @@ namespace rabbit_bank
         private static string LoadConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+        }
+
+        public static void updateBlockedUser()
+        {
+            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("UPDATE bank_user SET blocked_user = true WHERE attempts < 1", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
