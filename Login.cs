@@ -109,7 +109,7 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [WORKING]");
+                Console.WriteLine("1. See your accounts and balances \n2. Transfer money [NOT WORKING]\n3. Add a new account \n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -124,6 +124,7 @@ namespace rabbit_bank
                         break;
                     case "3":
                         Console.WriteLine("");
+                        CreateNewAccount();
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
@@ -164,7 +165,7 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See accounts and balances \n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7. Create new user \n8. Log out ");
+                Console.WriteLine("1. Accounts and balances \n2. Transfer money [NOT WORKING]\n3. Add a new account \n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7. Create new user \n8. Log out ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -181,6 +182,7 @@ namespace rabbit_bank
                     case "3":
                         Console.WriteLine("");
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
+                        CreateNewAccount();
                         //ToDo: sparkonto med ränta
                         break;
 
@@ -221,7 +223,83 @@ namespace rabbit_bank
             }
         }
 
-        static void CreateUser()
+        static void CreateNewAccount() //New accounts are created here
+        {                              
+            bool createAccountRun = true;
+            while (createAccountRun)
+            {
+                try
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write(" Create new Rabbit Bank account ");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                                        // IF A FIELD IS NOT ALLOWED TO BE EMPTY, THEN ERROR WILL OCCURE
+                                        //USER MAY GO BACK
+                    Console.Write("Please enter Account name: ");
+                    string accountName = Console.ReadLine();
+                    string capAccountName = GlobalItems.currentTextInfo.ToTitleCase(accountName.ToLower());
+
+                    Console.Write("Enter interest rate: "); //INTEREST RATE FIELD, user must input at least 0
+                    double interestRate = double.Parse(Console.ReadLine());
+
+                    Console.Write("Enter user ID: ");   //INT FIELDS CANNOT BE EMPTY
+                    int userId = int.Parse(Console.ReadLine());
+
+                    Console.Write("Enter currency ID: ");
+                    int currencyId = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine();
+                    Console.WriteLine($"Account name: {capAccountName}");
+                    Console.WriteLine($"Interest rate: {interestRate}");
+                    Console.WriteLine($"User ID: {userId}");
+                    Console.WriteLine($"Currency ID: {currencyId}");
+                    Console.Write("\nIs this correct? Y/N --> ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
+                    {
+                        AccountModel newAccount = new AccountModel
+                        {
+                            name = capAccountName,
+                            interest_rate = interestRate,
+                            user_id = userId,
+                            currency_id = currencyId
+                        };
+                        DBAccess.SaveBankAccount(newAccount);
+                        Console.WriteLine("\nAccount was successfully created!");
+
+                        Console.Write("\nPlease press ENTER to continue.");
+                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                        createAccountRun = false;
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
+                    //string yesNo = Console.ReadLine();
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
+                    {
+                        createAccountRun = false;
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+
+                }
+
+            }
+        }
+
+        static void CreateUser() //New users are created here
         {
             bool createUserRun = true;
             while (createUserRun)
@@ -231,7 +309,7 @@ namespace rabbit_bank
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
-                    Console.Write(" Create new user ");
+                    Console.Write(" Create new Rabbit Bank user ");
                     Console.ResetColor();
                     Console.WriteLine();
                     Console.WriteLine();
@@ -260,7 +338,7 @@ namespace rabbit_bank
                     Console.WriteLine($"Branch ID: {branchId}");
                     Console.Write("\nIs this correct? Y/N --> ");
                     string yesNo = Console.ReadLine();
-                    if (yesNo.ToLower() == "y")
+                    if (yesNo.ToLower() == "y")                         //It is possible to input small caps
                     {
                         UserModel newUser = new UserModel
                         {
@@ -272,7 +350,10 @@ namespace rabbit_bank
                         };
                         DBAccess.SaveBankUser(newUser);
                         Console.WriteLine("\nUser has successfully been created!");
-                        Thread.Sleep(1000);
+
+                        Console.Write("\nPlease press ENTER to continue.");
+                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                        createUserRun = false;
                     }
                     else if (yesNo.ToLower() == "n")
                     {
@@ -329,8 +410,10 @@ namespace rabbit_bank
                 Console.WriteLine();
                 //Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
             }
-            Console.WriteLine("Please press ENTER to continue.");
+
+            Console.Write("Please press ENTER to continue. ");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+            Console.WriteLine();
         }
 
     }

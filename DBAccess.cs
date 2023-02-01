@@ -12,19 +12,6 @@ namespace rabbit_bank
 {
     public class DBAccess
     {
-        public static List<UserModel> OldLoadBankUsers()
-        {
-            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
-            {
-
-                var output = cnn.Query<UserModel>("select * from bank_user", new DynamicParameters());
-                //Console.WriteLine(output);
-                return output.ToList();
-            }
-            // Kopplar upp mot DB:n
-            // läser ut alla Users
-            // Returnerar en lista av Users
-        }
         public static List<UserModel> LoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -34,10 +21,9 @@ namespace rabbit_bank
                 //Console.WriteLine(output);
                 return output.ToList();
             }
-            // Kopplar upp mot DB:n
-            // läser ut alla Users
-            // Returnerar en lista av Users
         }
+
+
         public static List<UserModel> CheckLogin(string firstName, int pinCode)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -47,10 +33,8 @@ namespace rabbit_bank
                 //Console.WriteLine(output);
                 return output.ToList();
             }
-            // Kopplar upp mot DB:n
-            // läser ut alla Users
-            // Returnerar en lista av Users
         }
+
 
         public static List<AccountModel> GetUserAccounts(int user_id)
         {
@@ -68,7 +52,7 @@ namespace rabbit_bank
 
         }
 
-        public static void SaveBankUser(UserModel user)
+        public static void SaveBankUser(UserModel user) //To create new user, we use this method
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
@@ -77,6 +61,15 @@ namespace rabbit_bank
             }
         }
 
+
+        public static void SaveBankAccount(AccountModel user) //This method creates new bank accounts
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute("INSERT INTO bank_account (name, interest_rate, user_id, currency_id) VALUES (@name, @interest_rate, @user_id, @currency_id)", user);
+
+            }
+        }
 
         private static string LoadConnectionString(string id = "Default")
         {
