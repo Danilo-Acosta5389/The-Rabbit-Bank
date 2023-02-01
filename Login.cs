@@ -283,6 +283,7 @@ namespace rabbit_bank
                     };
                     DBAccess.SaveNewAccount(newCurrencyAccount);
                     break;
+
             }
         }
     }
