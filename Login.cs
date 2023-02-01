@@ -19,16 +19,21 @@ namespace rabbit_bank
             bool loginRunning = true;
             while (loginRunning)
             {
+                UserModel usr = new UserModel();
                 List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
                 Console.WriteLine();
                 if (checkedUsers.Count < 1)
                 {
-                    Console.WriteLine($"Your input was {capInput} {pin_Code}");
-                    Console.WriteLine("Login failed, please try again");
+/*                    Console.WriteLine($"Your input was {capInput} {pin_Code}");
+*/                  Console.WriteLine("Login failed, please try again");
                     Console.ReadLine();
                     loginRunning = false;
                     break;
                 }
+                /*else if (usr.first_name == capInput && usr.pin_code != pin_Code)
+                {
+
+                }*/
                 foreach (UserModel user in checkedUsers)
                 {
                     DBAccess.updateBlockedUser();
@@ -39,8 +44,8 @@ namespace rabbit_bank
                         loginRunning = false;
                         break;
                     }
-                    string inpsut = capInput.ToString();
-                    /*else if ()*/
+/*                    string inpsut = capInput.ToString();
+*/                    /*else if ()*/
                     else
                     {
                         user.accounts = DBAccess.GetUserAccounts(user.id);
