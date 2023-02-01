@@ -63,11 +63,11 @@ namespace rabbit_bank
 
                         if (user.is_admin)
                         {
-                            AdminLoginMenu();
+                            AdminLoginMenu(user);
                         }
                         else if(user.is_client)
                         {
-                            UserLoginMenu();
+                            UserLoginMenu(user);
                         }
                         //else if(user.is_blocked)  //Blocked
                         //{
@@ -96,7 +96,7 @@ namespace rabbit_bank
         //    Console.WriteLine("This account is blocket. Please Contact admin for help.");
         //}
 
-        static void UserLoginMenu()
+        static void UserLoginMenu(UserModel userIndex)
         {
             bool loggedIn = true;
             while (loggedIn)
@@ -119,7 +119,7 @@ namespace rabbit_bank
                     case "3":
                         Console.WriteLine("");
                         Console.WriteLine("==========\nSkapa nytt konto\n========");
-                        CreateAccount();
+                        CreateAccount(userIndex);
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
@@ -127,7 +127,7 @@ namespace rabbit_bank
                     case "4":
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("==========\nSkapa nytt konto\n========");
-                        CreateAccount();
+                        CreateAccount(userIndex);
                         Console.WriteLine("");
                         break;
                     case "5":
@@ -149,7 +149,7 @@ namespace rabbit_bank
         }
 
 
-        static void AdminLoginMenu()
+        static void AdminLoginMenu(UserModel userIndex)
         {
             bool loggedIn = true;
             while (loggedIn)
@@ -170,6 +170,7 @@ namespace rabbit_bank
                         break;
 
                     case "3":
+                        CreateAccount(userIndex);
                         Console.WriteLine("");
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
@@ -233,7 +234,7 @@ namespace rabbit_bank
             DBAccess.SaveBankUser(newUser);
         }
 
-        static void CreateAccount()
+        static void CreateAccount(UserModel userIndex)
         {
             Console.WriteLine("Välj vilket konto du vill skapa.");
             Console.WriteLine("1. Lönekonto");
@@ -246,19 +247,41 @@ namespace rabbit_bank
                     Console.WriteLine("Case 1");
                     Console.WriteLine("Skapa lönekonto");
                     string _name = "Lönekonto";
-                    int _balance = 0;
+                    int _user_id = userIndex.id;
 
                     AccountModel newAccount = new AccountModel
                     {
                         name = _name,
-                        balance = _balance
-
+                        user_id = _user_id
                     };
                     DBAccess.SaveNewAccount(newAccount);
 
                     break;
                 case "2":
                     Console.WriteLine("case 2");
+                    Console.WriteLine("Skapa sparkonto");
+                    string savings_name = "Sparkonto";
+                    
+                    AccountModel newSavingsAccount = new AccountModel
+                    {
+                        name = savings_name,
+                        user_id = _user_id
+
+                    };
+                    DBAccess.SaveNewAccount(newSavingsAccount);
+                    break;
+                case "3":
+                    Console.WriteLine("case 3");
+                    Console.WriteLine("Skapa valutakonto");
+                    string currency_name = "Valutakonto";
+                    AccountModel newCurrencyAccount = new AccountModel
+                    {
+                        name = currency_name,
+                        user_id = _user_id,
+                        currency_id = _currency_id
+
+                    };
+                    DBAccess.SaveNewAccount(newCurrencyAccount);
                     break;
             }
         }
