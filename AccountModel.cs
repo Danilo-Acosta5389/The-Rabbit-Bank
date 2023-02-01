@@ -14,11 +14,11 @@ namespace rabbit_bank
 
         public decimal balance { get; set; }
 
-        public double interest_rate { get; set; }
+        public double interest_rate { get; set; } = 0;
 
         public int user_id { get; set; }
 
-        public int currency_id { get; set; }
+        public int currency_id { get; set; } = 1;
 
         public string currency_name { get; set; }
 

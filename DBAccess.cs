@@ -62,11 +62,11 @@ namespace rabbit_bank
         }
 
 
-        public static void SaveBankAccount(AccountModel user) //This method creates new bank accounts
+        public static void SaveBankAccount(AccountModel account) //This method creates new bank accounts
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute("INSERT INTO bank_account (name, interest_rate, user_id, currency_id) VALUES (@name, @interest_rate, @user_id, @currency_id)", user);
+                cnn.Execute("INSERT INTO bank_account (name, interest_rate, user_id, currency_id) VALUES (@name, @interest_rate, @user_id, @currency_id)", account);
 
             }
         }

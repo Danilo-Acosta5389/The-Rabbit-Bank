@@ -124,7 +124,7 @@ namespace rabbit_bank
                         break;
                     case "3":
                         Console.WriteLine("");
-                        CreateNewAccount();
+                        CreateNewAccount(userIndex);
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
@@ -182,7 +182,7 @@ namespace rabbit_bank
                     case "3":
                         Console.WriteLine("");
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
-                        CreateNewAccount();
+                        CreateNewAccount(userIndex);
                         //ToDo: sparkonto med ränta
                         break;
 
@@ -223,8 +223,9 @@ namespace rabbit_bank
             }
         }
 
-        static void CreateNewAccount() //New accounts are created here
-        {                              
+        static void CreateNewAccount(UserModel userIndex) //New accounts are created here
+        {
+
             bool createAccountRun = true;
             while (createAccountRun)
             {
@@ -233,40 +234,41 @@ namespace rabbit_bank
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
-                    Console.Write(" Create new Rabbit Bank account ");
+                    Console.Write(" Create new Rabbit Bank account XXX ");
                     Console.ResetColor();
                     Console.WriteLine();
                     Console.WriteLine();
                                         // IF A FIELD IS NOT ALLOWED TO BE EMPTY, THEN ERROR WILL OCCURE
                                         //USER MAY GO BACK
                     Console.Write("Please enter Account name: ");
-                    string accountName = Console.ReadLine();
-                    string capAccountName = GlobalItems.currentTextInfo.ToTitleCase(accountName.ToLower());
+                    string accountName = "Sparkonto";
 
-                    Console.Write("Enter interest rate: "); //INTEREST RATE FIELD, user must input at least 0
-                    double interestRate = double.Parse(Console.ReadLine());
+
+                    //string capAccountName = GlobalItems.currentTextInfo.ToTitleCase(accountName.ToLower());
+
+                    //Console.Write("Enter interest rate: "); //INTEREST RATE FIELD, user must input at least 0
+                    //double interestRate = double.Parse(Console.ReadLine());
 
                     Console.Write("Enter user ID: ");   //INT FIELDS CANNOT BE EMPTY
-                    int userId = int.Parse(Console.ReadLine());
+                    int userId = userIndex.id;
 
-                    Console.Write("Enter currency ID: ");
-                    int currencyId = int.Parse(Console.ReadLine());
+                    //Console.Write("Enter currency ID: ");
+                    //int currencyId = int.Parse(Console.ReadLine());
 
                     Console.WriteLine();
-                    Console.WriteLine($"Account name: {capAccountName}");
-                    Console.WriteLine($"Interest rate: {interestRate}");
+                    Console.WriteLine($"Account name: {accountName}");
+                    //Console.WriteLine($"Interest rate: {interestRate}");
                     Console.WriteLine($"User ID: {userId}");
-                    Console.WriteLine($"Currency ID: {currencyId}");
+                    //Console.WriteLine($"Currency ID: {currencyId}");
                     Console.Write("\nIs this correct? Y/N --> ");
                     string yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "y")
                     {
                         AccountModel newAccount = new AccountModel
                         {
-                            name = capAccountName,
-                            interest_rate = interestRate,
+                            name = accountName,
                             user_id = userId,
-                            currency_id = currencyId
+                            interest_rate = 2
                         };
                         DBAccess.SaveBankAccount(newAccount);
                         Console.WriteLine("\nAccount was successfully created!");
