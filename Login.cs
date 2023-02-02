@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -174,14 +175,8 @@ namespace rabbit_bank
                         break;
 
                     case "2":
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.BackgroundColor = ConsoleColor.White;
-                        Console.Write(" Create new user ");
-                        Console.ResetColor();
-                        Console.WriteLine("\n");
                         //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
-                        bool success = TransferBetweenUser();
+                        bool success = TransferBetweenUsers(userIndex);
                         if(success)
                         {
                             Console.WriteLine("Successful transfer");
@@ -192,6 +187,8 @@ namespace rabbit_bank
                         else
                         {
                             Console.WriteLine("Unsuccessful transfer");
+                            Console.Write("Please press ENTER to continue ");
+                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
                         }
                         break;
 
@@ -309,15 +306,45 @@ namespace rabbit_bank
                     {
                         continue;
                     }
-
                 }
-
             }
         }
 
-        public static bool TransferBetweenUser()
+        public static void TransferOwnMoney()
         {
-            return DBAccess.TransferMoney(5, 12, 3, 1000);
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Transfer between accounts ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+        }
+
+        public static bool TransferBetweenUsers(UserModel userIndex)
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Transfer between accounts ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+
+            foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+            {
+                Console.WriteLine($"Account id: {account.id}");
+                Console.WriteLine($"Account name: {account.name}");
+                Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                Console.WriteLine();
+            }
+            
+            Console.Write("\nPlease input from account id: ");
+            int fromAccount = int.Parse(Console.ReadLine());
+            Console.Write("Please input to account id: ");
+            int toAccount = int.Parse(Console.ReadLine());
+            Console.Write("Please input amount: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            return DBAccess.TransferMoney(userIndex.id, fromAccount, toAccount, amount);
         }
 
         //public static List<AccountModel> GetUserAccounts(int user_id)
