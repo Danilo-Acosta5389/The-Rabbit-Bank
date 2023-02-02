@@ -164,7 +164,7 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See accounts and balances \n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7. Create new user \n8. Log out ");
+                Console.WriteLine("1. See accounts and balances \n2. Transfer money [WORK-in-progress]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7. Create new user \n8. Log out ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -174,8 +174,25 @@ namespace rabbit_bank
                         break;
 
                     case "2":
-                        Console.WriteLine("");
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.Write(" Create new user ");
+                        Console.ResetColor();
+                        Console.WriteLine("\n");
                         //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
+                        bool success = TransferBetweenUser();
+                        if(success)
+                        {
+                            Console.WriteLine("Successful transfer");
+                            AccountsAndBalances(userIndex);
+                            Console.Write("Please press ENTER to continue ");
+                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Unsuccessful transfer");
+                        }
                         break;
 
                     case "3":
@@ -296,6 +313,11 @@ namespace rabbit_bank
                 }
 
             }
+        }
+
+        public static bool TransferBetweenUser()
+        {
+            return DBAccess.TransferMoney(5, 12, 3, 1000);
         }
 
         //public static List<AccountModel> GetUserAccounts(int user_id)

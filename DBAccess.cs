@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,30 @@ namespace rabbit_bank
 {
     public class DBAccess
     {
+        public static bool TransferMoney(int user_id, int from_account_id, int to_account_id, decimal amount)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                try
+                {
+                    string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+                    var output = cnn.Query<UserModel>($@"
+                   UPDATE bank_account SET balance = CASE
+                       when id = {from_account_id} AND balance >= {newAmount} then balance - {newAmount}
+                       when id = {to_account_id} then balance + {newAmount}
+                   END
+                   WHERE id IN ({from_account_id}, {to_account_id})", new DynamicParameters());
+                }
+                catch (Npgsql.PostgresException e)
+                {
+                    Console.WriteLine("Insufficient balance. ");
+                    Console.WriteLine(e.ErrorCode);
+                    Console.WriteLine(e.MessageText);
+                }
+                return true;
+            }
+        }
+
         public static List<UserModel> OldLoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
