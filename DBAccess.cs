@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.VisualBasic;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,19 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
+        public static List<UserModel> CheckUsername(string firstName)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+
+                var output = cnn.Query<UserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}'", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+            // Kopplar upp mot DB:n
+            // läser ut alla Users
+            // Returnerar en lista av Users
+        }
 
         public static List<AccountModel> GetUserAccounts(int user_id)
         {
@@ -91,6 +105,34 @@ namespace rabbit_bank
                 conn.Open();
 
                 using (var cmd = new NpgsqlCommand("UPDATE bank_user SET blocked_user = true WHERE attempts < 1", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = new NpgsqlCommand("UPDATE bank_user SET blocked_user = false WHERE attempts > 0", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public static void subtractAttempt(UserModel specificUser)
+        {
+            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand($"UPDATE bank_user SET attempts = attempts - 1 WHERE first_name = '{specificUser.first_name}'", conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public static void resetAttempts(UserModel specificUser)
+        {
+            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand($"UPDATE bank_user SET attempts = 3 WHERE first_name = '{specificUser.first_name}'", conn))
                 {
                     cmd.ExecuteNonQuery();
                 }

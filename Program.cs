@@ -15,7 +15,7 @@ namespace rabbit_bank
                 Console.WriteLine($"users length: {users.Count}");
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}");
+                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
                 }
                 try
                 {
@@ -275,7 +275,7 @@ namespace rabbit_bank
 ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝";
             Console.WriteLine(prompt);
             Console.WriteLine("                         .:The most rabid bank in the world:.");
-
+            DBAccess.updateBlockedUser();
         }
 
         static SecureString HidePin()

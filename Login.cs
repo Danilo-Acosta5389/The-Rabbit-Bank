@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,27 +17,45 @@ namespace rabbit_bank
             string capInput = currentTextInfo.ToTitleCase(first_Name.ToLower());
             //Above is converting firstName input to match the way it is capitalized in DB.
 
+            List<UserModel> realUser = DBAccess.CheckUsername(capInput);
+            UserModel specificUser = null;
+            if (realUser.Count > 0)
+            {
+                specificUser = realUser[0];
+            }
+            
             bool loginRunning = true;
             while (loginRunning)
             {
-                UserModel usr = new UserModel();
                 List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
                 Console.WriteLine();
-                if (checkedUsers.Count < 1)
+                /*if (specificUser != null)
                 {
-/*                    Console.WriteLine($"Your input was {capInput} {pin_Code}");
-*/                  Console.WriteLine("Login failed, please try again");
+                    specificUser.attempts--;
+                    Console.WriteLine("Login failed, please try again");
                     Console.ReadLine();
                     loginRunning = false;
                     break;
-                }
-                /*else if (usr.first_name == capInput && usr.pin_code != pin_Code)
-                {
-
                 }*/
+                if (specificUser.first_name == capInput)
+                {
+                    if (pin_Code != int.Parse(specificUser.pin_code))
+                    {
+                        DBAccess.subtractAttempt(specificUser);
+                        Console.WriteLine("Wrong login, please try again");
+                        Console.ReadLine();
+                        loginRunning= false;
+                    }
+                    else if (checkedUsers.Count < 1)
+                    {
+                        Console.WriteLine($"Your input was {capInput} {pin_Code}");
+                        Console.WriteLine("Login failed, please try again");
+                        Console.ReadLine();
+                        loginRunning = false;
+                    }
+                }
                 foreach (UserModel user in checkedUsers)
                 {
-                    DBAccess.updateBlockedUser();
                     if (user.blocked_user == true)
                     {
                         Console.WriteLine("Your account is locked, contact a admin!");
@@ -44,10 +63,9 @@ namespace rabbit_bank
                         loginRunning = false;
                         break;
                     }
-/*                    string inpsut = capInput.ToString();
-*/                    /*else if ()*/
                     else
                     {
+                        DBAccess.resetAttempts(user);
                         user.accounts = DBAccess.GetUserAccounts(user.id);
                         Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
@@ -88,7 +106,7 @@ namespace rabbit_bank
                             continue;
                         }
                     }
-                }
+                }            
             }
         }
 
