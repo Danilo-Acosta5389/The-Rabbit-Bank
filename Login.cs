@@ -241,13 +241,14 @@ namespace rabbit_bank
             Console.WriteLine("2. Sparkonto");
             Console.WriteLine("3. Valutakonto");
             string userChoice = Console.ReadLine();
+            int _user_id = userIndex.id;
             switch (userChoice)
             {
+
                 case "1":
                     Console.WriteLine("Case 1");
                     Console.WriteLine("Skapa lönekonto");
                     string _name = "Lönekonto";
-                    int _user_id = userIndex.id;
 
                     AccountModel newAccount = new AccountModel
                     {
@@ -261,24 +262,28 @@ namespace rabbit_bank
                     Console.WriteLine("case 2");
                     Console.WriteLine("Skapa sparkonto");
                     string savings_name = "Sparkonto";
+                    double interestRate = 2.85;
                     
                     AccountModel newSavingsAccount = new AccountModel
                     {
                         name = savings_name,
-                        user_id = _user_id
+                        user_id = _user_id,
+                        interest_rate = interestRate
 
                     };
                     DBAccess.SaveNewAccount(newSavingsAccount);
                     break;
+
                 case "3":
                     Console.WriteLine("case 3");
                     Console.WriteLine("Skapa valutakonto");
                     string currency_name = "Valutakonto";
+                    int currencyID = 2;
                     AccountModel newCurrencyAccount = new AccountModel
                     {
                         name = currency_name,
                         user_id = _user_id,
-                        currency_id = _currency_id
+                        currency_id = currencyID
 
                     };
                     DBAccess.SaveNewAccount(newCurrencyAccount);
