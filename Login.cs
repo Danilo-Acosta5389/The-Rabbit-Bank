@@ -2,16 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace rabbit_bank
 {
-    public static class GlobalItems
-    {
-        public static int attempts = 3;
-        public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
-    }
+
     public class Login
     {
         public static void LoginTry(string first_Name, int pin_Code) //Arguments store user input from login screen
@@ -20,6 +17,13 @@ namespace rabbit_bank
             string capInput = GlobalItems.currentTextInfo.ToTitleCase(first_Name.ToLower());
             //Above is converting firstName input to match the way it is capitalized in DB.
 
+            List<UserModel> realUser = DBAccess.CheckUsername(capInput);
+            UserModel specificUser = null;
+            if (realUser.Count > 0)
+            {
+                specificUser = realUser[0];
+            }
+            
             bool loginRunning = true;
             while (loginRunning)
             {
@@ -27,16 +31,33 @@ namespace rabbit_bank
                 List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code); //User input from log in screen is passed in here.
                                                                                         //CheckLogin checks if input name and pin matches with bank_user in DB
                 Console.WriteLine();
-                if (checkedUsers.Count < 1)
+                /*if (specificUser != null)
                 {
+                    specificUser.attempts--;
                     Console.WriteLine("Login failed, please try again");
+                    Console.ReadLine();
                     loginRunning = false;
-                    GlobalItems.attempts--;
+
                     break;
+                }*/
+                if (specificUser.first_name == capInput)
+                {
+                    if (pin_Code != int.Parse(specificUser.pin_code))
+                    {
+                        DBAccess.subtractAttempt(specificUser);
+                        Console.WriteLine("Wrong login, please try again");
+                        Console.ReadLine();
+                        loginRunning= false;
+                    }
+                    else if (checkedUsers.Count < 1)
+                    {
+                        Console.WriteLine($"Your input was {capInput} {pin_Code}");
+                        Console.WriteLine("Login failed, please try again");
+                        Console.ReadLine();
+                        loginRunning = false;
+                    }
                 }
-                foreach (UserModel user in checkedUsers) //This itarates through all data in DB that matches UserModel class(Look in UserModel.cs). 
-                { //user is the variable that is used to indikate index
-                    if (user.locked_user == true)
+
                     {
                         Console.WriteLine("Your account is locked, contact a admin!");
                         Console.ReadLine();
@@ -45,7 +66,7 @@ namespace rabbit_bank
                     }
                     else
                     {
-                        GlobalItems.attempts = 3;
+
                         user.accounts = DBAccess.GetUserAccounts(user.id);
                         Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
@@ -87,7 +108,7 @@ namespace rabbit_bank
                         //    continue;
                         //}
                     }
-                }
+                }            
             }
         }
         //TODO: Creates blocked user screen
@@ -101,17 +122,7 @@ namespace rabbit_bank
             bool loggedIn = true;
             while (loggedIn)
             {
-                Console.Clear();
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.BackgroundColor = ConsoleColor.White;
-                Console.Write(" Make your choice with 1-6 ");
-                Console.ResetColor();
-                Console.WriteLine();
-                Console.WriteLine();
 
-                Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [WORKING]");
-                Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {

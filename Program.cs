@@ -15,11 +15,11 @@ namespace rabbit_bank
                 Console.WriteLine($"users length: {users.Count}");
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.locked_user}");
+                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
                 }
                 try
                 {
-                    Console.Write($"Login attemtps: {GlobalItems.attempts}\nPlease enter FirstName: ");
+
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -40,17 +40,12 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-                        GlobalItems.attempts--;
+
                     }
                 }
                 catch (Exception)
                 {
-
                     Console.WriteLine("ERROR, please try again.");
-                }
-                if (GlobalItems.attempts == 0) 
-                {
-                    break;
                 }
 
             }
@@ -282,7 +277,7 @@ namespace rabbit_bank
 ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚═╝   ╚═╝       ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝";
             Console.WriteLine(prompt);
             Console.WriteLine("                         .:The most rabid bank in the world:.");
-
+            DBAccess.updateBlockedUser();
         }
 
         static SecureString HidePin()
