@@ -76,17 +76,7 @@ namespace rabbit_bank
                             loginRunning = false;
 
                         }
-                        //Console.Write("Do you wish to exit? Y/N --> ");
-                        //string yesNo = Console.ReadLine();
-
-                        //if (yesNo.ToLower() == "y")
-                        //{
-                        //    loginRunning = false;
-                        //}
-                        //else if (yesNo.ToLower() == "n")
-                        //{
-                        //    continue;
-                        //}
+                        
                     }
                 }
             }
@@ -122,6 +112,7 @@ namespace rabbit_bank
                     case "2":
                         Console.WriteLine("");
                         //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
+                        RunTransferMoney(userIndex);
                         break;
                     case "3":
                         Console.WriteLine("");
@@ -176,20 +167,7 @@ namespace rabbit_bank
 
                     case "2":
                         //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
-                        bool success = TransferBetweenUsers(userIndex);
-                        if(success)
-                        {
-                            Console.WriteLine("Successful transfer");
-                            AccountsAndBalances(userIndex);
-                            Console.Write("Please press ENTER to continue ");
-                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Unsuccessful transfer");
-                            Console.Write("Please press ENTER to continue ");
-                            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-                        }
+                        RunTransferMoney(userIndex);
                         break;
 
                     case "3":
@@ -215,7 +193,7 @@ namespace rabbit_bank
 
                     case "7":
                         // Create new user here
-                        CreateUser();
+                        //CreateUser();
                         break;
 
                     case "8":
@@ -235,131 +213,238 @@ namespace rabbit_bank
             }
         }
 
-        static void CreateUser()
+        //static void CreateUser()
+        //{
+        //    bool createUserRun = true;
+        //    while (createUserRun)
+        //    {
+        //        try
+        //        {
+        //            Console.WriteLine();
+        //            Console.ForegroundColor = ConsoleColor.Black;
+        //            Console.BackgroundColor = ConsoleColor.White;
+        //            Console.Write(" Create new user ");
+        //            Console.ResetColor();
+        //            Console.WriteLine();
+        //            Console.WriteLine();
+
+        //            Console.Write("Please enter FirstName: ");
+        //            string firstName = Console.ReadLine();
+        //            string capFirstName = GlobalItems.currentTextInfo.ToTitleCase(firstName.ToLower());
+
+        //            Console.Write("Please enter LastName: ");
+        //            string lastName = Console.ReadLine();
+        //            string capLastName = GlobalItems.currentTextInfo.ToTitleCase(lastName.ToLower());
+
+        //            Console.Write("Please enter PinCode: ");
+        //            string pinCode = Console.ReadLine();
+
+        //            Console.Write("Enter Role Id: ");
+        //            int roleId = int.Parse(Console.ReadLine());
+
+        //            Console.Write("Enter branchId: ");
+        //            int branchId = int.Parse(Console.ReadLine());
+        //            Console.WriteLine();
+        //            Console.WriteLine($"FirstName: {capLastName}");
+        //            Console.WriteLine($"LastName: {capFirstName}");
+        //            Console.WriteLine($"Pin: {pinCode}");
+        //            Console.WriteLine($"Role ID: {roleId}");
+        //            Console.WriteLine($"Branch ID: {branchId}");
+        //            Console.Write("\nIs this correct? Y/N --> ");
+        //            string yesNo = Console.ReadLine();
+        //            if (yesNo.ToLower() == "y")
+        //            {
+        //                UserModel newUser = new UserModel
+        //                {
+        //                    first_name = capFirstName,
+        //                    last_name = capLastName,
+        //                    pin_code = pinCode,
+        //                    role_id = roleId,
+        //                    branch_id = branchId
+        //                };
+        //                DBAccess.SaveBankUser(newUser);
+        //                Console.WriteLine("\nUser has successfully been created!");
+        //                Thread.Sleep(1000);
+        //            }
+        //            else if (yesNo.ToLower() == "n")
+        //            {
+        //                continue;
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //            Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
+        //            //string yesNo = Console.ReadLine();
+        //            string yesNo = Console.ReadLine();
+        //            if (yesNo.ToLower() == "y")
+        //            {
+        //                createUserRun = false;
+        //            }
+        //            else if (yesNo.ToLower() == "n")
+        //            {
+        //                continue;
+        //            }
+        //        }
+        //    }
+        //}
+
+        public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
-            bool createUserRun = true;
-            while (createUserRun)
+            Console.WriteLine("Transfer Money");
+            Console.WriteLine("1. Transfer between own accounts.");
+            Console.WriteLine("2. Transfer to others account. ");
+            int options = int.Parse(Console.ReadLine());
+            switch (options)
+            {
+                case 1:
+                    bool success1 = TransferOwnAccounts(userIndex);
+                    if (success1)
+                    {
+                        //AccountsAndBalances(userIndex);
+                        Console.Write("\nPlease press ENTER to continue ");
+                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                        Console.WriteLine();
+                    }
+                    break;
+                case 2:
+                    bool success2 = TransferOthersAccounts(userIndex);
+                    if (success2)
+                    {
+                        Console.Write("\nPlease press ENTER to continue");
+                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                        Console.WriteLine();
+                    }
+                    break;
+            }
+        }
+
+        public static bool TransferOthersAccounts(UserModel userIndex)
+        {
+            while (true)
             {
                 try
                 {
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
-                    Console.Write(" Create new user ");
+                    Console.Write(" Transfer to others account ");
                     Console.ResetColor();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    Console.WriteLine("\n");
 
-                    Console.Write("Please enter FirstName: ");
-                    string firstName = Console.ReadLine();
-                    string capFirstName = GlobalItems.currentTextInfo.ToTitleCase(firstName.ToLower());
+                    foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+                    {
+                        Console.WriteLine($"Account id: {account.id}");
+                        Console.WriteLine($"Account name: {account.name}");
+                        Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                        Console.WriteLine();
+                    }
 
-                    Console.Write("Please enter LastName: ");
-                    string lastName = Console.ReadLine();
-                    string capLastName = GlobalItems.currentTextInfo.ToTitleCase(lastName.ToLower());
+                    Console.WriteLine("\nPlease input FROM acount");
+                    Console.Write("Account id number here --> ");
+                    int fromAccount = int.Parse(Console.ReadLine());
 
-                    Console.Write("Please enter PinCode: ");
-                    string pinCode = Console.ReadLine();
 
-                    Console.Write("Enter Role Id: ");
-                    int roleId = int.Parse(Console.ReadLine());
+                    Console.WriteLine("\nPlease input TO account");
+                    Console.Write("Recieving account id number here --> ");
+                    int toAccount = int.Parse(Console.ReadLine());
 
-                    Console.Write("Enter branchId: ");
-                    int branchId = int.Parse(Console.ReadLine());
-                    Console.WriteLine();
-                    Console.WriteLine($"FirstName: {capLastName}");
-                    Console.WriteLine($"LastName: {capFirstName}");
-                    Console.WriteLine($"Pin: {pinCode}");
-                    Console.WriteLine($"Role ID: {roleId}");
-                    Console.WriteLine($"Branch ID: {branchId}");
-                    Console.Write("\nIs this correct? Y/N --> ");
+                    Console.Write("\nPlease input amount: ");
+                    decimal amount = decimal.Parse(Console.ReadLine());
+
+                    Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
+
                     if (yesNo.ToLower() == "y")
                     {
-                        UserModel newUser = new UserModel
-                        {
-                            first_name = capFirstName,
-                            last_name = capLastName,
-                            pin_code = pinCode,
-                            role_id = roleId,
-                            branch_id = branchId
-                        };
-                        DBAccess.SaveBankUser(newUser);
-                        Console.WriteLine("\nUser has successfully been created!");
-                        Thread.Sleep(1000);
+                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, amount);
                     }
                     else if (yesNo.ToLower() == "n")
                     {
-                        continue;
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid input");
                     }
                 }
                 catch (Exception)
                 {
-                    Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
-                    //string yesNo = Console.ReadLine();
+                    Console.WriteLine("\nError");
+                    Console.WriteLine("Do you wish to exit?");
+                    Console.Write("Y/N --> ");
                     string yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "y")
                     {
-                        createUserRun = false;
+                        return false;
+                    }
+                    else if(yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid input");
+                    }
+
+                }
+                
+            }
+            
+        }
+
+
+        public static bool TransferOwnAccounts(UserModel userIndex)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write(" Transfer between own accounts ");
+                    Console.ResetColor();
+                    Console.WriteLine("\n");
+
+                    foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+                    {
+                        Console.WriteLine($"Account id: {account.id}");
+                        Console.WriteLine($"Account name: {account.name}");
+                        Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                        Console.WriteLine();
+                    }
+
+                    Console.Write("\nPlease input from account id: ");
+                    int fromAccount = int.Parse(Console.ReadLine());
+                    Console.Write("Please input to account id: ");
+                    int toAccount = int.Parse(Console.ReadLine());
+                    Console.Write("Please input amount: ");
+                    decimal amount = decimal.Parse(Console.ReadLine());
+
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("\nError");
+                    Console.WriteLine("Do you wish to exit?");
+                    Console.Write("Y/N --> ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
+                    {
+                        return false;
                     }
                     else if (yesNo.ToLower() == "n")
                     {
                         continue;
                     }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid input");
+                    }
                 }
             }
         }
 
-        public static void TransferOwnMoney()
-        {
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.Write(" Transfer between accounts ");
-            Console.ResetColor();
-            Console.WriteLine("\n");
-        }
-
-        public static bool TransferBetweenUsers(UserModel userIndex)
-        {
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.Write(" Transfer between accounts ");
-            Console.ResetColor();
-            Console.WriteLine("\n");
-
-            foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
-            {
-                Console.WriteLine($"Account id: {account.id}");
-                Console.WriteLine($"Account name: {account.name}");
-                Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
-                Console.WriteLine();
-            }
-            
-            Console.Write("\nPlease input from account id: ");
-            int fromAccount = int.Parse(Console.ReadLine());
-            Console.Write("Please input to account id: ");
-            int toAccount = int.Parse(Console.ReadLine());
-            Console.Write("Please input amount: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
-
-            return DBAccess.TransferMoney(userIndex.id, fromAccount, toAccount, amount);
-        }
-
-        //public static List<AccountModel> GetUserAccounts(int user_id)
-        //{
-        //    using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
-        //    {
-
-        //        var output = cnn.Query<AccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE user_id = '{user_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
-        //        //Console.WriteLine(output);
-        //        return output.ToList();
-        //    }
-        //}
-        //public NpgsqlConnection(string connectionString)//Initializes a new instance of NpgsqlConnection with the given connection string.
-
-        //Todo: Put See account and balances in a method
 
         static void AccountsAndBalances(UserModel userIndex)
         {
