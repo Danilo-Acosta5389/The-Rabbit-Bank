@@ -236,67 +236,82 @@ namespace rabbit_bank
 
         static void CreateAccount(UserModel userIndex)
         {
-            Console.WriteLine("Välj vilket konto du vill skapa.");
-            Console.WriteLine("1. Lönekonto");
-            Console.WriteLine("2. Sparkonto");
-            Console.WriteLine("3. Valutakonto");
-            Console.WriteLine("4. Avbryt");
-            string userChoice = Console.ReadLine();
-            int _user_id = userIndex.id;
-
-            bool loginRunning = true;
-
-            while (loginRunning)
-            switch (userChoice)
+            bool createAccRunning = true;
+            while (createAccRunning)
             {
+                Console.WriteLine("Välj vilket konto du vill skapa.");
+                Console.WriteLine("1. Lönekonto");
+                Console.WriteLine("2. Sparkonto");
+                Console.WriteLine("3. Valutakonto");
+                Console.WriteLine("4. Avbryt");
+                string userChoice = Console.ReadLine();
+                int userInput = int.Parse(userChoice);
+                int _user_id = userIndex.id;
 
-                case "1":
-                    Console.WriteLine("Case 1");
-                    Console.WriteLine("Skapa lönekonto");
-                    string _name = "Lönekonto";
-
-                    AccountModel newAccount = new AccountModel
+                try
+                {
+                    switch (userInput)
                     {
-                        name = _name,
-                        user_id = _user_id
-                    };
-                    DBAccess.SaveNewAccount(newAccount);
 
-                    break;
-                case "2":
-                    Console.WriteLine("case 2");
-                    Console.WriteLine("Skapa sparkonto");
-                    string savings_name = "Sparkonto";
-                    double interestRate = 2.85;
-                    
-                    AccountModel newSavingsAccount = new AccountModel
-                    {
-                        name = savings_name,
-                        user_id = _user_id,
-                        interest_rate = interestRate
+                        case 1:
+                            Console.WriteLine("Case 1");
+                            Console.WriteLine("Skapa lönekonto");
+                            string _name = "Lönekonto";
 
-                    };
-                    DBAccess.SaveNewAccount(newSavingsAccount);
-                    break;
+                            AccountModel newAccount = new AccountModel
+                            {
+                                name = _name,
+                                user_id = _user_id
+                            };
+                            DBAccess.SaveNewAccount(newAccount);
 
-                case "3":
-                    Console.WriteLine("case 3");
-                    Console.WriteLine("Skapa valutakonto");
-                    string currency_name = "Valutakonto";
-                    int currencyID = 2;
-                    AccountModel newCurrencyAccount = new AccountModel
-                    {
-                        name = currency_name,
-                        user_id = _user_id,
-                        currency_id = currencyID
+                            break;
+                        case 2:
+                            Console.WriteLine("case 2");
+                            Console.WriteLine("Skapa sparkonto");
+                            string savings_name = "Sparkonto";
+                            double interestRate = 2.85;
 
-                    };
-                    DBAccess.SaveNewAccount(newCurrencyAccount);
-                    break;
-                    case "4":
-                        Console.WriteLine("Avbryt");
-                        return;
+                            AccountModel newSavingsAccount = new AccountModel
+                            {
+                                name = savings_name,
+                                user_id = _user_id,
+                                interest_rate = interestRate
+
+                            };
+                            DBAccess.SaveNewAccount(newSavingsAccount);
+                            break;
+
+                        case 3:
+                            Console.WriteLine("case 3");
+                            Console.WriteLine("Skapa valutakonto");
+                            string currency_name = "Valutakonto";
+                            int currencyID = 2;
+                            AccountModel newCurrencyAccount = new AccountModel
+                            {
+                                name = currency_name,
+                                user_id = _user_id,
+                                currency_id = currencyID
+
+                            };
+                            DBAccess.SaveNewAccount(newCurrencyAccount);
+                            break;
+                        case 4:
+                            Console.WriteLine("Avbryt");
+                            return;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please input a number between 1 and 3.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Please input a number between 1 and 3.");
+                }
             }
+
+            }
+            
         }
     }
-}
