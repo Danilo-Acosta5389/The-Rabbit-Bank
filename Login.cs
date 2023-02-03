@@ -101,6 +101,7 @@ namespace rabbit_bank
             bool loggedIn = true;
             while (loggedIn)
             {
+                Console.Clear();
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
@@ -326,6 +327,7 @@ namespace rabbit_bank
             {
                 Console.WriteLine($"{account.name}" +
                     $"\nBalance: {account.balance} {account.currency_name}");
+                Console.WriteLine("=============================================");
                 Console.WriteLine();
                 //Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
             }
