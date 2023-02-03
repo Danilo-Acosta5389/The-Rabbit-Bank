@@ -29,15 +29,14 @@ namespace rabbit_bank
             {
                 List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
                 Console.WriteLine();
-                /*if (specificUser != null)
+                if (specificUser == null)
                 {
-                    specificUser.attempts--;
                     Console.WriteLine("Login failed, please try again");
                     Console.ReadLine();
                     loginRunning = false;
                     break;
-                }*/
-                if (specificUser.first_name == capInput)
+                }
+                else if (specificUser.first_name == capInput)
                 {
                     if (pin_Code != int.Parse(specificUser.pin_code))
                     {

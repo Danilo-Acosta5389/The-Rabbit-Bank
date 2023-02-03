@@ -19,7 +19,7 @@ namespace rabbit_bank
                 }
                 try
                 {
-
+                    Console.Write("\nPlease enter FirstName: ");
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -40,16 +40,14 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
-
                     }
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("ERROR, please try again.");
                 }
-
             }
-            
+
 
 
 
@@ -69,47 +67,47 @@ namespace rabbit_bank
             //        Console.WriteLine("Login failed, please try again");
             //        continue;
             //    }
-                //foreach (BankUserModel user in users)
-                //{
-                //    if (user.is_admin)
-                //    {
-                //        AdminLoginMenu();
-                //    }
+            //foreach (BankUserModel user in users)
+            //{
+            //    if (user.is_admin)
+            //    {
+            //        AdminLoginMenu();
+            //    }
 
-                //    else
-                //    {
-                //        UserLoginMenu();
-                //    }
-                //}
-                //foreach (UserModel user in checkedUsers)
-                //{
+            //    else
+            //    {
+            //        UserLoginMenu();
+            //    }
+            //}
+            //foreach (UserModel user in checkedUsers)
+            //{
 
-                //    if (user.is_admin)
-                //    {
-                //        AdminLoginMenu();
-                //    }
+            //    if (user.is_admin)
+            //    {
+            //        AdminLoginMenu();
+            //    }
 
-                //    else
-                //    {
-                //        UserLoginMenu();
-                //    }
+            //    else
+            //    {
+            //        UserLoginMenu();
+            //    }
 
 
-                //    user.accounts = DBAccess.GetUserAccounts(user.id);
-                //    Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
-                //    Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
-                //    Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
-                //    Console.WriteLine($"User account list length: {user.accounts}");
-                //    if (user.accounts.Count > 0)
-                //    {
-                //        foreach (AccountModel account in user.accounts)
-                //        {
-                //            Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
-                //            Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
-                //        }
-                //    }
+            //    user.accounts = DBAccess.GetUserAccounts(user.id);
+            //    Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
+            //    Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
+            //    Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
+            //    Console.WriteLine($"User account list length: {user.accounts}");
+            //    if (user.accounts.Count > 0)
+            //    {
+            //        foreach (AccountModel account in user.accounts)
+            //        {
+            //            Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
+            //            Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+            //        }
+            //    }
 
-                //}
+            //}
 
             //}
         }
