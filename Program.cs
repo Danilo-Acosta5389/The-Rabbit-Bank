@@ -19,7 +19,7 @@ namespace rabbit_bank
                 }
                 try
                 {
-                    Console.Write("\nPlease enter FirstName: ");
+
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
@@ -40,12 +40,14 @@ namespace rabbit_bank
                         Console.ForegroundColor = ConsoleColor.Gray;
                         Console.WriteLine("Tryck enter för att fortsätta.");
                         Console.ReadKey();
+
                     }
                 }
                 catch (Exception)
                 {
                     Console.WriteLine("ERROR, please try again.");
                 }
+
             }
             
 

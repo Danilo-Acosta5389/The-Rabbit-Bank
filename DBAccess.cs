@@ -87,7 +87,7 @@ namespace rabbit_bank
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute("insert into bank_user (first_name, last_name, pin_code) values (@first_name, @last_name, @pin_code)", user);
+                cnn.Execute("insert into bank_user (first_name, last_name, pin_code, role_id, branch_id) values (@first_name, @last_name, @pin_code, @role_id,@branch_id)", user);
 
             }
         }
