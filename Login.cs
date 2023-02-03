@@ -240,8 +240,13 @@ namespace rabbit_bank
             Console.WriteLine("1. Lönekonto");
             Console.WriteLine("2. Sparkonto");
             Console.WriteLine("3. Valutakonto");
+            Console.WriteLine("4. Avbryt");
             string userChoice = Console.ReadLine();
             int _user_id = userIndex.id;
+
+            bool loginRunning = true;
+
+            while (loginRunning)
             switch (userChoice)
             {
 
@@ -288,7 +293,9 @@ namespace rabbit_bank
                     };
                     DBAccess.SaveNewAccount(newCurrencyAccount);
                     break;
-
+                    case "4":
+                        Console.WriteLine("Avbryt");
+                        return;
             }
         }
     }
