@@ -102,7 +102,12 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See your accounts and balances [WORKING]\n2. Transfer money [NOT WORKING]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Log out [WORKING]");
+                Console.WriteLine("1. See your accounts and balances [WORKING]" +
+                    "\n2. Transfer money [NOT WORKING]" +
+                    "\n3. Add a new account [NOT WORKING]" +
+                    "\n4. Make a bank loan [NOT WORKING]" +
+                    "\n5. Transaction history [NOT WORKING]" +
+                    "\n6. Log out [WORKING]");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -158,7 +163,14 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See accounts and balances \n2. Transfer money [WORK-in-progress]\n3. Add a new account [NOT WORKING]\n4. Make a bank loan [NOT WORKING]\n5. Transaction history [NOT WORKING]\n6. Set exchange rate [NOT WORKING]\n7. Create new user \n8. Log out ");
+                Console.WriteLine("1. See accounts and balances " +
+                    "\n2. Transfer money [WORK-in-progress]" +
+                    "\n3. Add a new account [NOT WORKING]" +
+                    "\n4. Make a bank loan [NOT WORKING]" +
+                    "\n5. Transaction history [NOT WORKING]" +
+                    "\n6. Set exchange rate [NOT WORKING]" +
+                    "\n7. Create new user " +
+                    "\n8. Log out ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -311,12 +323,13 @@ namespace rabbit_bank
 
                     Console.WriteLine("1. Transfer between own accounts.");
                     Console.WriteLine("2. Transfer to others account. ");
+                    bool success;
                     int options = int.Parse(Console.ReadLine());
                     switch (options)
                     {
                         case 1:
-                            bool success1 = TransferOwnAccounts(userIndex);
-                            if (success1)
+                            success = TransferOwnAccounts(userIndex);
+                            if (success)
                             {
                                 //AccountsAndBalances(userIndex);
                                 Console.Write("\nPlease press ENTER to continue ");
@@ -325,8 +338,8 @@ namespace rabbit_bank
                             }
                             break;
                         case 2:
-                            bool success2 = TransferOthersAccounts(userIndex);
-                            if (success2)
+                            success = TransferOthersAccounts(userIndex);
+                            if (success)
                             {
                                 Console.Write("\nPlease press ENTER to continue");
                                 while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
