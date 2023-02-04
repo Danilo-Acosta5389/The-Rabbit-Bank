@@ -12,6 +12,8 @@ namespace rabbit_bank
     {
         public static int attempts = 3;
         public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
+        public static List<int> accountsMap = new List<int>();
+        public static List<string> accountNameList = new List<string>();
     }
     public class Login
     {
@@ -47,7 +49,7 @@ namespace rabbit_bank
                     else
                     {
                         GlobalItems.attempts = 3;
-                        user.accounts = DBAccess.GetUserAccounts(user.id);
+                        //user.accounts = DBAccess.GetUserAccounts(user.id);
                         Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
                         Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
@@ -236,17 +238,23 @@ namespace rabbit_bank
         //            string lastName = Console.ReadLine();
         //            string capLastName = GlobalItems.currentTextInfo.ToTitleCase(lastName.ToLower());
 
-        //            Console.Write("Please enter PinCode: ");
+        //            Console.Write("Please enter 4 digit PinCode: ");
         //            string pinCode = Console.ReadLine();
 
-        //            Console.Write("Enter Role Id: ");
+                    //do
+                    //{
+                    //    Console.Write("Please enter 4 digit PinCode: ");
+                    //    pinCode = Console.ReadLine();
+                    //} while (pinCode.Length != 4 || pinCode.Length == 0);
+
+        //            Console.Write("Enter Role Id (1 for admin. 2 for client): ");
         //            int roleId = int.Parse(Console.ReadLine());
 
-        //            Console.Write("Enter branchId: ");
+        //            Console.Write("Enter branchId (default is 1): ");
         //            int branchId = int.Parse(Console.ReadLine());
         //            Console.WriteLine();
-        //            Console.WriteLine($"FirstName: {capLastName}");
-        //            Console.WriteLine($"LastName: {capFirstName}");
+        //            Console.WriteLine($"FirstName: {capFirstName}");
+        //            Console.WriteLine($"LastName: {capLastName}");
         //            Console.WriteLine($"Pin: {pinCode}");
         //            Console.WriteLine($"Role ID: {roleId}");
         //            Console.WriteLine($"Branch ID: {branchId}");
@@ -290,32 +298,65 @@ namespace rabbit_bank
 
         public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
-            Console.WriteLine("Transfer Money");
-            Console.WriteLine("1. Transfer between own accounts.");
-            Console.WriteLine("2. Transfer to others account. ");
-            int options = int.Parse(Console.ReadLine());
-            switch (options)
+            while (true)
             {
-                case 1:
-                    bool success1 = TransferOwnAccounts(userIndex);
-                    if (success1)
+                try
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write(" Transfer Money ");
+                    Console.ResetColor();
+                    Console.WriteLine("\n");
+
+                    Console.WriteLine("1. Transfer between own accounts.");
+                    Console.WriteLine("2. Transfer to others account. ");
+                    int options = int.Parse(Console.ReadLine());
+                    switch (options)
                     {
-                        //AccountsAndBalances(userIndex);
-                        Console.Write("\nPlease press ENTER to continue ");
-                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-                        Console.WriteLine();
+                        case 1:
+                            bool success1 = TransferOwnAccounts(userIndex);
+                            if (success1)
+                            {
+                                //AccountsAndBalances(userIndex);
+                                Console.Write("\nPlease press ENTER to continue ");
+                                while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                                Console.WriteLine();
+                            }
+                            break;
+                        case 2:
+                            bool success2 = TransferOthersAccounts(userIndex);
+                            if (success2)
+                            {
+                                Console.Write("\nPlease press ENTER to continue");
+                                while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+                                Console.WriteLine();
+                            }
+                            break;
                     }
-                    break;
-                case 2:
-                    bool success2 = TransferOthersAccounts(userIndex);
-                    if (success2)
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error");
+                    Console.WriteLine("Do you wish to exit?");
+                    Console.Write("Y/N --> ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
                     {
-                        Console.Write("\nPlease press ENTER to continue");
-                        while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-                        Console.WriteLine();
+                        break;
                     }
-                    break;
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nInvalid input");
+                    }
+                }
+
             }
+            
         }
 
         public static bool TransferOthersAccounts(UserModel userIndex)
@@ -331,32 +372,39 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+
+                    for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        Console.WriteLine($"Account id: {account.id}");
-                        Console.WriteLine($"Account name: {account.name}");
-                        Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                        GlobalItems.accountNameList.Add(userIndex.accounts[i].name);
+                        GlobalItems.accountsMap.Add(userIndex.accounts[i].id);
+                        Console.WriteLine($"{i + 1}. {userIndex.accounts[i].name}");
+                        Console.WriteLine($"Balance: {userIndex.accounts[i].balance} {userIndex.accounts[i].currency_name}");
                         Console.WriteLine();
                     }
 
                     Console.WriteLine("\nPlease input FROM acount");
-                    Console.Write("Account id number here --> ");
-                    int fromAccount = int.Parse(Console.ReadLine());
+                    Console.Write("Account number here --> ");
+                    int fromAccount = int.Parse(Console.ReadLine()) - 1;
+                    int fromAccountID = GlobalItems.accountsMap[fromAccount];
+                    string fromAccountName = GlobalItems.accountNameList[fromAccount];
 
-
-                    Console.WriteLine("\nPlease input TO account");
-                    Console.Write("Recieving account id number here --> ");
+                    Console.WriteLine("\nPlease input RECIEVING account number/id");
+                    Console.Write("Account id here --> ");
                     int toAccount = int.Parse(Console.ReadLine());
 
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
+
+                    Console.WriteLine($"\nFrom {fromAccountName}");
+                    Console.WriteLine($"To account number/id: {toAccount}");
+                    Console.WriteLine($"Amount: {amount} SEK");
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
 
                     if (yesNo.ToLower() == "y")
                     {
-                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, amount);
+                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccountID, toAccount, amount);
                     }
                     else if (yesNo.ToLower() == "n")
                     {
@@ -406,22 +454,29 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+                    // Below we iterate through the logged in persons bank accounts in DB
+                    //Each account is added to a List. The list index is showed to the user.
+                    for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        Console.WriteLine($"Account id: {account.id}");
-                        Console.WriteLine($"Account name: {account.name}");
-                        Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                        GlobalItems.accountsMap.Add(userIndex.accounts[i].id);
+                        Console.WriteLine($"{i + 1}. Account name: {userIndex.accounts[i].name}");
+                        Console.WriteLine($"Balance: {userIndex.accounts[i].balance} {userIndex.accounts[i].currency_name}");
                         Console.WriteLine();
                     }
 
-                    Console.Write("\nPlease input from account id: ");
-                    int fromAccount = int.Parse(Console.ReadLine());
-                    Console.Write("Please input to account id: ");
-                    int toAccount = int.Parse(Console.ReadLine());
+                    Console.Write("\nPlease input from account: ");
+                    int fromAccount = int.Parse( Console.ReadLine()) - 1;
+                    int fromAccountID = GlobalItems.accountsMap[fromAccount];
+                    
+                    Console.Write("Please input to account: ");
+                    int toAccount = int.Parse(Console.ReadLine()) - 1;
+                    int toAccountID = GlobalItems.accountsMap[toAccount];
+
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
+
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccountID, toAccountID, amount);
                 }
                 catch (Exception)
                 {
@@ -455,12 +510,15 @@ namespace rabbit_bank
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
-
+            int counter = 1;
             foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
             {
-                Console.WriteLine($"{account.name}" +
-                    $"\nBalance: {account.balance} {account.currency_name}");
+                Console.WriteLine($"{counter}. {account.name}");
+                Console.WriteLine($"Account id/nummber: {account.id}");
+                Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                if(account.interest_rate > 0) { Console.WriteLine($"Interest rate: {account.interest_rate} %"); }
                 Console.WriteLine();
+                counter++;
                 //Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
             }
             Console.WriteLine("Please press ENTER to continue.");

@@ -21,7 +21,16 @@ namespace rabbit_bank
 
         public bool locked_user { get; set; }
 
-        public List<AccountModel> accounts { get; set; }
+        //public List<AccountModel> accounts { get; set; }
+
+        public List<AccountModel> accounts
+        {
+            get
+            {
+                return DBAccess.GetUserAccounts(id);
+            }
+        }
+
     }
 }
     
