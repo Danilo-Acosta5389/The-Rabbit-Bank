@@ -86,6 +86,23 @@ namespace rabbit_bank
             }
         }
 
+        public static void ListNewAccount(AccountModel account)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute("insert into bank_account (name, interest_rate, user_id, currency_id) values (@name, @interest_rate, @user_id, @currency_id)", account);
+
+            }
+        }
+
+        public static void ListNewPayrollAcc(AccountModel account) // WORK IN PROGRESS. PROBLEMS WITH QUERY syntax QQ
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute("SELECT bank_account (name, interest_rate, user_id, currency_id) values (@name, @interest_rate, @user_id, @currency_id)", account);
+
+            }
+        }
 
         private static string LoadConnectionString(string id = "Default")
         {
