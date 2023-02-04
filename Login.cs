@@ -310,7 +310,8 @@ namespace rabbit_bank
 
         public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
-            while (true)
+            bool appRunning = true;
+            while (appRunning)
             {
                 try
                 {
@@ -323,6 +324,7 @@ namespace rabbit_bank
 
                     Console.WriteLine("1. Transfer between own accounts.");
                     Console.WriteLine("2. Transfer to others account. ");
+                    Console.WriteLine("3. Return to menu");
                     bool success;
                     int options = int.Parse(Console.ReadLine());
                     switch (options)
@@ -346,11 +348,14 @@ namespace rabbit_bank
                                 Console.WriteLine();
                             }
                             break;
+                        case 3:
+                            appRunning = false;
+                            break;
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Error");
+                    //Console.WriteLine("Error");
                     Console.WriteLine("Do you wish to exit?");
                     Console.Write("Y/N --> ");
                     string yesNo = Console.ReadLine();
@@ -384,14 +389,21 @@ namespace rabbit_bank
                     Console.Write(" Transfer to others account ");
                     Console.ResetColor();
                     Console.WriteLine("\n");
+                    List<AccountModel> tempAccount = userIndex.accounts;
 
-
-                    for (int i = 0; i < userIndex.accounts.Count; i++)
+                    for (int i = 0; i < tempAccount.Count; i++)
                     {
-                        GlobalItems.accountNameList.Add(userIndex.accounts[i].name);
-                        GlobalItems.accountsMap.Add(userIndex.accounts[i].id);
-                        Console.WriteLine($"{i + 1}. {userIndex.accounts[i].name}");
-                        Console.WriteLine($"Balance: {userIndex.accounts[i].balance} {userIndex.accounts[i].currency_name}");
+                        GlobalItems.accountNameList.Add(tempAccount[i].name);
+                        GlobalItems.accountsMap.Add(tempAccount[i].id);
+                        Console.WriteLine($"{i + 1}. {tempAccount[i].name}");
+                        if (tempAccount[i].currency_name == "SEK")
+                        {
+                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                        }
+                        else if (tempAccount[i].currency_name == "USD")
+                        {
+                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                        }
                         Console.WriteLine();
                     }
 
@@ -410,7 +422,7 @@ namespace rabbit_bank
 
                     Console.WriteLine($"\nFrom {fromAccountName}");
                     Console.WriteLine($"To account number/id: {toAccount}");
-                    Console.WriteLine($"Amount: {amount} SEK");
+                    Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.CurrentCulture)} SEK");
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
@@ -466,14 +478,22 @@ namespace rabbit_bank
                     Console.Write(" Transfer between own accounts ");
                     Console.ResetColor();
                     Console.WriteLine("\n");
-
+                    List<AccountModel> tempAccount = userIndex.accounts;
                     // Below we iterate through the logged in persons bank accounts in DB
                     //Each account is added to a List. The list index is showed to the user.
-                    for (int i = 0; i < userIndex.accounts.Count; i++)
+                    for (int i = 0; i < tempAccount.Count; i++)
                     {
-                        GlobalItems.accountsMap.Add(userIndex.accounts[i].id);
-                        Console.WriteLine($"{i + 1}. Account name: {userIndex.accounts[i].name}");
-                        Console.WriteLine($"Balance: {userIndex.accounts[i].balance} {userIndex.accounts[i].currency_name}");
+
+                        GlobalItems.accountsMap.Add(tempAccount[i].id);
+                        Console.WriteLine($"{i + 1}. Account name: {tempAccount[i].name}");
+                        if (tempAccount[i].currency_name == "SEK")
+                        {
+                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                        }
+                        else if (tempAccount[i].currency_name == "USD")
+                        {
+                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                        }
                         Console.WriteLine();
                     }
 
@@ -523,12 +543,24 @@ namespace rabbit_bank
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
+            //CultureInfo c2 = CultureInfo.GetCultureInfo("sv-SE");
+            //.ToString(c2)
+            List<AccountModel> tempAccount = userIndex.accounts;
             int counter = 1;
-            foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
+            foreach (AccountModel account in tempAccount) // This is used to iterate through the logged in persons bank_account in DB
             {
+                //List<AccountModel> tempAccount = userIndex.accounts;
                 Console.WriteLine($"{counter}. {account.name}");
                 Console.WriteLine($"Account id/nummber: {account.id}");
-                Console.WriteLine($"Balance: {account.balance} {account.currency_name}");
+                if(account.currency_name == "SEK")
+                {
+                    Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                }
+                else if (account.currency_name == "USD")
+                {
+                    Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                }
+                //Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))} {account.currency_name}");
                 if(account.interest_rate > 0) { Console.WriteLine($"Interest rate: {account.interest_rate} %"); }
                 Console.WriteLine();
                 counter++;
