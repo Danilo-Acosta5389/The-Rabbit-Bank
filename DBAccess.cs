@@ -68,6 +68,8 @@ namespace rabbit_bank
             }
         }
 
+
+
         public static List<UserModel> OldLoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -120,6 +122,18 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
+
+
+        public static AccountModel GetAccountById(int account_id)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<AccountModel>($"SELECT bank_account.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_account, bank_currency WHERE bank_account.id = '{account_id}' AND bank_account.currency_id = bank_currency.id", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList().First();
+            }
+        }
+
 
         public static List<AccountModel> GetUserAccounts(int user_id)
         {
