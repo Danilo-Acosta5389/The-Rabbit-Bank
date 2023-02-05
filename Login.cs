@@ -12,20 +12,20 @@ namespace rabbit_bank
 
     public static class GlobalItems
     {
-        //public static int attempts = 3;
         public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
         public static List<int> accountsList = new List<int>();
         public static List<string> accountNameList = new List<string>();
+        public static List<string> currencyNameList = new List<string>();
+        public static List<decimal> balanceList = new List<decimal>();
     }
 
     public class Login
     {
         public static void LoginTry(string first_Name, int pin_Code)
         {
-            //string nameToLower = first_Name.ToLower();
-            //TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
             string capInput = GlobalItems.currentTextInfo.ToTitleCase(first_Name.ToLower());
             //Above is converting firstName input to match the way it is capitalized in DB.
+            //first_name becomes capInput. If 'john' was passed into first_name, then capInput will give 'John'.
 
             List<UserModel> realUser = DBAccess.CheckUsername(capInput);
             UserModel specificUser = null;
@@ -76,22 +76,28 @@ namespace rabbit_bank
                     {
                         DBAccess.resetAttempts(user);
                         //user.accounts = DBAccess.GetUserAccounts(user.id);
-
-                        Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
-                        Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
-                        Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
-                        Console.WriteLine($"User account list length: {user.accounts.Count}");
-
-                        if (user.accounts.Count > 0)
+                        Console.WriteLine($"Welcome back {user.first_name}.");
+                        Console.WriteLine($"User ID: {user.id}");
+                        if (user.role_id == 1)
                         {
-                            foreach (AccountModel account in user.accounts)
-                            {
-                                Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
-                                Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
-                            }
+                            Console.WriteLine($"[Admin account]");
                         }
+                        //Console.WriteLine($"User ID: {user.id}");
+                        //Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
+                        //Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
+                        //Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
+                        //Console.WriteLine($"User account list length: {user.accounts.Count}");
 
-                        Console.WriteLine();
+                        //if (user.accounts.Count > 0)
+                        //{
+                        //    foreach (AccountModel account in user.accounts)
+                        //    {
+                        //        Console.WriteLine($"ID: {account.id} Account name: {account.name} Balance: {account.balance}");
+                        //        Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                        //    }
+                        //}
+
+                        //Console.WriteLine();
 
                         if (user.is_admin)
                         {
@@ -135,25 +141,21 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See your accounts and balances [WORKING]" +
-                    "\n2. Transfer money [NOT WORKING]" +
+                Console.WriteLine("1. See your accounts and balances" +
+                    "\n2. Transfer money" +
                     "\n3. Add a new account [NOT WORKING]" +
                     "\n4. Make a bank loan [NOT WORKING]" +
                     "\n5. Transaction history [NOT WORKING]" +
-                    "\n6. Log out [WORKING]");
+                    "\n6. Logout");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
-                        Console.WriteLine("");
-                        //Todo: skapa funktion för att visa konton. showAccounts();
                         AccountsAndBalances(userIndex);
                         break;
 
                     case "2":
-                        Console.WriteLine("");
-                        //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
                         RunTransferMoney(userIndex);
                         break;
                     case "3":
@@ -172,13 +174,12 @@ namespace rabbit_bank
                         break;
 
                     case "6":
-                        // ToDo: Skapa en funktion för användare att se överföringshistorik
-                        Console.WriteLine("");
+                        //Logout
                         loggedIn = false;
                         break;
 
                     default:
-                        Console.WriteLine("");
+                        Console.WriteLine("Please enter a number between 1 and 6.");
                         continue;
                 }
             }
@@ -199,25 +200,22 @@ namespace rabbit_bank
                 Console.WriteLine();
 
                 Console.WriteLine("1. See accounts and balances " +
-                    "\n2. Transfer money [WORK-in-progress]" +
+                    "\n2. Transfer money" +
                     "\n3. Add a new account [NOT WORKING]" +
                     "\n4. Make a bank loan [NOT WORKING]" +
                     "\n5. Transaction history [NOT WORKING]" +
                     "\n6. Set exchange rate [NOT WORKING]" +
-                    "\n7. Create new user " +
-                    "\n8. Log out ");
+                    "\n7. Create new user" +
+                    "\n8. Logout ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
-                        Console.WriteLine("");
-                        //Todo: skapa funktion för att visa konton. showAccounts();
                         AccountsAndBalances(userIndex);
                         break;
 
                     case "2":
-                        //ToDo: skapa funktion för att föra över pengar till eget och andras konton: transferMoney();
                         RunTransferMoney(userIndex);
                         break;
 
@@ -243,19 +241,15 @@ namespace rabbit_bank
                         break;
 
                     case "7":
-                        // Create new user here
                         CreateNewUser();
-                        // ToDo: Skapa en funktion för admin att skapa nya användare i systemet
                         break;
 
                     case "8":
-                        // ToDo: Skapa en funktion för admin att sätta dagens växelkurs
-                        Console.WriteLine("");
                         loggedIn = false;
                         break;
 
                     default:
-                        Console.WriteLine("");
+                        Console.WriteLine("Please enter a number between 1 and 8.");
                         continue;
                 }
             }
@@ -264,6 +258,7 @@ namespace rabbit_bank
 
         static void CreateNewUser()
         {
+            string yesNo;
             bool createUserRun = true;
             while (createUserRun)
             {
@@ -288,6 +283,31 @@ namespace rabbit_bank
                     Console.Write("Please enter 4 digit PinCode: ");
                     string pinCode = Console.ReadLine();
 
+                    //!!!!!=====================TESTING CODE BELOW=============!!!!!
+                    //string pinCode;
+                    //do
+                    //{
+                    //    Console.Write("Please enter 4 digit PinCode: ");
+                    //    pinCode = Console.ReadLine();
+
+
+                    //    if (pinCode.Length != 4)
+                    //    {
+                    //        Console.WriteLine("Error, You must enter a 4 digit PIN to continue!");
+                    //        Console.Write("Do you wish to exit? Y/N: ");
+                    //        yesNo = Console.ReadLine();
+                    //        if (yesNo.ToLower() == "y")
+                    //        {
+                    //            createUserRun = false;
+                    //        }
+                    //        else if (yesNo.ToLower() == "n")
+                    //        {
+                    //            createUserRun = false;
+                    //        }
+                    //    }
+                    //} while (pinCode.Length != 4);
+
+
                     Console.Write("Enter Role Id (1 for admin, 2 for client): ");
                     int roleId = int.Parse(Console.ReadLine());
 
@@ -300,7 +320,7 @@ namespace rabbit_bank
                     Console.WriteLine($"Role ID: {roleId}");
                     Console.WriteLine($"Branch ID: {branchId}");
                     Console.Write("\nIs this correct? Y/N --> ");
-                    string yesNo = Console.ReadLine();
+                    yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "y")
                     {
                         UserModel newUser = new UserModel
@@ -324,7 +344,7 @@ namespace rabbit_bank
                 {
                     Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
                     //string yesNo = Console.ReadLine();
-                    string yesNo = Console.ReadLine();
+                    yesNo = Console.ReadLine();
                     if (yesNo.ToLower() == "y")
                     {
                         createUserRun = false;
@@ -354,6 +374,7 @@ namespace rabbit_bank
                     Console.WriteLine("1. Transfer between own accounts.");
                     Console.WriteLine("2. Transfer to others account. ");
                     Console.WriteLine("3. Return to menu");
+                    Console.Write("--> ");
                     bool success;
                     int options = int.Parse(Console.ReadLine());
                     switch (options)
@@ -401,9 +422,7 @@ namespace rabbit_bank
                         Console.WriteLine("\nInvalid input");
                     }
                 }
-
             }
-            
         }
 
         public static bool TransferOthersAccounts(UserModel userIndex)
@@ -424,10 +443,11 @@ namespace rabbit_bank
                     {
                         GlobalItems.accountNameList.Add(tempAccount[i].name);
                         GlobalItems.accountsList.Add(tempAccount[i].id);
+                        GlobalItems.currencyNameList.Add(tempAccount[i].currency_name);
                         Console.WriteLine($"{i + 1}. {tempAccount[i].name}");
                         if (tempAccount[i].currency_name == "SEK")
                         {
-                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                         }
                         else if (tempAccount[i].currency_name == "USD")
                         {
@@ -451,7 +471,15 @@ namespace rabbit_bank
 
                     Console.WriteLine($"\nFrom {fromAccountName}");
                     Console.WriteLine($"To account number/id: {toAccount}");
-                    Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.CurrentCulture)} SEK");
+                    if (GlobalItems.currencyNameList[fromAccount] == "SEK")
+                    {
+                        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    }
+                    else if (GlobalItems.currencyNameList[fromAccount] == "USD")
+                    {
+                        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                    }
+
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
@@ -487,11 +515,8 @@ namespace rabbit_bank
                     {
                         Console.WriteLine("\nInvalid input");
                     }
-
                 }
-                
             }
-            
         }
 
 
@@ -508,37 +533,42 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
                     List<AccountModel> tempAccount = userIndex.accounts;
+
                     // Below we iterate through the logged in persons bank accounts in DB
                     //Each account is added to a List. The list index is showed to the user.
-                    for (int i = 0; i < tempAccount.Count; i++)
-                    {
 
-                        GlobalItems.accountsList.Add(tempAccount[i].id);
-                        Console.WriteLine($"{i + 1}. Account name: {tempAccount[i].name}");
-                        if (tempAccount[i].currency_name == "SEK")
+                    for (int i = 0; i < userIndex.accounts.Count; i++)
+                    {
+                        //GlobalItems.accountsList.Add(userIndex.accounts[i].id);
+                        //GlobalItems.balanceList.Add(userIndex.accounts[i].balance);
+                        Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
+                        Console.WriteLine($"Account name: {userIndex.accounts[i].name}");
+                        //Console.WriteLine($"Balance: {tempAccount[i].balance}");
+                        if (userIndex.accounts[i].currency_name == "SEK")
                         {
-                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                            Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                         }
                         else if (tempAccount[i].currency_name == "USD")
                         {
-                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                            Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                         }
                         Console.WriteLine();
                     }
 
                     Console.Write("\nPlease input from account: ");
-                    int fromAccount = int.Parse( Console.ReadLine()) - 1;
-                    int fromAccountID = GlobalItems.accountsList[fromAccount];
+                    int fromAccount = int.Parse( Console.ReadLine());
+                    //int fromAccountID = GlobalItems.accountsList[fromAccount];
                     
                     Console.Write("Please input to account: ");
-                    int toAccount = int.Parse(Console.ReadLine()) - 1;
-                    int toAccountID = GlobalItems.accountsList[toAccount];
+                    int toAccount = int.Parse(Console.ReadLine());
+                    //int toAccountID = GlobalItems.accountsList[toAccount];
 
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
+                    //decimal newAmount = GlobalItems.balanceList[amount];
 
 
-                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccountID, toAccountID, amount);
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
                 }
                 catch (Exception)
                 {
@@ -546,6 +576,7 @@ namespace rabbit_bank
                     Console.WriteLine("Do you wish to exit?");
                     Console.Write("Y/N --> ");
                     string yesNo = Console.ReadLine();
+
                     if (yesNo.ToLower() == "y")
                     {
                         return false;
@@ -558,6 +589,29 @@ namespace rabbit_bank
                     {
                         Console.WriteLine("\nInvalid input");
                     }
+
+
+                    //=========TESTING CODE BELOW==================
+
+                    //Console.ReadKey(true).Key != ConsoleKey.Enter
+                    //if (yesNo.ToLower() == "y")
+
+                    //ConsoleKey keyPressed;
+                    //ConsoleKeyInfo yesNo = Console.ReadKey();
+                    //keyPressed = yesNo.Key;
+
+                    //if (keyPressed == ConsoleKey.Y)
+                    //{
+                    //    return false;
+                    //}
+                    //else if (keyPressed == ConsoleKey.N)
+                    //{
+                    //    continue;
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("\nInvalid input");
+                    //}
                 }
             }
         }
@@ -583,17 +637,16 @@ namespace rabbit_bank
                 Console.WriteLine($"Account id/nummber: {account.id}");
                 if(account.currency_name == "SEK")
                 {
-                    Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.CurrentCulture)}");
+                    Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                 }
                 else if (account.currency_name == "USD")
                 {
                     Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                 }
-                //Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))} {account.currency_name}");
+                
                 if(account.interest_rate > 0) { Console.WriteLine($"Interest rate: {account.interest_rate} %"); }
                 Console.WriteLine();
                 counter++;
-                //Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
             }
             Console.WriteLine("Please press ENTER to continue.");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
