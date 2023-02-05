@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,6 +15,59 @@ namespace rabbit_bank
 {
     public class DBAccess
     {
+        public static bool TransferMoney(int user_id, int other_user_id, int from_account_id, int to_account_id, decimal amount)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                if (other_user_id == 0)
+                {
+                    try
+                    {
+                        string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+                        var output = cnn.Query<UserModel>($@"
+                   UPDATE bank_account SET balance = CASE
+                       when id = {from_account_id} AND user_id = {user_id} AND balance >= {newAmount} then balance - {newAmount}
+                       when id = {to_account_id} then balance + {newAmount}
+                   END
+                   WHERE id IN ({from_account_id}, {to_account_id})", new DynamicParameters());
+
+                        Console.WriteLine("\nSuccessful transfer");
+                    }
+                    catch (Npgsql.PostgresException e)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(e.ErrorCode);
+                        Console.WriteLine(e.MessageText);
+                        Console.WriteLine("\nTransfer was not successful. ");
+                    }
+                    //return true;
+                }
+                else
+                {
+                    try
+                    {
+                        string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+                        var output = cnn.Query<UserModel>($@"
+                   UPDATE bank_account SET balance = CASE
+                       when id = {from_account_id} AND user_id = {user_id} AND balance >= {newAmount} then balance - {newAmount}
+                       when id = {to_account_id} AND user_id = {other_user_id} then balance + {newAmount}
+                   END
+                   WHERE id IN ({from_account_id}, {to_account_id})", new DynamicParameters());
+                        Console.WriteLine("\nSuccessful transfer");
+                    }
+                    catch (Npgsql.PostgresException e)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(e.ErrorCode);
+                        Console.WriteLine(e.MessageText);
+                        Console.WriteLine("\nTransfer was not successful. ");
+                    }
+                    
+                }
+                return true;
+            }
+        }
+
         public static List<UserModel> OldLoadBankUsers()
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -91,7 +145,6 @@ namespace rabbit_bank
 
             }
         }
-
 
         private static string LoadConnectionString(string id = "Default")
         {

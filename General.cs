@@ -5,11 +5,10 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Npgsql.Replication;
-using System.Security;
 
 namespace rabbit_bank
 {
-    public class Class1
+    public class General
     {
         public static void app()
         {            
@@ -29,26 +28,26 @@ namespace rabbit_bank
                     string firstName = Console.ReadLine();
 
                     Console.Write("Please enter PinCode: ");
-                                    SecureString pin = HidePin();
+                    SecureString pin = HidePin();
                     string pinCode = new System.Net.NetworkCredential(String.Empty, pin).Password;
                     Console.WriteLine();
 
-                                    int inputPIN = 0;
+                    int inputPIN = 0;
                     bool success = int.TryParse(pinCode, out inputPIN);
-                                    if (success)
-                                    {
-                                        Login.LoginTry(firstName, inputPIN);
-                                    }
-                                    else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine("Tryck enter för att fortsätta.");
-                    Console.ReadKey();
+                    if (success)
+                    {
+                        Login.LoginTry(firstName, inputPIN);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nOgiltigt val. Var god och ange heltal endast!\n");
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine("Tryck enter för att fortsätta.");
+                        Console.ReadKey();
+                    }
                 }
-                                }
-                                catch (Exception)
+                catch (Exception)
                 {
                     Console.WriteLine("ERROR, please try again.");
                 }
