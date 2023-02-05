@@ -3,43 +3,69 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace rabbit_bank
 {
+
     public static class GlobalItems
     {
-        public static int attempts = 3;
+        //public static int attempts = 3;
         public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
-        public static List<int> accountsMap = new List<int>();
+        public static List<int> accountsList = new List<int>();
         public static List<string> accountNameList = new List<string>();
     }
+
     public class Login
     {
-        public static void LoginTry(string first_Name, int pin_Code) //Arguments store user input from login screen
+        public static void LoginTry(string first_Name, int pin_Code)
         {
-
+            //string nameToLower = first_Name.ToLower();
+            //TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
             string capInput = GlobalItems.currentTextInfo.ToTitleCase(first_Name.ToLower());
             //Above is converting firstName input to match the way it is capitalized in DB.
+
+            List<UserModel> realUser = DBAccess.CheckUsername(capInput);
+            UserModel specificUser = null;
+            if (realUser.Count > 0)
+            {
+                specificUser = realUser[0];
+            }
 
             bool loginRunning = true;
             while (loginRunning)
             {
-                Console.Clear();
-                List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code); //User input from log in screen is passed in here.
-                                                                                        //CheckLogin checks if input name and pin matches with bank_user in DB
+                List<UserModel> checkedUsers = DBAccess.CheckLogin(capInput, pin_Code);
                 Console.WriteLine();
-                if (checkedUsers.Count < 1)
+                if (specificUser == null)
                 {
                     Console.WriteLine("Login failed, please try again");
+                    Console.ReadLine();
                     loginRunning = false;
-                    GlobalItems.attempts--;
                     break;
                 }
-                foreach (UserModel user in checkedUsers) //This itarates through all data in DB that matches UserModel class(Look in UserModel.cs). 
-                { //user is the variable that is used to indikate index
-                    if (user.locked_user == true)
+                else if (specificUser.first_name == capInput)
+                {
+                    if (pin_Code != int.Parse(specificUser.pin_code))
+                    {
+                        DBAccess.subtractAttempt(specificUser);
+                        Console.WriteLine("Wrong login, please try again");
+                        Console.ReadLine();
+                        loginRunning = false;
+                    }
+                    else if (checkedUsers.Count < 1)
+                    {
+                        Console.WriteLine($"Your input was {capInput} {pin_Code}");
+                        Console.WriteLine("Login failed, please try again");
+                        Console.ReadLine();
+                        loginRunning = false;
+                    }
+                }
+                foreach (UserModel user in checkedUsers)
+                {
+                    if (user.blocked_user == true)
                     {
                         Console.WriteLine("Your account is locked, contact a admin!");
                         Console.ReadLine();
@@ -48,8 +74,9 @@ namespace rabbit_bank
                     }
                     else
                     {
-                        GlobalItems.attempts = 3;
+                        DBAccess.resetAttempts(user);
                         //user.accounts = DBAccess.GetUserAccounts(user.id);
+
                         Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
                         Console.WriteLine($"is_admin: {user.is_admin} is_client: {user.is_client}");
@@ -68,28 +95,34 @@ namespace rabbit_bank
 
                         if (user.is_admin)
                         {
-                            AdminLoginMenu(user);  //the variable user is passed in here
+                            AdminLoginMenu(user);
                             loginRunning = false;
                         }
                         else if (user.is_client)
                         {
-
-                            UserLoginMenu(user); //the variable user is passed in here
+                            UserLoginMenu(user);
                             loginRunning = false;
-
                         }
-                        
+
+                        //Console.WriteLine("Do you wish to exit? Y/N");
+                        //string yesNo = Console.ReadLine();
+
+                        //if (yesNo.ToLower() == "y")
+                        //{
+                        //    loginRunning = false;
+                        //}
+                        //else if (yesNo.ToLower() == "n")
+                        //{
+                        //    continue;
+                        //}
                     }
                 }
             }
         }
-        //TODO: Creates blocked user screen
-        //static void UserBlockedScreen()
-        //{
-        //    Console.WriteLine("This account is blocket. Please Contact admin for help.");
-        //}
 
-        static void UserLoginMenu(UserModel userIndex) // the user variable is stored in userIndex
+
+
+        static void UserLoginMenu(UserModel userIndex)
         {
             bool loggedIn = true;
             while (loggedIn)
@@ -113,6 +146,8 @@ namespace rabbit_bank
                 switch (userChoice)
                 {
                     case "1":
+                        Console.WriteLine("");
+                        //Todo: skapa funktion för att visa konton. showAccounts();
                         AccountsAndBalances(userIndex);
                         break;
 
@@ -137,7 +172,7 @@ namespace rabbit_bank
                         break;
 
                     case "6":
-                        // Log out user;
+                        // ToDo: Skapa en funktion för användare att se överföringshistorik
                         Console.WriteLine("");
                         loggedIn = false;
                         break;
@@ -150,7 +185,7 @@ namespace rabbit_bank
         }
 
 
-        static void AdminLoginMenu(UserModel userIndex) // the user variable is stored in userIndex
+        static void AdminLoginMenu(UserModel userIndex)
         {
             bool loggedIn = true;
             while (loggedIn)
@@ -176,6 +211,8 @@ namespace rabbit_bank
                 switch (userChoice)
                 {
                     case "1":
+                        Console.WriteLine("");
+                        //Todo: skapa funktion för att visa konton. showAccounts();
                         AccountsAndBalances(userIndex);
                         break;
 
@@ -207,16 +244,13 @@ namespace rabbit_bank
 
                     case "7":
                         // Create new user here
-                        //CreateUser();
+                        CreateNewUser();
+                        // ToDo: Skapa en funktion för admin att skapa nya användare i systemet
                         break;
 
                     case "8":
-                        // Log out user
-                        Console.Clear();
-                        Console.WriteLine("Logging out now.");
-                        Thread.Sleep(1000);
-                        Console.WriteLine("\nThank you for using Rabbit Bank services.");
-                        Thread.Sleep(1000);
+                        // ToDo: Skapa en funktion för admin att sätta dagens växelkurs
+                        Console.WriteLine("");
                         loggedIn = false;
                         break;
 
@@ -227,86 +261,81 @@ namespace rabbit_bank
             }
         }
 
-        //static void CreateUser()
-        //{
-        //    bool createUserRun = true;
-        //    while (createUserRun)
-        //    {
-        //        try
-        //        {
-        //            Console.WriteLine();
-        //            Console.ForegroundColor = ConsoleColor.Black;
-        //            Console.BackgroundColor = ConsoleColor.White;
-        //            Console.Write(" Create new user ");
-        //            Console.ResetColor();
-        //            Console.WriteLine();
-        //            Console.WriteLine();
 
-        //            Console.Write("Please enter FirstName: ");
-        //            string firstName = Console.ReadLine();
-        //            string capFirstName = GlobalItems.currentTextInfo.ToTitleCase(firstName.ToLower());
+        static void CreateNewUser()
+        {
+            bool createUserRun = true;
+            while (createUserRun)
+            {
+                try
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    Console.Write(" Create new user ");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine();
 
-        //            Console.Write("Please enter LastName: ");
-        //            string lastName = Console.ReadLine();
-        //            string capLastName = GlobalItems.currentTextInfo.ToTitleCase(lastName.ToLower());
+                    Console.Write("Please enter FirstName: ");
+                    string firstName = Console.ReadLine();
+                    string capFirstName = GlobalItems.currentTextInfo.ToTitleCase(firstName.ToLower());
 
-        //            Console.Write("Please enter 4 digit PinCode: ");
-        //            string pinCode = Console.ReadLine();
+                    Console.Write("Please enter LastName: ");
+                    string lastName = Console.ReadLine();
+                    string capLastName = GlobalItems.currentTextInfo.ToTitleCase(lastName.ToLower());
 
-                    //do
-                    //{
-                    //    Console.Write("Please enter 4 digit PinCode: ");
-                    //    pinCode = Console.ReadLine();
-                    //} while (pinCode.Length != 4 || pinCode.Length == 0);
+                    Console.Write("Please enter 4 digit PinCode: ");
+                    string pinCode = Console.ReadLine();
 
-        //            Console.Write("Enter Role Id (1 for admin. 2 for client): ");
-        //            int roleId = int.Parse(Console.ReadLine());
+                    Console.Write("Enter Role Id (1 for admin, 2 for client): ");
+                    int roleId = int.Parse(Console.ReadLine());
 
-        //            Console.Write("Enter branchId (default is 1): ");
-        //            int branchId = int.Parse(Console.ReadLine());
-        //            Console.WriteLine();
-        //            Console.WriteLine($"FirstName: {capFirstName}");
-        //            Console.WriteLine($"LastName: {capLastName}");
-        //            Console.WriteLine($"Pin: {pinCode}");
-        //            Console.WriteLine($"Role ID: {roleId}");
-        //            Console.WriteLine($"Branch ID: {branchId}");
-        //            Console.Write("\nIs this correct? Y/N --> ");
-        //            string yesNo = Console.ReadLine();
-        //            if (yesNo.ToLower() == "y")
-        //            {
-        //                UserModel newUser = new UserModel
-        //                {
-        //                    first_name = capFirstName,
-        //                    last_name = capLastName,
-        //                    pin_code = pinCode,
-        //                    role_id = roleId,
-        //                    branch_id = branchId
-        //                };
-        //                DBAccess.SaveBankUser(newUser);
-        //                Console.WriteLine("\nUser has successfully been created!");
-        //                Thread.Sleep(1000);
-        //            }
-        //            else if (yesNo.ToLower() == "n")
-        //            {
-        //                continue;
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-        //            Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
-        //            //string yesNo = Console.ReadLine();
-        //            string yesNo = Console.ReadLine();
-        //            if (yesNo.ToLower() == "y")
-        //            {
-        //                createUserRun = false;
-        //            }
-        //            else if (yesNo.ToLower() == "n")
-        //            {
-        //                continue;
-        //            }
-        //        }
-        //    }
-        //}
+                    Console.Write("Enter branchId (1 for default branch): ");
+                    int branchId = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.WriteLine($"FirstName: {capFirstName}");
+                    Console.WriteLine($"LastName: {capLastName}");
+                    Console.WriteLine($"Pin: {pinCode}");
+                    Console.WriteLine($"Role ID: {roleId}");
+                    Console.WriteLine($"Branch ID: {branchId}");
+                    Console.Write("\nIs this correct? Y/N --> ");
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
+                    {
+                        UserModel newUser = new UserModel
+                        {
+                            first_name = capFirstName,
+                            last_name = capLastName,
+                            pin_code = pinCode,
+                            role_id = roleId,
+                            branch_id = branchId
+                        };
+                        DBAccess.SaveBankUser(newUser);
+                        Console.WriteLine("\nUser has successfully been created!");
+                        Thread.Sleep(1000);
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.Write("\nError occured. Would you like to exit? Y/N: --> ");
+                    //string yesNo = Console.ReadLine();
+                    string yesNo = Console.ReadLine();
+                    if (yesNo.ToLower() == "y")
+                    {
+                        createUserRun = false;
+                    }
+                    else if (yesNo.ToLower() == "n")
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
 
         public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
@@ -394,7 +423,7 @@ namespace rabbit_bank
                     for (int i = 0; i < tempAccount.Count; i++)
                     {
                         GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        GlobalItems.accountsMap.Add(tempAccount[i].id);
+                        GlobalItems.accountsList.Add(tempAccount[i].id);
                         Console.WriteLine($"{i + 1}. {tempAccount[i].name}");
                         if (tempAccount[i].currency_name == "SEK")
                         {
@@ -410,7 +439,7 @@ namespace rabbit_bank
                     Console.WriteLine("\nPlease input FROM acount");
                     Console.Write("Account number here --> ");
                     int fromAccount = int.Parse(Console.ReadLine()) - 1;
-                    int fromAccountID = GlobalItems.accountsMap[fromAccount];
+                    int fromAccountID = GlobalItems.accountsList[fromAccount];
                     string fromAccountName = GlobalItems.accountNameList[fromAccount];
 
                     Console.WriteLine("\nPlease input RECIEVING account number/id");
@@ -484,7 +513,7 @@ namespace rabbit_bank
                     for (int i = 0; i < tempAccount.Count; i++)
                     {
 
-                        GlobalItems.accountsMap.Add(tempAccount[i].id);
+                        GlobalItems.accountsList.Add(tempAccount[i].id);
                         Console.WriteLine($"{i + 1}. Account name: {tempAccount[i].name}");
                         if (tempAccount[i].currency_name == "SEK")
                         {
@@ -499,11 +528,11 @@ namespace rabbit_bank
 
                     Console.Write("\nPlease input from account: ");
                     int fromAccount = int.Parse( Console.ReadLine()) - 1;
-                    int fromAccountID = GlobalItems.accountsMap[fromAccount];
+                    int fromAccountID = GlobalItems.accountsList[fromAccount];
                     
                     Console.Write("Please input to account: ");
                     int toAccount = int.Parse(Console.ReadLine()) - 1;
-                    int toAccountID = GlobalItems.accountsMap[toAccount];
+                    int toAccountID = GlobalItems.accountsList[toAccount];
 
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
@@ -569,7 +598,5 @@ namespace rabbit_bank
             Console.WriteLine("Please press ENTER to continue.");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
-
     }
 }
-        
