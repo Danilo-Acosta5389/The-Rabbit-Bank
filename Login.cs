@@ -437,40 +437,41 @@ namespace rabbit_bank
                     Console.Write(" Transfer to others account ");
                     Console.ResetColor();
                     Console.WriteLine("\n");
-                    List<AccountModel> tempAccount = userIndex.accounts;
+                    //List<AccountModel> tempAccount = userIndex.accounts;
 
-                    for (int i = 0; i < tempAccount.Count; i++)
+                    for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        GlobalItems.accountsList.Add(tempAccount[i].id);
-                        GlobalItems.currencyNameList.Add(tempAccount[i].currency_name);
-                        Console.WriteLine($"{i + 1}. {tempAccount[i].name}");
-                        if (tempAccount[i].currency_name == "SEK")
+                        //GlobalItems.accountNameList.Add(tempAccount[i].name);
+                        //GlobalItems.accountsList.Add(tempAccount[i].id);
+                        GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
+                        Console.WriteLine($"{userIndex.accounts[i].name}");
+                        Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
+                        if (userIndex.accounts[i].currency_name == "SEK")
                         {
-                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                            Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                         }
-                        else if (tempAccount[i].currency_name == "USD")
+                        else if (userIndex.accounts[i].currency_name == "USD")
                         {
-                            Console.WriteLine($"Balance: {tempAccount[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                            Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                         }
                         Console.WriteLine();
                     }
 
-                    Console.WriteLine("\nPlease input FROM acount");
-                    Console.Write("Account number here --> ");
-                    int fromAccount = int.Parse(Console.ReadLine()) - 1;
-                    int fromAccountID = GlobalItems.accountsList[fromAccount];
-                    string fromAccountName = GlobalItems.accountNameList[fromAccount];
+                    Console.WriteLine("\nPlease input FROM account");
+                    Console.Write("Account number/ID here --> ");
+                    int fromAccount = int.Parse(Console.ReadLine());
+                    //int fromAccountID = GlobalItems.accountsList[fromAccount];
+                    //string fromAccountName = GlobalItems.accountNameList[fromAccount];
 
-                    Console.WriteLine("\nPlease input RECIEVING account number/id");
-                    Console.Write("Account id here --> ");
+                    Console.WriteLine("\nPlease input RECIEVING account number/ID");
+                    Console.Write("Account numeber/ID here --> ");
                     int toAccount = int.Parse(Console.ReadLine());
 
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    Console.WriteLine($"\nFrom {fromAccountName}");
-                    Console.WriteLine($"To account number/id: {toAccount}");
+                    Console.WriteLine($"\nFrom {fromAccount}");
+                    Console.WriteLine($"To account number/ID: {toAccount}");
                     if (GlobalItems.currencyNameList[fromAccount] == "SEK")
                     {
                         Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -480,13 +481,12 @@ namespace rabbit_bank
                         Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                     }
 
-
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
 
                     if (yesNo.ToLower() == "y")
                     {
-                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccountID, toAccount, amount);
+                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, amount);
                     }
                     else if (yesNo.ToLower() == "n")
                     {
