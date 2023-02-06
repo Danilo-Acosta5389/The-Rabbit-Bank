@@ -12,11 +12,13 @@ namespace rabbit_bank
 
     public static class GlobalItems
     {
+
         public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
         public static List<int> accountsList = new List<int>();
         public static List<string> accountNameList = new List<string>();
         public static List<string> currencyNameList = new List<string>();
         public static List<decimal> balanceList = new List<decimal>();
+
     }
 
     public class Login
@@ -96,6 +98,22 @@ namespace rabbit_bank
                         if (user.is_admin)
                         {
                             AdminLoginMenu(user);
+                        }
+                        else if (user.is_client)
+                        {
+                            UserLoginMenu(user);
+                        }
+                        //else if(user.is_blocked)  //Blocked
+                        //{
+                        //    UserBlockedScreen();
+                        //}
+
+
+                        Console.WriteLine("Do you wish to exit? Y/N");
+                        string yesNo = Console.ReadLine();
+
+                        if (yesNo.ToLower() == "y")
+                        {
                             loginRunning = false;
                         }
                         else if (user.is_client)
@@ -119,8 +137,6 @@ namespace rabbit_bank
                 }
             }
         }
-
-
 
         static void UserLoginMenu(UserModel userIndex)
         {
@@ -161,12 +177,16 @@ namespace rabbit_bank
                         break;
                     case "3":
                         Console.WriteLine("");
+                        Console.WriteLine("==========\nSkapa nytt konto\n========");
+                        CreateAccount(userIndex);
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
 
                     case "4":
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
+                        Console.WriteLine("==========\nSkapa nytt konto\n========");
+                        //CreateAccount(userIndex);
                         Console.WriteLine("");
                         break;
                     case "5":
@@ -228,6 +248,7 @@ namespace rabbit_bank
                         break;
 
                     case "3":
+                        CreateAccount(userIndex);
                         Console.WriteLine("");
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
@@ -668,6 +689,144 @@ namespace rabbit_bank
             }
             Console.WriteLine("Please press ENTER to continue.");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+        }
+
+        static void CreateAccount(UserModel userIndex)
+        {
+            Console.Clear();
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            bool createAccRunning = true;
+            while (createAccRunning)
+            {
+                double interestRate = 2.85;
+                Console.WriteLine("==============================\nVälj vilket konto du vill skapa.\n==============================");
+                Console.ResetColor();
+                Console.WriteLine("1. Checking account. Sorry, no interest rate.");
+                
+                Console.WriteLine($"2. Savings account. Current interest rate: {interestRate}");
+                Console.WriteLine($"3. Currency account (Currency USD || Exchange rate:");
+                Console.WriteLine("4. Cancel");
+                string userChoice = Console.ReadLine();
+                int userInput = int.Parse(userChoice);
+                int _user_id = userIndex.id;
+
+                {
+                    switch (userInput)
+                    {
+
+                        case 1:
+                            Console.WriteLine("Case 1");
+                            Console.WriteLine("Create checking account");
+                            string _name = "Checking account";
+
+                            AccountModel newAccount = new AccountModel
+                            {
+                                name = _name,
+                                user_id = _user_id
+                            };
+                            DBAccess.SaveNewAccount(newAccount);
+                            
+                            foreach (AccountModel account in userIndex.accounts)
+                            {
+                                Console.WriteLine($"Account name: {account.name} Balance: {account.balance}");
+                                Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                            }
+                            bool inputCheck = true;
+                            do
+                            {
+                                Console.WriteLine("\nPress [Enter] to go back to main menu.");
+                                ConsoleKeyInfo info = Console.ReadKey(); // Kollar om användaren trycker ner ENTER-knappen
+                                if (info.Key == ConsoleKey.Enter)
+                                {
+                                    Console.Clear();
+                                    inputCheck = false;
+                                }
+                                else Console.WriteLine("Invalid input.");
+                            } while (inputCheck == true);
+                            createAccRunning = false;
+
+                            return;
+                        case 2:
+                            
+                            Console.WriteLine("case 2");
+                            Console.WriteLine($"Savings account (Interest rate: {interestRate}");
+                            string savings_name = "Sparkonto";
+
+                            AccountModel newSavingsAccount = new AccountModel
+                            {
+                                name = savings_name,
+                                user_id = _user_id,
+                                interest_rate = interestRate
+
+                            };
+                            DBAccess.SaveNewAccount(newSavingsAccount);
+                            foreach (AccountModel account in userIndex.accounts)
+                            {
+                                Console.WriteLine($"Account name: {account.name} Balance: {account.balance}");
+                                Console.WriteLine($"Currency: {account.currency_name} Exchange rate: {account.currency_exchange_rate}");
+                            }
+                            inputCheck = true;
+                            do
+                            {
+                                Console.WriteLine("\nPress [Enter] to go back to main menu.");
+                                
+                                ConsoleKeyInfo info = Console.ReadKey(); // Kollar om användaren trycker ner ENTER-knappen
+                                if (info.Key == ConsoleKey.Enter)
+                                {
+                                    Console.Clear();
+                                    inputCheck = false;
+
+                                }
+                                else Console.WriteLine("Invalid input.");
+                            } while (inputCheck == true);
+                            createAccRunning = false;
+                            return;
+
+                        case 3:
+                            Console.WriteLine("case 3");
+                            Console.WriteLine("Create a currency account ");
+                            string currency_name = "Currency account";
+                            int currencyID = 2;
+                            AccountModel newCurrencyAccount = new AccountModel
+                            {
+                                name = currency_name,
+                                user_id = _user_id,
+                                currency_id = currencyID
+
+                            };
+                            DBAccess.SaveNewAccount(newCurrencyAccount);
+                            Console.WriteLine("New currency account created:\nBalance: ");
+                            inputCheck = true;
+                            do
+                            {
+                                Console.WriteLine("\nPress [Enter] to go back to main menu.");
+
+                                ConsoleKeyInfo info = Console.ReadKey(); // Kollar om användaren trycker ner ENTER-knappen
+                                if (info.Key == ConsoleKey.Enter)
+                                {
+                                    Console.Clear();
+                                    inputCheck = false;
+
+                                }
+                                else Console.WriteLine("Invalid input.");
+                            } while (inputCheck == true);
+                            createAccRunning = false;
+                            return;
+                        case 4:
+                            Console.WriteLine("Cancel.");
+                            return;
+
+                        default:
+                            Console.WriteLine("Invalid input. Please input a number between 1 and 3.");
+                            break;
+
+                    }
+                    Console.ReadKey();
+                }
+
+            }
+
         }
     }
 }
