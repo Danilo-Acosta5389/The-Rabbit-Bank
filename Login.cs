@@ -76,12 +76,6 @@ namespace rabbit_bank
                     {
                         DBAccess.resetAttempts(user);
                         //user.accounts = DBAccess.GetUserAccounts(user.id);
-                        Console.WriteLine($"Welcome back {user.first_name}.");
-                        Console.WriteLine($"User ID: {user.id}");
-                        if (user.role_id == 1)
-                        {
-                            Console.WriteLine($"[Admin account]");
-                        }
                         //Console.WriteLine($"User ID: {user.id}");
                         //Console.WriteLine($"Logged in as {user.first_name} your pincode is {user.pin_code} and the id is {user.id}");
                         //Console.WriteLine($"role_id: {user.role_id} branch_id: {user.branch_id}");
@@ -130,6 +124,13 @@ namespace rabbit_bank
 
         static void UserLoginMenu(UserModel userIndex)
         {
+            Console.WriteLine($"Welcome back {userIndex.first_name}.");
+            Console.WriteLine($"User ID: {userIndex.id}");
+            if (userIndex.role_id == 1)
+            {
+                Console.WriteLine($"[Admin account]");
+            }
+
             bool loggedIn = true;
             while (loggedIn)
             {
@@ -188,6 +189,13 @@ namespace rabbit_bank
 
         static void AdminLoginMenu(UserModel userIndex)
         {
+            Console.WriteLine($"Welcome back {userIndex.first_name}.");
+            Console.WriteLine($"User ID: {userIndex.id}");
+            if (userIndex.role_id == 1)
+            {
+                Console.WriteLine($"[Admin account]");
+            }
+
             bool loggedIn = true;
             while (loggedIn)
             {
@@ -469,6 +477,16 @@ namespace rabbit_bank
 
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
+
+                    try
+                    {
+
+                    }
+                    catch (FormatException)
+                    {
+
+                        throw;
+                    }
 
                     Console.WriteLine($"\nFrom {fromAccount}");
                     Console.WriteLine($"To account number/ID: {toAccount}");
