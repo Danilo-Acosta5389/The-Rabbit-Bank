@@ -349,8 +349,11 @@ namespace rabbit_bank
                         //GlobalItems.accountNameList.Add(tempAccount[i].name);
                         //GlobalItems.accountsList.Add(tempAccount[i].id);
                         GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
+                        GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
                         Console.WriteLine($"{userIndex.accounts[i].name}");
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
+                        Console.WriteLine(userIndex.accounts[i].currency_exchange_rate);
+
                         if (userIndex.accounts[i].currency_name == "SEK")
                         {
                             Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -361,6 +364,8 @@ namespace rabbit_bank
                         }
                         Console.WriteLine();
                     }
+
+                    
 
                     Console.WriteLine("\nPlease input FROM account");
                     Console.Write("Account number/ID here --> ");
@@ -479,9 +484,10 @@ namespace rabbit_bank
 
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
+
                     //decimal newAmount = GlobalItems.balanceList[amount];
 
-
+                    //convertToUSD(amount);
                     return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
                 }
                 catch (Exception)
@@ -569,23 +575,28 @@ namespace rabbit_bank
         public static void CreateAccount(UserModel userIndex)
         {
             Console.Clear();
+            double interestRate = 2.85;
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.DarkGray;
             bool createAccRunning = true;
             while (createAccRunning)
             {
-                double interestRate = 2.85;
+
+
+
+                for (int i = 0; i < userIndex.accounts.Count; i++)
+                {
+                    GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
+                }
                 Console.WriteLine("==============================\nVälj vilket konto du vill skapa.\n==============================");
                 Console.ResetColor();
                 Console.WriteLine("1. Checking account. Sorry, no interest rate.");
-
                 Console.WriteLine($"2. Savings account. Current interest rate: {interestRate}");
-                Console.WriteLine($"3. Currency account (Currency USD || Exchange rate: ");
+                Console.WriteLine($"3. Currency account (Currency USD || Exchange rate: {GlobalItems.currencyRateList[1].ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                 Console.WriteLine("4. Cancel");
                 string userChoice = Console.ReadLine();
                 int userInput = int.Parse(userChoice);
                 int _user_id = userIndex.id;
-
                 {
                     switch (userInput)
                     {
@@ -627,7 +638,7 @@ namespace rabbit_bank
                             Console.WriteLine("case 2");
                             Console.WriteLine($"Savings account (Interest rate: {interestRate}");
                             string savings_name = "Sparkonto";
-
+                            
                             AccountModel newSavingsAccount = new AccountModel
                             {
                                 name = savings_name,
@@ -702,6 +713,17 @@ namespace rabbit_bank
 
             }
 
+        }
+
+        public static decimal convertToUSD(decimal amount)
+        {
+            //Ta in SEK och konvertera till USD
+            //1 * 10,28 = 1 usd
+            //returnera USD
+            //
+            //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
+            decimal result = amount * 10.28m;
+            return result;
         }
     }
 }

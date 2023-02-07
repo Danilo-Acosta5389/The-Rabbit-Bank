@@ -18,6 +18,8 @@ namespace rabbit_bank
         public static List<string> accountNameList = new List<string>();
         public static List<string> currencyNameList = new List<string>();
         public static List<decimal> balanceList = new List<decimal>();
+        public static List<double> currencyRateList = new List<double>();
+        public static List<double> interestRateList = new List<double>();
 
     }
 
