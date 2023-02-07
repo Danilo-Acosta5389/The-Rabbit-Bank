@@ -375,15 +375,14 @@ namespace rabbit_bank
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    try
-                    {
+                    //bool accountInRange;
 
-                    }
-                    catch (FormatException)
-                    {
-
-                        throw;
-                    }
+                    //if(GlobalItems.accountsList.Count > userIndex.accounts.Count)
+                    //{
+                    //    Console.WriteLine();
+                    //    Console.WriteLine("Index out of range!!!!");
+                    //    Console.WriteLine();
+                    //}
 
                     Console.WriteLine($"\nFrom {fromAccount}");
                     Console.WriteLine($"To account number/ID: {toAccount}");
@@ -483,6 +482,9 @@ namespace rabbit_bank
                     //decimal newAmount = GlobalItems.balanceList[amount];
 
                     //convertToUSD(amount);
+
+                    //if(amount )
+
                     return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
                 }
                 catch (Exception)
@@ -540,7 +542,7 @@ namespace rabbit_bank
             Console.Write(" Accounts and balances ");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine();  
             //CultureInfo c2 = CultureInfo.GetCultureInfo("sv-SE");
             //.ToString(c2)
             List<AccountModel> tempAccount = userIndex.accounts;
@@ -576,9 +578,6 @@ namespace rabbit_bank
             bool createAccRunning = true;
             while (createAccRunning)
             {
-
-
-
                 for (int i = 0; i < userIndex.accounts.Count; i++)
                 {
                     GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
@@ -586,7 +585,7 @@ namespace rabbit_bank
                 Console.WriteLine("==============================\nVälj vilket konto du vill skapa.\n==============================");
                 Console.ResetColor();
                 Console.WriteLine("1. Checking account. Sorry, no interest rate.");
-                Console.WriteLine($"2. Savings account. Current interest rate: {interestRate}");
+                Console.WriteLine($"2. Savings account. Current interest rate: {interestRate} %");
                 Console.WriteLine($"3. Currency account (Currency USD || Exchange rate: {GlobalItems.currencyRateList[1].ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                 Console.WriteLine("4. Cancel");
                 string userChoice = Console.ReadLine();

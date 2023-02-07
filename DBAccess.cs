@@ -178,15 +178,6 @@ namespace rabbit_bank
             }
         }
 
-        public static void ListNewPayrollAcc(AccountModel account) // WORK IN PROGRESS. PROBLEMS WITH QUERY syntax QQ
-        {
-            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
-            {
-                cnn.Execute("SELECT bank_account (name, interest_rate, user_id, currency_id) values (@name, @interest_rate, @user_id, @currency_id)", account);
-
-            }
-        }
-
         private static string LoadConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
@@ -208,6 +199,7 @@ namespace rabbit_bank
                 }
             }
         }
+
         public static void subtractAttempt(UserModel specificUser)
         {
             using (var conn = new NpgsqlConnection(LoadConnectionString()))
@@ -220,6 +212,7 @@ namespace rabbit_bank
                 }
             }
         }
+
         public static void resetAttempts(UserModel specificUser)
         {
             using (var conn = new NpgsqlConnection(LoadConnectionString()))
