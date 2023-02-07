@@ -151,6 +151,15 @@ namespace rabbit_bank
 
         }
 
+        public static void UpdateExchangeRate(decimal userInput)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE bank_currency SET exchange_rate = {userInput} WHERE name = 'USD'");
+
+            }
+        }
+
         public static void SaveBankUser(UserModel user)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))

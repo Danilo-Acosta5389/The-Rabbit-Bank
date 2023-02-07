@@ -9,6 +9,7 @@ namespace rabbit_bank
 {
     public class MenuOptions
     {
+
         public static void UserLoginMenu(UserModel userIndex)
         {
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
@@ -102,7 +103,8 @@ namespace rabbit_bank
                     "\n2. Transaction history [NOT WORKING]" +
                     "\n3. Set exchange rate [NOT WORKING]" +
                     "\n4. Create new user" +
-                    "\n5. Logout ");
+                    "\n5. Set exchange rate" +
+                    "\n6. Logout ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -141,6 +143,7 @@ namespace rabbit_bank
                         break;
 
                     case "3":
+                        
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("");
                         break;
@@ -150,6 +153,11 @@ namespace rabbit_bank
                         break;
 
                     case "5":
+
+                        MenuOptions.SetExchangeRate();
+                        break;
+
+                    case "6":
                         loggedIn = false;
                         break;
 
@@ -158,6 +166,13 @@ namespace rabbit_bank
                         continue;
                 }
             }
+        }
+
+        public static void SetExchangeRate()
+        {            
+            Console.WriteLine("Choose new exchange rate for USD.");
+            decimal userInput = decimal.Parse(Console.ReadLine());
+            DBAccess.UpdateExchangeRate(userInput);
         }
 
         public static void CreateNewUser()
