@@ -98,53 +98,58 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.WriteLine();
 
-                Console.WriteLine("1. See accounts and balances " +
-                    "\n2. Transfer money" +
-                    "\n3. Add a new account [NOT WORKING]" +
-                    "\n4. Make a bank loan [NOT WORKING]" +
-                    "\n5. Transaction history [NOT WORKING]" +
-                    "\n6. Set exchange rate [NOT WORKING]" +
-                    "\n7. Create new user" +
-                    "\n8. Logout ");
+                Console.WriteLine("1. Block/Unblock Users" +
+                    "\n2. Transaction history [NOT WORKING]" +
+                    "\n3. Set exchange rate [NOT WORKING]" +
+                    "\n4. Create new user" +
+                    "\n5. Logout ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
                 {
                     case "1":
-                        MenuOptions.AccountsAndBalances(userIndex);
+                        Console.WriteLine("List of users:");
+                        List<UserModel> user = DBAccess.LoadBankUsers();
+                        foreach (UserModel u in user)
+                        {
+                            Console.WriteLine($"ID is: {u.id}, Name is {u.first_name}, number of attempts: {u.attempts}");
+                        }
+                        Console.WriteLine("\n1. Block a user with ID\n2. Unblock user by ID");
+                        string bChoice = Console.ReadLine();
+                        switch (bChoice)
+                        {
+                            case "1":
+                                Console.WriteLine("input id of user you want to block");
+                                int pick = int.Parse(Console.ReadLine());
+                                DBAccess.blockUser(pick);
+                                Console.WriteLine("Done!");
+                                Console.ReadLine();
+                                break;
+                            case "2":
+                                Console.WriteLine("input id of user you want to unblock");
+                                int id = int.Parse(Console.ReadLine());
+                                DBAccess.unblockUser(id);
+                                Console.WriteLine("Done!");
+                                Console.ReadLine();
+                                break;
+                        }
                         break;
-
                     case "2":
-                        MenuOptions.RunTransferMoney(userIndex);
-                        break;
-
-                    case "3":
-                        MenuOptions.CreateAccount(userIndex);
                         Console.WriteLine("");
                         //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
                         //ToDo: sparkonto med ränta
                         break;
 
-                    case "4":
+                    case "3":
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("");
                         break;
 
-                    case "5":
-                        //ToDo: skapa en funktion för användare att låna pengar
-                        Console.WriteLine("");
-                        break;
-
-                    case "6":
-                        // ToDo: Skapa en funktion för användare att se överföringshistorik
-                        Console.WriteLine("");
-                        break;
-
-                    case "7":
+                    case "4":
                         MenuOptions.CreateNewUser();
                         break;
 
-                    case "8":
+                    case "5":
                         loggedIn = false;
                         break;
 
