@@ -570,23 +570,28 @@ namespace rabbit_bank
         public static void CreateAccount(UserModel userIndex)
         {
             Console.Clear();
+            double interestRate = 2.85;
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.DarkGray;
             bool createAccRunning = true;
             while (createAccRunning)
             {
-                double interestRate = 2.85;
+
+
+
+                for (int i = 0; i < userIndex.accounts.Count; i++)
+                {
+                    GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
+                }
                 Console.WriteLine("==============================\nVälj vilket konto du vill skapa.\n==============================");
                 Console.ResetColor();
                 Console.WriteLine("1. Checking account. Sorry, no interest rate.");
-
                 Console.WriteLine($"2. Savings account. Current interest rate: {interestRate}");
-                Console.WriteLine($"3. Currency account (Currency USD || Exchange rate: ");
+                Console.WriteLine($"3. Currency account (Currency USD || Exchange rate: {GlobalItems.currencyRateList[1].ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                 Console.WriteLine("4. Cancel");
                 string userChoice = Console.ReadLine();
                 int userInput = int.Parse(userChoice);
                 int _user_id = userIndex.id;
-
                 {
                     switch (userInput)
                     {
@@ -628,7 +633,7 @@ namespace rabbit_bank
                             Console.WriteLine("case 2");
                             Console.WriteLine($"Savings account (Interest rate: {interestRate}");
                             string savings_name = "Sparkonto";
-
+                            
                             AccountModel newSavingsAccount = new AccountModel
                             {
                                 name = savings_name,
