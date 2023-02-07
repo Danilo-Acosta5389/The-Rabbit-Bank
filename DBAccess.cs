@@ -194,42 +194,40 @@ namespace rabbit_bank
 
         public static void updateBlockedUser()
         {
-            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                conn.Open();
+                cnn.Execute("UPDATE bank_user SET blocked_user = true WHERE attempts < 1");
 
-                using (var cmd = new NpgsqlCommand("UPDATE bank_user SET blocked_user = true WHERE attempts < 1", conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-                using (var cmd = new NpgsqlCommand("UPDATE bank_user SET blocked_user = false WHERE attempts > 0", conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                cnn.Execute("UPDATE bank_user SET blocked_user = false WHERE attempts > 0");
             }
         }
         public static void subtractAttempt(UserModel specificUser)
         {
-            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                conn.Open();
-
-                using (var cmd = new NpgsqlCommand($"UPDATE bank_user SET attempts = attempts - 1 WHERE first_name = '{specificUser.first_name}'", conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+                cnn.Execute($"UPDATE bank_user SET attempts = attempts - 1 WHERE first_name = '{specificUser.first_name}'");
             }
         }
         public static void resetAttempts(UserModel specificUser)
         {
-            using (var conn = new NpgsqlConnection(LoadConnectionString()))
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                conn.Open();
+                cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE first_name = '{specificUser.first_name}'");
+            }
+        }
+        public static void blockUser(int pick)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE bank_user SET attempts = 0 WHERE id = '{pick}'");
 
-                using (var cmd = new NpgsqlCommand($"UPDATE bank_user SET attempts = 3 WHERE first_name = '{specificUser.first_name}'", conn))
-                {
-                    cmd.ExecuteNonQuery();
-                }
+            }
+        }
+        public static void unblockUser(int id)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE id = '{id}'");
             }
         }
     }
