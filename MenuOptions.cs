@@ -342,17 +342,19 @@ namespace rabbit_bank
                     Console.Write(" Transfer to others account ");
                     Console.ResetColor();
                     Console.WriteLine("\n");
-                    //List<AccountModel> tempAccount = userIndex.accounts;
+
+                    var tempList = GlobalItems.accountsList;
+                    tempList.Clear();
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
                         //GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        //GlobalItems.accountsList.Add(tempAccount[i].id);
+                        tempList.Add(userIndex.accounts[i].id);
                         GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
-                        GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
+                        //GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
                         Console.WriteLine($"{userIndex.accounts[i].name}");
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
-                        Console.WriteLine(userIndex.accounts[i].currency_exchange_rate);
+                        //Console.WriteLine(userIndex.accounts[i].currency_exchange_rate);
 
                         if (userIndex.accounts[i].currency_name == "SEK")
                         {
@@ -370,8 +372,25 @@ namespace rabbit_bank
                     Console.WriteLine("\nPlease input FROM account");
                     Console.Write("Account number/ID here --> ");
                     int fromAccount = int.Parse(Console.ReadLine());
-                    //int fromAccountID = GlobalItems.accountsList[fromAccount];
-                    //string fromAccountName = GlobalItems.accountNameList[fromAccount];
+
+                    int lastOnList = tempList.Last();
+
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        Console.WriteLine(tempList[i]);
+                        if (fromAccount == tempList[i])
+                        {
+                            Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
+                            Console.WriteLine("WOHOO FOUND IT");
+                            break;
+                        }
+                        else if (lastOnList == tempList[i])
+                        {
+                            Console.WriteLine("Error. Invalid account number/ID.");
+                            return false;
+                        }
+                    }
+
 
                     Console.WriteLine("\nPlease input RECIEVING account number/ID");
                     Console.Write("Account numeber/ID here --> ");
@@ -380,25 +399,25 @@ namespace rabbit_bank
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    //bool accountInRange;
 
-                    //if(GlobalItems.accountsList.Count > userIndex.accounts.Count)
-                    //{
-                    //    Console.WriteLine();
-                    //    Console.WriteLine("Index out of range!!!!");
-                    //    Console.WriteLine();
-                    //}
 
                     Console.WriteLine($"\nFrom {fromAccount}");
                     Console.WriteLine($"To account number/ID: {toAccount}");
-                    if (GlobalItems.currencyNameList[fromAccount] == "SEK")
+                    //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    for (int i = 0; i < GlobalItems.currencyNameList.Count; i++)
                     {
-                        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                        Console.WriteLine(GlobalItems.currencyNameList[i]);
+
+                        if (GlobalItems.currencyNameList[i] == "SEK")
+                        {
+                            Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                        }
+                        else if (GlobalItems.currencyNameList[i] == "USD")
+                        {
+                            Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                        }
                     }
-                    else if (GlobalItems.currencyNameList[fromAccount] == "USD")
-                    {
-                        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
-                    }
+                    
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
@@ -416,8 +435,9 @@ namespace rabbit_bank
                         Console.WriteLine("\nInvalid input");
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     Console.WriteLine("\nError");
                     Console.WriteLine("Do you wish to exit?");
                     Console.Write("Y/N --> ");
@@ -450,14 +470,16 @@ namespace rabbit_bank
                     Console.Write(" Transfer between own accounts ");
                     Console.ResetColor();
                     Console.WriteLine("\n");
-                    List<AccountModel> tempAccount = userIndex.accounts;
+
+                    var tempList = GlobalItems.accountsList;
+                    tempList.Clear();
 
                     // Below we iterate through the logged in persons bank accounts in DB
                     //Each account is added to a List. The list index is showed to the user.
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        //GlobalItems.accountsList.Add(userIndex.accounts[i].id);
+                        GlobalItems.accountsList.Add(userIndex.accounts[i].id);
                         //GlobalItems.balanceList.Add(userIndex.accounts[i].balance);
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
                         Console.WriteLine($"Account name: {userIndex.accounts[i].name}");
@@ -466,20 +488,53 @@ namespace rabbit_bank
                         {
                             Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                         }
-                        else if (tempAccount[i].currency_name == "USD")
+                        else if (userIndex.accounts[i].currency_name == "USD")
                         {
                             Console.WriteLine($"Balance: {userIndex.accounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                         }
                         Console.WriteLine();
                     }
-
+                    
                     Console.Write("\nPlease input from account: ");
                     int fromAccount = int.Parse(Console.ReadLine());
-                    //int fromAccountID = GlobalItems.accountsList[fromAccount];
+
+                    int lastOnList = tempList.Last();
+
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        //Console.WriteLine(tempList[i]);
+                        if (fromAccount == tempList[i])
+                        {
+                            //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
+                            //Console.WriteLine("WOHOO FOUND IT");
+                            break;
+                        }
+                        else if (lastOnList == tempList[i])
+                        {
+                            Console.WriteLine("Error. Invalid account number/ID.");
+                            return false;
+                        }
+                    }
 
                     Console.Write("Please input to account: ");
                     int toAccount = int.Parse(Console.ReadLine());
                     //int toAccountID = GlobalItems.accountsList[toAccount];
+
+                    for (int i = 0; i < tempList.Count; i++)
+                    {
+                        Console.WriteLine(tempList[i]);
+                        if (toAccount == tempList[i])
+                        {
+                            Console.WriteLine("{0} = {1}", toAccount, tempList[i]);
+                            Console.WriteLine("WOHOO FOUND IT");
+                            break;
+                        }
+                        else if (lastOnList == tempList[i])
+                        {
+                            Console.WriteLine("Could not find " + toAccount);
+                            return false;
+                        }
+                    }
 
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
