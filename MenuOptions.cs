@@ -400,23 +400,38 @@ namespace rabbit_bank
                     decimal amount = decimal.Parse(Console.ReadLine());
 
 
-
-                    Console.WriteLine($"\nFrom {fromAccount}");
+                    Console.WriteLine($"\nFrom account number/ID: {fromAccount}");
                     Console.WriteLine($"To account number/ID: {toAccount}");
-                    //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
-                    for (int i = 0; i < GlobalItems.currencyNameList.Count; i++)
-                    {
-                        Console.WriteLine(GlobalItems.currencyNameList[i]);
+                    Console.WriteLine($"Amount: {amount}");
 
-                        if (GlobalItems.currencyNameList[i] == "SEK")
-                        {
-                            Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
-                        }
-                        else if (GlobalItems.currencyNameList[i] == "USD")
-                        {
-                            Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
-                        }
-                    }
+
+
+                    //if (GlobalItems.currencyNameList[0] == "SEK")
+                    //{
+                    //    Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    //}
+                    //else if (GlobalItems.currencyNameList[1] == "USD")
+                    //{
+                    //    Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                    //}
+
+
+
+                    
+                    //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    //for (int i = 0; i < GlobalItems.currencyNameList.Count; i++)
+                    //{
+                    //    Console.WriteLine(GlobalItems.currencyNameList[i]);
+
+                    //    if (GlobalItems.currencyNameList[i] == "SEK")
+                    //    {
+                    //        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    //    }
+                    //    else if (GlobalItems.currencyNameList[i] == "USD")
+                    //    {
+                    //        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                    //    }
+                    //}
                     
 
                     Console.Write("\nIs this correct? Y/N: ");
