@@ -377,11 +377,11 @@ namespace rabbit_bank
 
                     for (int i = 0; i < tempList.Count; i++)
                     {
-                        Console.WriteLine(tempList[i]);
+                        //Console.WriteLine(tempList[i]);
                         if (fromAccount == tempList[i])
                         {
-                            Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
-                            Console.WriteLine("WOHOO FOUND IT");
+                            //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
+                            //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
                         else if (lastOnList == tempList[i])
@@ -537,16 +537,16 @@ namespace rabbit_bank
 
                     for (int i = 0; i < tempList.Count; i++)
                     {
-                        Console.WriteLine(tempList[i]);
+                        //Console.WriteLine(tempList[i]);
                         if (toAccount == tempList[i])
                         {
-                            Console.WriteLine("{0} = {1}", toAccount, tempList[i]);
-                            Console.WriteLine("WOHOO FOUND IT");
+                            //Console.WriteLine("{0} = {1}", toAccount, tempList[i]);
+                            //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
                         else if (lastOnList == tempList[i])
                         {
-                            Console.WriteLine("Could not find " + toAccount);
+                            Console.WriteLine("Error. Invalid account number/ID.");
                             return false;
                         }
                     }
