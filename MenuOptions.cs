@@ -143,7 +143,9 @@ namespace rabbit_bank
                         break;
 
                     case "3":
-                        
+                        // Lets admin change exchange rate for USD
+                        MenuOptions.SetExchangeRate();
+
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("");
                         break;
@@ -173,6 +175,7 @@ namespace rabbit_bank
             Console.WriteLine("Choose new exchange rate for USD.");
             decimal userInput = decimal.Parse(Console.ReadLine());
             DBAccess.UpdateExchangeRate(userInput);
+            Console.WriteLine("Updated currency exchange rate to: ");
         }
 
         public static void CreateNewUser()

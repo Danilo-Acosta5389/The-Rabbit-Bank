@@ -160,6 +160,15 @@ namespace rabbit_bank
             }
         }
 
+        public static void ListExchangeRate()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"SELECT bank_currency.exchange_rate name = 'USD'");
+
+            }
+        }
+
         public static void SaveBankUser(UserModel user)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
