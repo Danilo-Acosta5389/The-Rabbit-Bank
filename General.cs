@@ -11,7 +11,7 @@ namespace rabbit_bank
     public class General
     {
         public static void app()
-        {            
+        {
             bool isRunning = true;
             while (isRunning)
             {
@@ -20,12 +20,12 @@ namespace rabbit_bank
                 Console.WriteLine($"users length: {users.Count}");
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
+                    Console.WriteLine($"Existing user id: {user.id} name: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}, admin = {user.role_id}");
                 }
                 try
                 {
-                    Console.Write("\nPlease enter FirstName: ");
-                    string firstName = Console.ReadLine();
+                    Console.Write("\nPlease enter id: ");
+                    int ident = int.Parse(Console.ReadLine());
 
                     Console.Write("Please enter PinCode: ");
                     SecureString pin = HidePin();
@@ -36,7 +36,7 @@ namespace rabbit_bank
                     bool success = int.TryParse(pinCode, out inputPIN);
                     if (success)
                     {
-                        Login.LoginTry(firstName, inputPIN);
+                        Login.LoginTry(ident, inputPIN);
                     }
                     else
                     {
@@ -47,10 +47,13 @@ namespace rabbit_bank
                         Console.ReadKey();
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("ERROR, please try again.");
+                    Console.WriteLine(ex);
+                    Console.WriteLine("ERROR, try again");
+                    Console.ReadLine();
                 }
+                
             }
 
         }

@@ -96,12 +96,12 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
-        public static List<UserModel> CheckLogin(string firstName, int pinCode)
+        public static List<UserModel> CheckLogin(int firstName, int pinCode)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
 
-                var output = cnn.Query<UserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}' AND pin_code = '{pinCode}' AND bank_user.role_id = bank_role.id", new DynamicParameters());
+                var output = cnn.Query<UserModel>($"SELECT * FROM bank_user WHERE id = '{firstName}' AND pin_code = '{pinCode}'", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -109,12 +109,12 @@ namespace rabbit_bank
             // läser ut alla Users
             // Returnerar en lista av Users
         }
-        public static List<UserModel> CheckUsername(string firstName)
+        public static List<UserModel> CheckUsername(int firstName)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
 
-                var output = cnn.Query<UserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}'", new DynamicParameters());
+                var output = cnn.Query<UserModel>($"SELECT * FROM bank_user WHERE id = '{firstName}'", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
             }
@@ -205,7 +205,7 @@ namespace rabbit_bank
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE first_name = '{specificUser.first_name}'");
+                cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE id = '{specificUser.id}'");
             }
         }
         public static void blockUser(int pick)
