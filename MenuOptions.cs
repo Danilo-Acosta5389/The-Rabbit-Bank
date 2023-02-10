@@ -264,6 +264,8 @@ namespace rabbit_bank
 
         public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
+
+
             bool appRunning = true;
             while (appRunning)
             {
@@ -343,13 +345,13 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    var tempList = GlobalItems.accountsList;
-                    tempList.Clear();
+                    var tempIDlist = GlobalItems.accountsList;
+                    tempIDlist.Clear();
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
                         //GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        tempList.Add(userIndex.accounts[i].id);
+                        tempIDlist.Add(userIndex.accounts[i].id);
                         GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
                         //GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
                         Console.WriteLine($"{userIndex.accounts[i].name}");
@@ -406,6 +408,63 @@ namespace rabbit_bank
 
 
 
+                    //for (int i = 0; i < tempCurrList.Count; i++)
+                    //{
+                    //    Console.WriteLine(tempIDlist[i]);      //38, 40, 41, 42, 45
+                    //    Console.WriteLine(tempCurrList[i]); // SEK, SEK, USD, USD, SEK
+                    //    Console.WriteLine();
+
+
+                    //    if (fromAccount == tempIDlist[i] && tempCurrList[i] == "SEK")
+                    //    {
+                    //        Console.WriteLine("From account is swedish");
+
+                    //        for (int j = 0; j < tempIDlist.Count; j++)
+                    //        {
+                    //            if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                    //            {
+                    //                Console.WriteLine("To account is swedish");
+                    //            }
+                    //            else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                    //            {
+                    //                Console.WriteLine("To account is american");
+                    //                Console.WriteLine($"{convertCurrency(amount, "sek")}");
+                    //                amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                    //                Console.WriteLine("LOOOK HERE! USD");
+                    //            }
+                    //        }
+
+                    //    }
+                    //    else if (fromAccount == tempIDlist[i] && tempCurrList[i] == "USD")
+                    //    {
+                    //        Console.WriteLine("From account is american");
+                    //        Console.WriteLine();
+
+                    //        for (int j = 0; j < tempIDlist.Count; j++)
+                    //        {
+                    //            if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                    //            {
+                    //                Console.WriteLine("To account is swedish");
+                    //                Console.WriteLine($"{convertCurrency(amount, "usd")}");
+                    //                amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                    //                Console.WriteLine("LOOK HERE!! SEK");
+                    //            }
+                    //            else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                    //            {
+                    //                Console.WriteLine("To account is american");
+                    //            }
+                    //        }
+                    //    }
+
+                    //}
+                    //decimal newAmount = Math.Round(amount, 2);
+                    //Console.WriteLine("HERE AGAIN");
+                    //Console.WriteLine(newAmount);
+                    //Console.WriteLine();
+
+
+
+
                     //if (GlobalItems.currencyNameList[0] == "SEK")
                     //{
                     //    Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -417,7 +476,7 @@ namespace rabbit_bank
 
 
 
-                    
+
                     //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                     //for (int i = 0; i < GlobalItems.currencyNameList.Count; i++)
                     //{
@@ -432,7 +491,7 @@ namespace rabbit_bank
                     //        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                     //    }
                     //}
-                    
+
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
@@ -569,57 +628,41 @@ namespace rabbit_bank
                         {
                             Console.WriteLine("From account is swedish");
 
-                            if (toAccount == tempIDlist[i] && tempCurrList[i] == "SEK")
+                            for (int j = 0; j < tempIDlist.Count; j++)
                             {
-                                Console.WriteLine("To account is swedish");
+                                if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                                {
+                                    Console.WriteLine("To account is swedish");
+                                }
+                                else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                                {
+                                    Console.WriteLine("To account is american");
+                                    Console.WriteLine($"{convertCurrency(amount, "sek")}");
+                                    amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                                    Console.WriteLine("LOOOK HERE! USD");
+                                }
                             }
-                            else if (toAccount == tempIDlist[i] && tempCurrList[i] == "USD")
-                            {
-                                Console.WriteLine("To account is american");
-                            }
-
-                            //if (tempCurrList[i] == "SEK")
-                            //{
-                            //    Console.WriteLine($"{convertCurrency(amount, "sek")}");
-                            //    amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
-                            //    Console.WriteLine("LOOK HERE!! SEK");
-                            //}
-                            //else if (tempCurrList[i] == "USD")
-                            //{
-                            //    Console.WriteLine($"{convertCurrency(amount, "usd")}");
-                            //    amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
-                            //    Console.WriteLine("LOOOK HERE! USD");
-                            //}
 
                         }
                         else if (fromAccount == tempIDlist[i] && tempCurrList[i] == "USD")
                         {
                             Console.WriteLine("From account is american");
                             Console.WriteLine();
-                            if (tempCurrList[i] == "SEK")
+
+                            for (int j = 0; j < tempIDlist.Count; j++)
                             {
-                                Console.WriteLine("To account is swedish");
+                                if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                                {
+                                    Console.WriteLine("To account is swedish");
+                                    Console.WriteLine($"{convertCurrency(amount, "usd")}");
+                                    amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                                    Console.WriteLine("LOOK HERE!! SEK");
+                                }
+                                else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                                {
+                                    Console.WriteLine("To account is american");
+                                }
                             }
-                            else if (tempCurrList[i] == "USD")
-                            {
-                                Console.WriteLine("To account is american");
-                            }
-
-
-
-
-                            //if (tempCurrList[i] == "SEK")
-                            //{
-                            //    Console.WriteLine($"{convertCurrency(amount, "sek")}");
-                            //    amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
-                            //    Console.WriteLine("LOOK HERE!! SEK");
-                            //}
-                            //else if (tempCurrList[i] == "USD")
-                            //{
-                            //    Console.WriteLine($"{convertCurrency(amount, "usd")}");
-                            //    amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
-                            //    Console.WriteLine("LOOOK HERE! USD");
-                            //}
                         }
                         
                     }

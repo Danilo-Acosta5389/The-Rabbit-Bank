@@ -134,6 +134,16 @@ namespace rabbit_bank
             }
         }
 
+        //public static AccountModel GetexRate()
+        //{
+        //    using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+        //    {
+        //        var output = cnn.Query<AccountModel>($"SELECT bank_currency.*, bank_currency.name AS currency_name, bank_currency.exchange_rate AS currency_exchange_rate FROM bank_currency WHERE name = USD AND bank_currency.id = 2", new DynamicParameters());
+        //        //Console.WriteLine(output);
+        //        return output;
+        //    }
+        //}
+
 
         public static List<AccountModel> GetUserAccounts(int user_id)
         {
