@@ -486,16 +486,18 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    var tempList = GlobalItems.accountsList;
-                    tempList.Clear();
-
+                    var tempIDlist = GlobalItems.accountsList;
+                    tempIDlist.Clear();
+                    var tempCurrList = GlobalItems.currencyNameList;
+                    tempCurrList.Clear();
                     // Below we iterate through the logged in persons bank accounts in DB
                     //Each account is added to a List. The list index is showed to the user.
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        GlobalItems.accountsList.Add(userIndex.accounts[i].id);
+                        tempIDlist.Add(userIndex.accounts[i].id);
                         //GlobalItems.balanceList.Add(userIndex.accounts[i].balance);
+                        tempCurrList.Add(userIndex.accounts[i].currency_name);
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
                         Console.WriteLine($"Account name: {userIndex.accounts[i].name}");
                         //Console.WriteLine($"Balance: {tempAccount[i].balance}");
@@ -513,18 +515,18 @@ namespace rabbit_bank
                     Console.Write("\nPlease input from account: ");
                     int fromAccount = int.Parse(Console.ReadLine());
 
-                    int lastOnList = tempList.Last();
+                    int lastOnList = tempIDlist.Last();
 
-                    for (int i = 0; i < tempList.Count; i++)
+                    for (int i = 0; i < tempIDlist.Count; i++)
                     {
                         //Console.WriteLine(tempList[i]);
-                        if (fromAccount == tempList[i])
+                        if (fromAccount == tempIDlist[i])
                         {
                             //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
                             //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
-                        else if (lastOnList == tempList[i])
+                        else if (lastOnList == tempIDlist[i])
                         {
                             Console.WriteLine("Error. Invalid account number/ID.");
                             return false;
@@ -535,16 +537,16 @@ namespace rabbit_bank
                     int toAccount = int.Parse(Console.ReadLine());
                     //int toAccountID = GlobalItems.accountsList[toAccount];
 
-                    for (int i = 0; i < tempList.Count; i++)
+                    for (int i = 0; i < tempIDlist.Count; i++)
                     {
                         //Console.WriteLine(tempList[i]);
-                        if (toAccount == tempList[i])
+                        if (toAccount == tempIDlist[i])
                         {
                             //Console.WriteLine("{0} = {1}", toAccount, tempList[i]);
                             //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
-                        else if (lastOnList == tempList[i])
+                        else if (lastOnList == tempIDlist[i])
                         {
                             Console.WriteLine("Error. Invalid account number/ID.");
                             return false;
@@ -554,11 +556,30 @@ namespace rabbit_bank
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    //decimal newAmount = GlobalItems.balanceList[amount];
+                    for (int i = 0; i < tempCurrList.Count; i++)
+                    {
+                        Console.WriteLine(tempIDlist[i]);
+                        Console.WriteLine(tempCurrList[i]);
+                        Console.WriteLine();
+                        if (fromAccount == tempIDlist[i])
+                        {
+                            if (tempCurrList[i] == "SEK")
+                            {
+                                Console.WriteLine($"{convertCurrency(amount, "sek")}");
+                                Console.WriteLine("LOOK HERE!! SEK");
+                            }
+                            else if (tempCurrList[i] == "usd")
+                            {
+                                Console.WriteLine($"{convertCurrency(amount, "usd")}");
+                                Console.WriteLine("LOOOK HERE! USD");
+                            }
+                        }
+                        
+                    }
 
-                    //convertToUSD(amount);
 
-                    //if(amount )
+                    
+
 
                     return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
                 }
@@ -643,6 +664,7 @@ namespace rabbit_bank
             Console.WriteLine("Please press ENTER to continue.");
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
+
 
         public static void CreateAccount(UserModel userIndex)
         {
@@ -784,15 +806,38 @@ namespace rabbit_bank
 
         }
 
-        public static decimal convertToUSD(decimal amount)
+        static string convertCurrency(decimal amount, string currencyName)
         {
-            //Ta in SEK och konvertera till USD
-            //1 * 10,28 = 1 usd
-            //returnera USD
-            //
+            /*
+            Tar in SEK och konverterar till USD och vice versa
+            10,35 sek = 1 usd
+            returnera resultat för USD till SEK eller från SEK till USD
+
+            Om det förs in 'sek' i 'currency' så blir formeln amount / 10,35. Exempel: 100 / 10,35 = 9,66. 
+            Användaren som för över 100 sek till ett USD konto, USD kontot tar då emot 9,66 dollar.
+            
+            Om det förs in 'usd' i istället så blir formeln amount * 10,35 . Exempel: 100 * 10,35 = 1035. 
+            Användaren som för över 100 dollar till SEK konto, SEK kontot tar då emot 1035 kr.
+            */
+
             //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
-            decimal result = amount * 10.28m;
-            return result;
+            decimal usd = 10.35m;
+            if (currencyName == "sek")
+            {
+                decimal result = amount / usd;
+                return result.ToString();
+            }
+            else if (currencyName == "usd")
+            {
+                decimal result = amount * usd;
+                return result.ToString();
+            }
+            else
+            {
+                decimal result = amount * 1;
+                return result.ToString();
+            }
+
         }
     }
 }
