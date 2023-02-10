@@ -170,12 +170,18 @@ namespace rabbit_bank
             }
         }
 
+        // Method for changing exchange rate
         public static void SetExchangeRate()
-        {            
+        {
             Console.WriteLine("Choose new exchange rate for USD.");
             decimal userInput = decimal.Parse(Console.ReadLine());
             DBAccess.UpdateExchangeRate(userInput);
-            Console.WriteLine("Updated currency exchange rate to: ");
+            List<AccountModel> accounts = DBAccess.exchangeR();
+            foreach (AccountModel ex in accounts)
+            {
+                Console.WriteLine($"exchange rate for {ex.name}: {ex.exchange_rate}");
+            }
+            Console.ReadLine();
         }
 
         public static void CreateNewUser()

@@ -100,7 +100,6 @@ namespace rabbit_bank
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-
                 var output = cnn.Query<UserModel>($"SELECT bank_user.*, bank_role.is_admin, bank_role.is_client FROM bank_user, bank_role WHERE first_name = '{firstName}' AND pin_code = '{pinCode}' AND bank_user.role_id = bank_role.id", new DynamicParameters());
                 //Console.WriteLine(output);
                 return output.ToList();
@@ -153,9 +152,10 @@ namespace rabbit_bank
 
         public static void UpdateExchangeRate(decimal userInput)
         {
+            string newUserInput = userInput.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute($"UPDATE bank_currency SET exchange_rate = {userInput} WHERE name = 'USD'");
+                cnn.Execute($"UPDATE bank_currency SET exchange_rate = {newUserInput} WHERE name = 'USD'");
 
             }
         }
@@ -164,7 +164,7 @@ namespace rabbit_bank
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute($"SELECT bank_currency.exchange_rate name = 'USD'");
+                cnn.Execute($"SELECT exchange_rate FROM bank_currency WHERE name='USD'");
 
             }
         }
@@ -247,6 +247,19 @@ namespace rabbit_bank
             {
                 cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE id = '{id}'");
             }
+        }
+        public static List<AccountModel> exchangeR()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+
+                var output = cnn.Query<AccountModel>("select * from bank_currency", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+            // Kopplar upp mot DB:n
+            // läser ut alla Users
+            // Returnerar en lista av Users
         }
     }
 }

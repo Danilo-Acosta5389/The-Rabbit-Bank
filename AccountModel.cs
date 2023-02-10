@@ -20,7 +20,14 @@ namespace rabbit_bank
 
         public string currency_name { get; set; }
         public int currency_id { get; set; } = 1;
+        public decimal exchange_rate { get; set; }
 
         public double currency_exchange_rate { get; set; }
+    }
+
+    public class bank_currency
+    {
+        public double exchange_rate { get; set; }
+        public string name { get; set; }
     }
 }
