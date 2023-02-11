@@ -345,13 +345,13 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    var tempIDlist = GlobalItems.accountsList;
-                    tempIDlist.Clear();
+                    var tempList = GlobalItems.accountsList;
+                    tempList.Clear();
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
                         //GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        tempIDlist.Add(userIndex.accounts[i].id);
+                        tempList.Add(userIndex.accounts[i].id);
                         GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
                         //GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
                         Console.WriteLine($"{userIndex.accounts[i].name}");
