@@ -173,6 +173,13 @@ namespace rabbit_bank
         // Method for changing exchange rate
         public static void SetExchangeRate()
         {
+            //Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Set exchange rate on USD ");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("Choose new exchange rate for USD.");
             decimal userInput = decimal.Parse(Console.ReadLine());
             DBAccess.UpdateExchangeRate(userInput);
