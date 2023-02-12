@@ -8,10 +8,6 @@ namespace rabbit_bank
         {
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
             Console.WriteLine($"User ID: {userIndex.id}");
-            if (userIndex.role_id == 1)
-            {
-                Console.WriteLine($"[Admin account]");
-            }
 
             bool loggedIn = true;
             while (loggedIn)
@@ -85,10 +81,7 @@ namespace rabbit_bank
         {
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
             Console.WriteLine($"User ID: {userIndex.id}");
-            if (userIndex.role_id == 1)
-            {
-                Console.WriteLine($"[Admin account]");
-            }
+            Console.WriteLine($"[Admin account]");
 
             bool loggedIn = true;
             while (loggedIn)
@@ -96,7 +89,7 @@ namespace rabbit_bank
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.White;
-                Console.Write(" Make your choice with 1-8 ");
+                Console.Write(" Make your choice with 1-5 ");
                 Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine();
@@ -267,6 +260,8 @@ namespace rabbit_bank
 
         public static void RunTransferMoney(UserModel userIndex) //THIS IS ONLY FOR RUNNING TransferMoney()
         {
+
+
             bool appRunning = true;
             while (appRunning)
             {
@@ -346,14 +341,16 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    var tempList = GlobalItems.accountsList;
-                    tempList.Clear();
+                    var tempIDlist = GlobalItems.accountsList;
+                    var tempCurrList = GlobalItems.currencyNameList;
+                    tempCurrList.Clear();
+                    tempIDlist.Clear();
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
                         //GlobalItems.accountNameList.Add(tempAccount[i].name);
-                        tempList.Add(userIndex.accounts[i].id);
-                        GlobalItems.currencyNameList.Add(userIndex.accounts[i].currency_name);
+                        tempIDlist.Add(userIndex.accounts[i].id);
+                        tempCurrList.Add(userIndex.accounts[i].currency_name);
                         //GlobalItems.currencyRateList.Add(userIndex.accounts[i].currency_exchange_rate);
                         Console.WriteLine($"{userIndex.accounts[i].name}");
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
@@ -376,36 +373,127 @@ namespace rabbit_bank
                     Console.Write("Account number/ID here --> ");
                     int fromAccount = int.Parse(Console.ReadLine());
 
-                    int lastOnList = tempList.Last();
+                    int lastOnList = tempIDlist.Last();
 
-                    for (int i = 0; i < tempList.Count; i++)
+                    for (int i = 0; i < tempIDlist.Count; i++)
                     {
                         //Console.WriteLine(tempList[i]);
-                        if (fromAccount == tempList[i])
+                        if (fromAccount == tempIDlist[i])
                         {
                             //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
                             //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
-                        else if (lastOnList == tempList[i])
+                        else if (lastOnList == tempIDlist[i])
                         {
-                            Console.WriteLine("Error. Invalid account number/ID.");
+                            Console.WriteLine("\nError. Invalid account number/ID.");
                             return false;
                         }
                     }
+
 
 
                     Console.WriteLine("\nPlease input RECIEVING account number/ID");
                     Console.Write("Account numeber/ID here --> ");
                     int toAccount = int.Parse(Console.ReadLine());
 
+                    var getAllAccounts = GlobalItems.globalAccountsList;
+
+                    int lastOnList2 = tempIDlist.Last();
+
+                    for (int i = 0; i < getAllAccounts.Count; i++)
+                    {
+                        //Console.WriteLine(tempList[i]);
+                        if (toAccount == getAllAccounts[i].id)
+                        {
+                            //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
+                            //Console.WriteLine("WOHOO FOUND IT");
+                            break;
+                        }
+                        else if (lastOnList2 == getAllAccounts[i].id)
+                        {
+                            
+                            Console.WriteLine("\nError. Invalid account number/ID.");
+                            return false;
+                        }
+                    }
+
+
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
 
+
+                    // ==========BELOW IS THE ALGORITM THAT WILL CONVERT CURRENCY FROM ACCOUNTS ON TRANSFER========
+
+
+                    int currencyID = 0;
+
+                    for (int i = 0; i < tempIDlist.Count; i++)
+                    {
+                        //Console.WriteLine(tempIDlist[i]);      //38, 40, 41, 42, 45
+                        //Console.WriteLine(tempCurrList[i]); // SEK, SEK, USD, USD, SEK
+                        //Console.WriteLine();
+
+                        //Below loops and if-statemnts check if the 'from' account has SEK or USD currency and then the same with 'To' account.
+                        //A conversion is being made if the from account has SEK and the recieving has USD
+
+                        if (fromAccount == tempIDlist[i] && tempCurrList[i] == "SEK")
+                        {
+                            //Console.WriteLine("From account is swedish");
+                            currencyID = 1;
+
+                            //for (int j = 0; j < getAllAccounts.Count; j++)
+                            //{
+                            //    if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "SEK")
+                            //    {
+                            //        //Console.WriteLine("To account is swedish");
+                            //    }
+                            //    else if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "USD")
+                            //    {
+                                    //Console.WriteLine("To account is american");
+                                    //Console.WriteLine($"{convertCurrency(amount, "sek")}");
+                                    //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                                    //Console.WriteLine("LOOOK HERE! USD");
+                                //}
+                            //}
+
+                        }
+                        else if (fromAccount == tempIDlist[i] && tempCurrList[i] == "USD")
+                        {
+                            //Console.WriteLine("From account is american");
+                            //Console.WriteLine();
+                            currencyID = 2;
+
+                            //for (int j = 0; j < tempIDlist.Count; j++)
+                            //{
+                            //    if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "SEK")
+                            //    {
+                                    //Console.WriteLine("To account is swedish");
+                                    //Console.WriteLine($"{convertCurrency(amount, "usd")}");
+                                    //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                                    //Console.WriteLine("LOOK HERE!! SEK");
+                                //}
+                                //else if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "USD")
+                                //{
+                                //    //Console.WriteLine("To account is american");
+                                //}
+                            //}
+                        }
+
+                    }
+                    decimal newAmount = Math.Round(amount, 2);
+                    //Console.WriteLine("HERE AGAIN");
+                    //Console.WriteLine(newAmount);
+                    Console.WriteLine();
+
+
                     Console.WriteLine($"\nFrom account number/ID: {fromAccount}");
                     Console.WriteLine($"To account number/ID: {toAccount}");
-                    Console.WriteLine($"Amount: {amount}");
+                    Console.WriteLine($"Amount: {newAmount}");
+
+                    
+
 
 
 
@@ -419,6 +507,8 @@ namespace rabbit_bank
                     //}
 
 
+
+                    //====================BELOW IS JUST A PRETTIER NUMBER PRESENTATION FOR THE USER============!!!
 
 
                     //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -442,7 +532,9 @@ namespace rabbit_bank
 
                     if (yesNo.ToLower() == "y")
                     {
-                        return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, amount);
+                        return DBAccess.TransferMoney(userIndex.id, 0, currencyID, fromAccount, toAccount, amount); // NEW
+
+                        //return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, newAmount); OLD
                     }
                     else if (yesNo.ToLower() == "n")
                     {
@@ -476,7 +568,7 @@ namespace rabbit_bank
             }
         }
 
-        public static bool TransferOwnAccounts(UserModel userIndex)
+        public static bool TransferOwnAccounts(UserModel userIndex)  // TRANSFER MONEY BETWEEN USERS OWN ACCOUNTS
         {
             while (true)
             {
@@ -489,16 +581,20 @@ namespace rabbit_bank
                     Console.ResetColor();
                     Console.WriteLine("\n");
 
-                    var tempList = GlobalItems.accountsList;
-                    tempList.Clear();
+                    //Below, two lists are declared, one containing account id's and the other currency name (eg. SEK and USD). The very same lists are also cleared on the next lines
+                    var tempIDlist = GlobalItems.accountsList;
+                    tempIDlist.Clear();
+                    var tempCurrList = GlobalItems.currencyNameList;
+                    tempCurrList.Clear();
 
                     // Below we iterate through the logged in persons bank accounts in DB
-                    //Each account is added to a List. The list index is showed to the user.
+                    //Each account id and currency name is added to the Lists. Also, the list indexes are showed to the user.
 
                     for (int i = 0; i < userIndex.accounts.Count; i++)
                     {
-                        GlobalItems.accountsList.Add(userIndex.accounts[i].id);
+                        tempIDlist.Add(userIndex.accounts[i].id);
                         //GlobalItems.balanceList.Add(userIndex.accounts[i].balance);
+                        tempCurrList.Add(userIndex.accounts[i].currency_name);
                         Console.WriteLine($"Account number/ID: {userIndex.accounts[i].id}");
                         Console.WriteLine($"Account name: {userIndex.accounts[i].name}");
                         //Console.WriteLine($"Balance: {tempAccount[i].balance}");
@@ -513,57 +609,117 @@ namespace rabbit_bank
                         Console.WriteLine();
                     }
 
+
                     Console.Write("\nPlease input from account: ");
-                    int fromAccount = int.Parse(Console.ReadLine());
+                    int fromAccount = int.Parse(Console.ReadLine()); //HERE the user inputs from wich account ID
 
-                    int lastOnList = tempList.Last();
+                    //the for loop below checks if the ID exist withing this users accounts
+                    //If not, the user gets thrown out one step.
 
-                    for (int i = 0; i < tempList.Count; i++)
+                    int lastOnList = tempIDlist.Last();
+                    for (int i = 0; i < tempIDlist.Count; i++)
                     {
-                        //Console.WriteLine(tempList[i]);
-                        if (fromAccount == tempList[i])
+                        //Console.WriteLine(tempIDlist[i]);
+                        if (fromAccount == tempIDlist[i])
                         {
-                            //Console.WriteLine("{0} = {1}", fromAccount, tempList[i]);
+                            //Console.WriteLine("{0} = {1}", fromAccount, tempIDlist[i]);
                             //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
-                        else if (lastOnList == tempList[i])
+                        else if (lastOnList == tempIDlist[i])
                         {
-                            Console.WriteLine("Error. Invalid account number/ID.");
+                            Console.WriteLine("\nError. Invalid account number/ID.");
                             return false;
                         }
                     }
 
-                    Console.Write("Please input to account: ");
+                    Console.Write("Please input to account: "); //The same procidure as above is done in 'To' account
                     int toAccount = int.Parse(Console.ReadLine());
-                    //int toAccountID = GlobalItems.accountsList[toAccount];
 
-                    for (int i = 0; i < tempList.Count; i++)
+                    for (int i = 0; i < tempIDlist.Count; i++)
                     {
                         //Console.WriteLine(tempList[i]);
-                        if (toAccount == tempList[i])
+                        if (toAccount == tempIDlist[i])
                         {
                             //Console.WriteLine("{0} = {1}", toAccount, tempList[i]);
                             //Console.WriteLine("WOHOO FOUND IT");
                             break;
                         }
-                        else if (lastOnList == tempList[i])
+                        else if (lastOnList == tempIDlist[i])
                         {
-                            Console.WriteLine("Error. Invalid account number/ID.");
+                            Console.WriteLine("\nError. Invalid account number/ID.");
                             return false;
                         }
                     }
 
+                    // ==========BELOW IS THE ALGORITM THAT WILL CONVERT CURRENCY FROM ACCOUNTS ON TRANSFER========
+
                     Console.Write("Please input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
 
-                    //decimal newAmount = GlobalItems.balanceList[amount];
+                    //Below loops and if-statemnts check if the 'from' account has SEK or USD currency and then the same with 'To' account.
+                    //A conversion is being made if the from account has SEK and the recieving has USD
 
-                    //convertToUSD(amount);
+                    int currencyID = 0; //This will determine if FROM SEK or FROM USD 
 
-                    //if(amount )
+                    for (int i = 0; i < tempCurrList.Count; i++)
+                    {
+                        //Console.WriteLine(tempIDlist[i]);      //38, 40, 41, 42, 45
+                        //Console.WriteLine(tempCurrList[i]); // SEK, SEK, USD, USD, SEK
+                        //Console.WriteLine();
 
-                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
+
+                        if (fromAccount == tempIDlist[i] && tempCurrList[i] == "SEK")
+                        {
+                            Console.WriteLine("From account is swedish");
+                            currencyID = 1;
+
+                            //for (int j = 0; j < tempIDlist.Count; j++)
+                            //{
+                            //    if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                            //    {
+                            //        Console.WriteLine("To account is swedish");
+                            //    }
+                            //    else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                            //    {
+                                    //Console.WriteLine("To account is american");
+                                    //Console.WriteLine($"{convertCurrency(amount, "in sek")}");
+                                    //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                                    //Console.WriteLine("LOOOK HERE! USD");
+                                //}
+                            //}
+
+                        }
+                        else if (fromAccount == tempIDlist[i] && tempCurrList[i] == "USD")
+                        {
+                            Console.WriteLine("From account is american");
+                            //Console.WriteLine();
+                            currencyID = 2;
+
+                            //for (int j = 0; j < tempIDlist.Count; j++)
+                            //{
+                            //    if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                            //    {
+                                    //Console.WriteLine("To account is swedish");
+                                    //Console.WriteLine($"{convertCurrency(amount, "in usd")}");
+                                    //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                                    //Console.WriteLine("LOOK HERE!! SEK");
+                            //    }
+                            //    else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                            //    {
+                            //        Console.WriteLine("To account is american");
+                            //    }
+                            //}
+                        }
+                    }
+
+                    //decimal newAmount = Math.Round(amount, 2);
+                    //Console.WriteLine();
+                    //Console.WriteLine(Math.Round(amount, 2) + "Will be transfered");
+                    //Console.WriteLine();
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, currencyID, fromAccount, toAccount, amount); // NEW
+
+                    //return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);  OLD
                 }
                 catch (Exception)
                 {
@@ -623,13 +779,13 @@ namespace rabbit_bank
             Console.WriteLine();
             //CultureInfo c2 = CultureInfo.GetCultureInfo("sv-SE");
             //.ToString(c2)
-            List<AccountModel> tempAccount = userIndex.accounts;
+            //List<AccountModel> tempAccount = userIndex.accounts;
             int counter = 1;
-            foreach (AccountModel account in tempAccount) // This is used to iterate through the logged in persons bank_account in DB
+            foreach (AccountModel account in userIndex.accounts) // This is used to iterate through the logged in persons bank_account in DB
             {
                 //List<AccountModel> tempAccount = userIndex.accounts;
                 Console.WriteLine($"{counter}. {account.name}");
-                Console.WriteLine($"Account id/nummber: {account.id}");
+                Console.WriteLine($"Account nummber/ID: {account.id}");
                 if (account.currency_name == "SEK")
                 {
                     Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -646,6 +802,7 @@ namespace rabbit_bank
             //Console.WriteLine("Please press ENTER to continue.");
             //while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
+
 
         public static void CreateAccount(UserModel userIndex)
         {
@@ -787,13 +944,25 @@ namespace rabbit_bank
 
         }
 
-        public static decimal convertToUSD(decimal amount)
-        {
-            //Ta in SEK och konvertera till USD
-            //1 * 10,28 = 1 usd
-            //returnera USD
-            //
+
+        //=== METHOD BELOW CAN BE DISCARDED, IT IS OF NO USE ANY MORE
+
+        //static string convertCurrency(decimal amount, string currencyName)
+        //{
+            /*
+            Tar in SEK och konverterar till USD och vice versa
+            10,35 sek = 1 usd
+            returnera resultat för USD till SEK eller från SEK till USD
+
+            Om det förs in 'sek' i 'currency' så blir formeln amount / 10,35. Exempel: 100 / 10,35 = 9,66. 
+            Användaren som för över 100 sek till ett USD konto, USD kontot tar då emot 9,66 dollar.
+            
+            Om det förs in 'usd' i istället så blir formeln amount * 10,35 . Exempel: 100 * 10,35 = 1035. 
+            Användaren som för över 100 dollar till SEK konto, SEK kontot tar då emot 1035 kr.
+            */
+
             //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
+
             decimal result = amount * 10.28m;
             return result;
         }
@@ -855,6 +1024,26 @@ namespace rabbit_bank
             }
 
         }
+
+        //    decimal usd = 10.35m;
+        //    if (currencyName == "sek")
+        //    {
+        //        decimal result = amount / usd;
+        //        return result.ToString();
+        //    }
+        //    else if (currencyName == "usd")
+        //    {
+        //        decimal result = amount * usd;
+        //        return result.ToString();
+        //    }
+        //    else
+        //    {
+        //        decimal result = amount * 1;
+        //        return result.ToString();
+        //    }
+
+        //}
+
     }
 
 

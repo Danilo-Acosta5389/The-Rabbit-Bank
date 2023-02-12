@@ -12,9 +12,9 @@ namespace rabbit_bank
 
     public class Login
     {
-        public static void LoginTry(string first_Name, int pin_Code)
+        public static void LoginTry(int first_Name, int pin_Code)
         {
-            string capInput = GlobalItems.currentTextInfo.ToTitleCase(first_Name.ToLower());
+            int capInput = first_Name;
             //Above is converting firstName input to match the way it is capitalized in DB.
             //first_name becomes capInput. If 'john' was passed into first_name, then capInput will give 'John'.
 
@@ -37,7 +37,7 @@ namespace rabbit_bank
                     loginRunning = false;
                     break;
                 }
-                else if (specificUser.first_name == capInput)
+                else if (specificUser.id == capInput)
                 {
                     if (pin_Code != int.Parse(specificUser.pin_code))
                     {
@@ -84,11 +84,11 @@ namespace rabbit_bank
 
                         //Console.WriteLine();
 
-                        if (user.is_admin)
+                        if (user.role_id == 1)
                         {
                             MenuOptions.AdminLoginMenu(user);
                         }
-                        else if (user.is_client)
+                        else if (user.role_id == 2)
                         {
                             MenuOptions.UserLoginMenu(user);
                         }

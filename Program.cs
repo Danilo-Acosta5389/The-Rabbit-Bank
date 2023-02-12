@@ -7,7 +7,7 @@ namespace rabbit_bank
     {
         static void Main(string[] args)
         {
-            General.app();
+            General.App();
         }
     }
 }
