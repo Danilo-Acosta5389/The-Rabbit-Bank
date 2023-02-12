@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace rabbit_bank
 {
@@ -34,7 +29,8 @@ namespace rabbit_bank
                     "\n3. Add a new account [NOT WORKING]" +
                     "\n4. Make a bank loan [NOT WORKING]" +
                     "\n5. Transaction history [NOT WORKING]" +
-                    "\n6. Logout");
+                    "\n6. Withdraw money [NOT WORKING]" +
+                    "\n7. Logout");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -66,6 +62,11 @@ namespace rabbit_bank
                         break;
 
                     case "6":
+                        WithDraw(userIndex.id);
+                        Console.WriteLine("");
+                        break;
+
+                    case "7":
                         //Logout
                         loggedIn = false;
                         break;
@@ -74,6 +75,8 @@ namespace rabbit_bank
                         Console.WriteLine("Please enter a number between 1 and 6.");
                         continue;
                 }
+                Console.WriteLine("Please press ENTER to continue.");
+                while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
             }
         }
 
@@ -367,7 +370,7 @@ namespace rabbit_bank
                         Console.WriteLine();
                     }
 
-                    
+
 
                     Console.WriteLine("\nPlease input FROM account");
                     Console.Write("Account number/ID here --> ");
@@ -417,7 +420,7 @@ namespace rabbit_bank
 
 
 
-                    
+
                     //Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
                     //for (int i = 0; i < GlobalItems.currencyNameList.Count; i++)
                     //{
@@ -432,7 +435,7 @@ namespace rabbit_bank
                     //        Console.WriteLine($"Amount: {amount.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
                     //    }
                     //}
-                    
+
 
                     Console.Write("\nIs this correct? Y/N: ");
                     string yesNo = Console.ReadLine();
@@ -509,7 +512,7 @@ namespace rabbit_bank
                         }
                         Console.WriteLine();
                     }
-                    
+
                     Console.Write("\nPlease input from account: ");
                     int fromAccount = int.Parse(Console.ReadLine());
 
@@ -617,7 +620,7 @@ namespace rabbit_bank
             Console.Write(" Accounts and balances ");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine();  
+            Console.WriteLine();
             //CultureInfo c2 = CultureInfo.GetCultureInfo("sv-SE");
             //.ToString(c2)
             List<AccountModel> tempAccount = userIndex.accounts;
@@ -640,8 +643,8 @@ namespace rabbit_bank
                 Console.WriteLine();
                 counter++;
             }
-            Console.WriteLine("Please press ENTER to continue.");
-            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+            //Console.WriteLine("Please press ENTER to continue.");
+            //while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
 
         public static void CreateAccount(UserModel userIndex)
@@ -707,7 +710,7 @@ namespace rabbit_bank
                             Console.WriteLine("case 2");
                             Console.WriteLine($"Savings account (Interest rate: {interestRate}");
                             string savings_name = "Sparkonto";
-                            
+
                             AccountModel newSavingsAccount = new AccountModel
                             {
                                 name = savings_name,
@@ -794,6 +797,68 @@ namespace rabbit_bank
             decimal result = amount * 10.28m;
             return result;
         }
+        public static void WithDraw(int user_id)
+        {
+            //visar anv konton och saldon
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Withdraw ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+
+            List<AccountModel> userAccounts = DBAccess.GetUserAccounts(user_id);
+
+            for (int i = 0; i < userAccounts.Count; i++)
+            {
+                
+                Console.WriteLine($"{i + 1}. {userAccounts[i].name}");
+                
+                if (userAccounts[i].currency_name == "SEK")
+                {
+                    Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                }
+                else if (userAccounts[i].currency_name == "USD")
+                {
+                    Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                }
+                Console.WriteLine("============================================================");
+            }
+
+
+            Console.Write("Which account do you want to withdraw from? :");
+            int account = int.Parse(Console.ReadLine());
+
+
+            account -= 1;
+            Console.WriteLine($"You chose : {userAccounts[account].name} ");
+
+        
+            Console.Write("How much would you like to withdraw? :");
+            decimal.TryParse(Console.ReadLine(), out decimal amount);
+
+
+            if (amount <= 0)
+            {
+                Console.WriteLine("You cannot withdraw a negative amount.");
+            }
+            else if (userAccounts[account].balance < amount)
+            {
+                Console.WriteLine("\nYou don't have enough money on your account");
+            }
+            else
+            {
+                decimal newBalance = userAccounts[account].balance -= amount;
+                Console.WriteLine($"\nYour balance is now: {newBalance} on account: {userAccounts[account].name} ");
+                DBAccess.UpdateAccount(user_id, userAccounts[account].id, newBalance);
+
+            }
+
+        }
     }
+
+
+
 }
+
 
