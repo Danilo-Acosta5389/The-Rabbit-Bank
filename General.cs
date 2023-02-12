@@ -10,7 +10,7 @@ namespace rabbit_bank
 {
     public class General
     {
-        public static void app()
+        public static void App()
         {
             bool isRunning = true;
             while (isRunning)
