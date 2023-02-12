@@ -16,12 +16,20 @@ namespace rabbit_bank
             while (isRunning)
             {
                 WelcomeRabbit();
-                List<UserModel> users = DBAccess.LoadBankUsers();
-                Console.WriteLine($"users length: {users.Count}");
-                foreach (UserModel user in users)
-                {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
-                }
+                //List<UserModel> users = DBAccess.LoadBankUsers();
+                //Console.WriteLine($"users length: {users.Count}");
+                //foreach (UserModel user in users)
+                //{
+                //    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
+                //}
+                //int count = 1;
+                //var getAllAccounts = GlobalItems.globalAccountsList;
+                //foreach (var accounts in getAllAccounts)
+                //{
+                //    Console.WriteLine($" {count}. Account ID: {accounts.id}, currency ID: {accounts.currency_id}, currency name: {accounts.currency_name}");
+                //    count++;
+                //}
+
                 try
                 {
                     Console.Write("\nPlease enter FirstName: ");
