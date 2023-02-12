@@ -528,9 +528,9 @@ namespace rabbit_bank
 
                     if (yesNo.ToLower() == "y")
                     {
-                        return DBAccess.TransferMoney(userIndex.id, 0, currencyID, fromAccount, toAccount, amount);
+                        return DBAccess.TransferMoney(userIndex.id, 0, currencyID, fromAccount, toAccount, amount); // NEW
 
-                        //return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, newAmount);
+                        //return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, newAmount); OLD
                     }
                     else if (yesNo.ToLower() == "n")
                     {
@@ -617,7 +617,7 @@ namespace rabbit_bank
                     int lastOnList = tempIDlist.Last();
                     for (int i = 0; i < tempIDlist.Count; i++)
                     {
-                        Console.WriteLine(tempIDlist[i]);
+                        //Console.WriteLine(tempIDlist[i]);
                         if (fromAccount == tempIDlist[i])
                         {
                             //Console.WriteLine("{0} = {1}", fromAccount, tempIDlist[i]);
@@ -626,7 +626,7 @@ namespace rabbit_bank
                         }
                         else if (lastOnList == tempIDlist[i])
                         {
-                            Console.WriteLine("Error. Invalid account number/ID.");
+                            Console.WriteLine("\nError. Invalid account number/ID.");
                             return false;
                         }
                     }
@@ -658,7 +658,7 @@ namespace rabbit_bank
                     //Below loops and if-statemnts check if the 'from' account has SEK or USD currency and then the same with 'To' account.
                     //A conversion is being made if the from account has SEK and the recieving has USD
 
-                    int currencyID = 0;
+                    int currencyID = 0; //This will determine if FROM SEK or FROM USD 
 
                     for (int i = 0; i < tempCurrList.Count; i++)
                     {
@@ -712,12 +712,12 @@ namespace rabbit_bank
                     }
 
                     //decimal newAmount = Math.Round(amount, 2);
-                    Console.WriteLine();
-                    Console.WriteLine(Math.Round(amount, 2) + "Will be transfered");
-                    Console.WriteLine();
-                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, currencyID, fromAccount, toAccount, amount);
+                    //Console.WriteLine();
+                    //Console.WriteLine(Math.Round(amount, 2) + "Will be transfered");
+                    //Console.WriteLine();
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, currencyID, fromAccount, toAccount, amount); // NEW
 
-                    //return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);
+                    //return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);  OLD
                 }
                 catch (Exception)
                 {
@@ -783,7 +783,7 @@ namespace rabbit_bank
             {
                 //List<AccountModel> tempAccount = userIndex.accounts;
                 Console.WriteLine($"{counter}. {account.name}");
-                Console.WriteLine($"Account id/nummber: {account.id}");
+                Console.WriteLine($"Account nummber/ID: {account.id}");
                 if (account.currency_name == "SEK")
                 {
                     Console.WriteLine($"Balance: {account.balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -942,8 +942,11 @@ namespace rabbit_bank
 
         }
 
-        static string convertCurrency(decimal amount, string currencyName)
-        {
+
+        //=== METHOD BELOW CAN BE DISCARDED, IT IS OF NO USE ANY MORE
+
+        //static string convertCurrency(decimal amount, string currencyName)
+        //{
             /*
             Tar in SEK och konverterar till USD och vice versa
             10,35 sek = 1 usd
@@ -957,24 +960,24 @@ namespace rabbit_bank
             */
 
             //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
-            decimal usd = 10.35m;
-            if (currencyName == "sek")
-            {
-                decimal result = amount / usd;
-                return result.ToString();
-            }
-            else if (currencyName == "usd")
-            {
-                decimal result = amount * usd;
-                return result.ToString();
-            }
-            else
-            {
-                decimal result = amount * 1;
-                return result.ToString();
-            }
+        //    decimal usd = 10.35m;
+        //    if (currencyName == "sek")
+        //    {
+        //        decimal result = amount / usd;
+        //        return result.ToString();
+        //    }
+        //    else if (currencyName == "usd")
+        //    {
+        //        decimal result = amount * usd;
+        //        return result.ToString();
+        //    }
+        //    else
+        //    {
+        //        decimal result = amount * 1;
+        //        return result.ToString();
+        //    }
 
-        }
+        //}
     }
 }
 
