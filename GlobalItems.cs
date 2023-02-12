@@ -17,6 +17,7 @@ namespace rabbit_bank
         public static List<decimal> balanceList = new List<decimal>();
         public static List<double> currencyRateList = new List<double>();
         public static List<double> interestRateList = new List<double>();
+        public static List<AccountModel> globalAccountsList = DBAccess.GetAllAccountsIdAndCurrency();
 
     }
 }
