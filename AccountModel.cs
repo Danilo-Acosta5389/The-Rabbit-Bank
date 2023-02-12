@@ -19,6 +19,7 @@ namespace rabbit_bank
         public double interest_rate { get; set; } = 0;
 
         public string currency_name { get; set; }
+
         public int currency_id { get; set; } = 1;
         public decimal exchange_rate { get; set; }
 

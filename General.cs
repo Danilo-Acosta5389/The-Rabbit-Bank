@@ -5,27 +5,44 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Npgsql.Replication;
+using Spectre.Console;
 
 namespace rabbit_bank
 {
     public class General
     {
-        public static void app()
-        {            
+        public static void App()
+        {
             bool isRunning = true;
             while (isRunning)
             {
                 WelcomeRabbit();
+                //List<UserModel> users = DBAccess.LoadBankUsers();
+                //Console.WriteLine($"users length: {users.Count}");
+                //foreach (UserModel user in users)
+                //{
+                //    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
+                //}
+                //int count = 1;
+                //var getAllAccounts = GlobalItems.globalAccountsList;
+                //foreach (var accounts in getAllAccounts)
+                //{
+                //    Console.WriteLine($" {count}. Account ID: {accounts.id}, currency ID: {accounts.currency_id}, currency name: {accounts.currency_name}");
+                //    count++;
+                //}
                 List<UserModel> users = DBAccess.LoadBankUsers();
                 Console.WriteLine($"users length: {users.Count}");
+                
                 foreach (UserModel user in users)
                 {
-                    Console.WriteLine($"Existing user: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}");
+                    string isAdmin = (user.role_id == 1) ? "YES" : "NO";
+                    Console.WriteLine($"Existing user id: {user.id} name: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}, is admin = {isAdmin}");
                 }
+
                 try
                 {
-                    Console.Write("\nPlease enter FirstName: ");
-                    string firstName = Console.ReadLine();
+                    Console.Write("\nPlease enter id: ");
+                    int ident = int.Parse(Console.ReadLine());
 
                     Console.Write("Please enter PinCode: ");
                     SecureString pin = HidePin();
@@ -36,7 +53,7 @@ namespace rabbit_bank
                     bool success = int.TryParse(pinCode, out inputPIN);
                     if (success)
                     {
-                        Login.LoginTry(firstName, inputPIN);
+                        Login.LoginTry(ident, inputPIN);
                     }
                     else
                     {
@@ -47,50 +64,76 @@ namespace rabbit_bank
                         Console.ReadKey();
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("ERROR, please try again.");
+                    Console.WriteLine(ex);
+                    Console.WriteLine("ERROR, try again");
+                    Console.ReadLine();
                 }
+                
             }
 
         }
 
         static void WelcomeRabbit()
         {
-            string rabbit = @"                                                                                                    
-                             ..::^~~!!!!!~~~^^.                                         
-                      .:~!???77~~JGGGGGPGPGGGGPP?.          .^7!
-                  :~7?7JPPGPY?!..JGGPPPPP5GGGGBBP         .~?Y5?
-               :7YPGG5?75PGGPY!:.7PGGPGP55GPGBBBJ..     .!7?JY?^
-            ^?5GGGGGPPP??PGGG5?^ ~5GGGGP5PGGGBBB?:. .:^~~7JYJ~
-          ^5GBGBGGGGGP55?J5PP5Y!.^?PGPPPPPPGBBBB7.:^!!~!?YYY^
-          :5BGGBGGGPGGP55JJ5PPPJ~.!5GPPPPPGBBBBG7~!!^~?JJ?!7^
-           .?GGGGGPPPGPP55JYPPP5!:~?PGPPPPGBBBG57~::!JYJ!^^!
-             ~GGGGGGPPPP55Y?YPP5J~^75GGPPGBBBPY7^.:!YY?!~:^~
-              ~PGGGGGPGPP55J?5GP57^~JGGGPGGBGJ~^.:~J5J77^^!^                      
-               ^PGGGGPGPPPP5JYGGPY~^7PGGGGGPJ?^.:^?5Y?7!^!!^
-                ~GGGGGGGGPP5YJYPGPJ^!5GGGGPY?^.:^~Y5Y?7~~7^^
-                 ?GGGGGGBGGPG5YPP5JJY5PPBGYJ7^~~!!55Y??7JG5?~^^
-                  YBBBBBGGP5YJ!!?YJ?JPGBBP57~~7~~!5JJ???PBP557^^
-                  ~GGGGP555YJ?!7JJ!~?PGBBPY777!^!?Y77??5PYJPPP!^^
-                   YGGBGPPPP5YYYPPY!!5GGP5J7~~:~!?JJ!??GPPGGGY~^
-                .^!JGBBBGGGP5PBBBGP55YJ?J?7~~~~~!7?7?JGGBBB57^^^
-             :!J5GBGGBBBGPPGB##BG5YJ?7~!7!!~~!^~!7?7?YGG5J!^^^^
-           :!JYPGGBGGPP55GBBBG5J?77~^^^:^~~~^!!~!!7!7?J57^^^^
-          ^Y5Y??JY5555PGBBGPY?7!^^::^^^:.::~7!!!^~~!!7?YY~^^^
-          75PG5YJJY5GBBGPYJ7!!^^..^^^~7??!::~^^^^~!!!77YY7~^^
-          !JPPPGGBBBG5YJ?7!!^~^^^^~^?PPPPY^:^^^.:^~~~7?JY!^^
-            ^!77??7YYJ?7!~!:::::^~!7?Y5PY!^..:^^^!~!!7?J?^:^
-                  ^JJ7~^~^^::^::^!~^^^^^^::. :^~!!!?!7JY7^^^
-                  7Y?!^^^^:::::::::^^^::::. :^~7?7?YJYJY7~^^
-                .:YJ7~~^^::^:......:~!~^^..:~!7???7!~^::~
-                 ~5J7~^^!~:..:^^:...:~77!~~!77~::...  :?!^^^
-                 75J?7~7?7:.::^!?!^^^^7?J????.   .:^:~7JY??^^
-                 !Y5YYYY!~^^^:^!?J?!!~7??JJ?: .:.^7:?~J^??5Y!
-                 :7YYYY?7!!~!~7??YJ?????JJY7^^?JJY^~7!?~?Y5YP^
-                   ~YP5YJJ??JJ?JYYYYYYJJJJYJ7?7!Y7 !:^.^?J!YG?
-                   ^!^7Y?YJYY5YYYJ?J?JJJ???7!7?J5^.^.!^J?!YGPP!
-                     ^ 7??77!7JYY???7?7^^^^:!77Y!:777YJ7!Y5J7JGY!^";
+            AnsiConsole.Markup("[underline red]Hello[/] World!");
+
+            string rabbit = @"
+
+
+
+     
+     
+                                 ,,▄╦@ÑÑ▓████▓█████▄▄          ╓╗
+                             ▄▄╫▓█▓█▓╢r ▓█████▓██████       ,@▓▓▓
+                         ,▄████▓▓▓▓██▓@ ╫█████▓█████▌░    ,$▓▓▓▓`
+                      ,▄███████▓▓▓▓██▓╣ ║▓████▓█████▌░░░#╨Ç0▓▓
+                      ▀█████████▓▓▓▓██▓H]╢███▓██████▌╔╢╨╣▓▓▓╝╫░
+                       ""████████▓▓▓▓██▓▓░▒▓███▓████▓▓░ ╔▓▓╣/┘▒▒░
+                         ███████▓█▓▓▓▓█▓▒▒▓███████▓▀ .╠▓▓▓▒,Φ▒▒░
+                          ▓███████▓▓▓▓█▓▓░▒▓█████▓M .å▓▓▓▓▒╓▒▒░░
+                           ████████▓▓▓▓█▓▓╚▓████▓▌.nUB▓▓▓▓▒▓▒▒▒░░
+                            ██████████▀▓▓▓▓▓███▓▓╝]╛%▐▓▓▓▓▓██▓▒▒▒░
+                           ;▐█████▓▓▓╣▒▓▓▒▓████▓▓▓▓,h▓▌▓▓▓██▓██▒▒▒░ `
+                             ██████▓█▓▓▓█▓▒▓███▓▌╨╖╓╝▓▓▓▓▓█████▒▒░
+                           ▄▄█████████████▓▓▓╬▓▓Ç┼)┼╬▓▓▓▓████▀▒▒▒░░
+                       ,▄██████████████▓▓▓╫ÖK╜╠3╝╙%▒Ñ╬Ñ▓▓▓▓░▒▒▒░░░
+                      Æ▓▓▓▓▓████████▓▓▓""Ω `¡å``ª╟▓H▓▒Ñ╬Φ▓▓▓▒▒▒░░░░░
+                      ▓███▓▓█████▓▓╣wΦF ,┘'╓@▓▓º╖▒ `▒╨@Ö▓▓▓▓░▒░░░░░░
+                      ▀▀▀█████▓▓▓▓╬Ω ?:└}╗▓████k ""▒,⌐▒▒╟▓▓▓╨░░░░░
+                        '░░░░▓▓▓Ü▒╜╤7² >â╜▒G╙▒╕└  ""╜▒╟╟▓▓▓▓▒░░░░░░
+                            ▐▓▓Ñ[▒j, ~ `,""Y┴.─-` ≤ƒ%▓╟▓▓▓▓▀╛░░░░░
+                            █▓╢▒▒▒ ¿,     `╠çΘ\╓╓╢▓╝▀╙⌐ "" å░░░░░░░
+                           j▓▓╬╜ä▓▒   ╣B╗=─]▓▓▓╬▓▓   .─` ▐▓▓╣▒▒░░░░░░
+                           .▓▓▓▓▓╫╓ú¬.ƒ▓▓▓╣W╫▓▓▓▓  , ╓╝▐╜▓ ▌▓▄░░▒░░░
+                            ▀▓█▓▓φ╬∞╣╬▓▓▓▓▓▓▓▓▓▓@▒4▓▓▌─▓▐Ü▓▓▓▓▌░░░░░░
+                            ─9▀▓▓▓▓▓▓▓▓▓▓▓▓▀▓▀▓▓▓PN▄▓╕  ╓ ▓▀╫██µ░░░▒ `
+                              ] ▐╢▓▀▀▀█▓▓▓▓▀▀▀▀""`▐▀▓▌y╫m▓▓▒▓█▓▓▓▄░░░▒
+                               \▒▌)▌╔m▄▌ ▒▓▒   ╙ ▓▓▓ ▓▒▓▓▒▓╬╫▒╫▓▓▓▓▄░░
+                              ╒█WW▓ m╜▓▓]g▓▓╜  r▓▓▀,▓g▓▒╫▒▒▓▓▀╜▒▒║▓▓█
+                             ╓█▓▓▓▓DÆ▓g▓▓▓▐▌▓╦A▓▓▓╫▓▓╜  `╫▓▒▒▒▒▒@▓████▄
+                            ▄▓█▓▓▓▓▄▓▓▀ ╒▌╘▓j▓╠▓█▓▀  (╣▒ `╓φ▓╢▓▓█▓▓▓████,
+                        ░ ▄▓▓█▌▓▓╜╓▓▀╜ ,▓▌ ,/,╢▓▀.l╬╫╢▓▓B╣▀▒╢▓█▓▒▓█▓▓▓▓██▓ÑV,
+                         ' ▄▓█▒▌,▓╟` ▓ ▓▓ φ ▄▀,ƒ▒▒╜╙▓▓╨┤`,▓██▓▓▓█▓▒▄▓▓▓▓▒╙ ▀▀N
+                           `▓▓ ▌╫▓╜ ▓""╓▓,▐▓▀,▓▓Ñ ¿▄j╬▒┘,▄█▓▓▓▓▓▀,W▓▓█▓▓─
+                        .░Æ▓▓▓ ▓╩▓ $ ╙`╓▓▀ ""╙╙``▐██░F ▄█▓▓▓▓▓▓▒ß▓▓▓▓█▓*
+                         ░╙▓▀▓ ╫▓▓▐▓╥▓▓▓▓½─m▀▓█▓███▌,▓█████▓▓╨ ╜`
+                         ░ ╠▓▓m ▐█▐▓▓▓▓▓▓▓▓@▓╣▄██████████▓╨`
+                         `░╟▓▓▓L∩▓▓▓▓▓▓╝▒▄▓▓██▓▓▓█████▓▓╝
+                           ╙▓▌▓█▓▓▓▒▒▓▓▀▓▓▓▓█▓▓███▓▓╝╜ '
+                           ╚▓██▌███▓▓▒╣Ñ▒▓█▓██▓▓▀▀
+                          ,g▓█▌█▓▒▓▓▒▒▒▒▄▒``╙▀▓╜
+                            j▓]▓█▓█▓,╙▀▀▓▓╫H
+                             ▓ÿ▓▓▓▒╚▓@∩ ╡;Yj^
+                             ╚ ╙
+     
+     
+     
+    
+---
+asciiart.club
+";
             Console.WriteLine(rabbit);
             //Original image: "Regency Rabbit", drawing by Adam Zebediah Joseph.
             //Console.WriteLine("                                    .:Welcome to:.");
