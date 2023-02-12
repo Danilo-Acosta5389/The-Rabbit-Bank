@@ -349,5 +349,13 @@ namespace rabbit_bank
                 cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE id = '{id}'");
             }
         }
+        public static void UpdateAccount(int user_id, int from_account, decimal newBalance)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Query($"UPDATE bank_account SET balance = '{newBalance.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}' WHERE id = '{from_account}' AND user_id = '{user_id}'", new DynamicParameters());
+                
+            }
+        }
     }
 }
