@@ -25,7 +25,7 @@ namespace rabbit_bank
                     "\n3. Add a new account [NOT WORKING]" +
                     "\n4. Make a bank loan [NOT WORKING]" +
                     "\n5. Transaction history [NOT WORKING]" +
-                    "\n6. Withdraw money [NOT WORKING]" +
+                    "\n6. Withdraw money " +
                     "\n7. Logout");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
@@ -412,7 +412,7 @@ namespace rabbit_bank
                         }
                         else if (lastOnList2 == getAllAccounts[i].id)
                         {
-                            
+
                             Console.WriteLine("\nError. Invalid account number/ID.");
                             return false;
                         }
@@ -451,11 +451,11 @@ namespace rabbit_bank
                             //    }
                             //    else if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "USD")
                             //    {
-                                    //Console.WriteLine("To account is american");
-                                    //Console.WriteLine($"{convertCurrency(amount, "sek")}");
-                                    //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
-                                    //Console.WriteLine("LOOOK HERE! USD");
-                                //}
+                            //Console.WriteLine("To account is american");
+                            //Console.WriteLine($"{convertCurrency(amount, "sek")}");
+                            //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                            //Console.WriteLine("LOOOK HERE! USD");
+                            //}
                             //}
 
                         }
@@ -469,15 +469,15 @@ namespace rabbit_bank
                             //{
                             //    if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "SEK")
                             //    {
-                                    //Console.WriteLine("To account is swedish");
-                                    //Console.WriteLine($"{convertCurrency(amount, "usd")}");
-                                    //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
-                                    //Console.WriteLine("LOOK HERE!! SEK");
-                                //}
-                                //else if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "USD")
-                                //{
-                                //    //Console.WriteLine("To account is american");
-                                //}
+                            //Console.WriteLine("To account is swedish");
+                            //Console.WriteLine($"{convertCurrency(amount, "usd")}");
+                            //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                            //Console.WriteLine("LOOK HERE!! SEK");
+                            //}
+                            //else if (toAccount == getAllAccounts[j].id && getAllAccounts[j].currency_name == "USD")
+                            //{
+                            //    //Console.WriteLine("To account is american");
+                            //}
                             //}
                         }
 
@@ -492,7 +492,7 @@ namespace rabbit_bank
                     Console.WriteLine($"To account number/ID: {toAccount}");
                     Console.WriteLine($"Amount: {newAmount}");
 
-                    
+
 
 
 
@@ -682,11 +682,11 @@ namespace rabbit_bank
                             //    }
                             //    else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
                             //    {
-                                    //Console.WriteLine("To account is american");
-                                    //Console.WriteLine($"{convertCurrency(amount, "in sek")}");
-                                    //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
-                                    //Console.WriteLine("LOOOK HERE! USD");
-                                //}
+                            //Console.WriteLine("To account is american");
+                            //Console.WriteLine($"{convertCurrency(amount, "in sek")}");
+                            //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                            //Console.WriteLine("LOOOK HERE! USD");
+                            //}
                             //}
 
                         }
@@ -700,10 +700,10 @@ namespace rabbit_bank
                             //{
                             //    if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
                             //    {
-                                    //Console.WriteLine("To account is swedish");
-                                    //Console.WriteLine($"{convertCurrency(amount, "in usd")}");
-                                    //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
-                                    //Console.WriteLine("LOOK HERE!! SEK");
+                            //Console.WriteLine("To account is swedish");
+                            //Console.WriteLine($"{convertCurrency(amount, "in usd")}");
+                            //amount = Convert.ToDecimal(convertCurrency(amount, "usd"));
+                            //Console.WriteLine("LOOK HERE!! SEK");
                             //    }
                             //    else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
                             //    {
@@ -945,27 +945,8 @@ namespace rabbit_bank
         }
 
 
-        //=== METHOD BELOW CAN BE DISCARDED, IT IS OF NO USE ANY MORE
 
-        //static string convertCurrency(decimal amount, string currencyName)
-        //{
-            /*
-            Tar in SEK och konverterar till USD och vice versa
-            10,35 sek = 1 usd
-            returnera resultat för USD till SEK eller från SEK till USD
 
-            Om det förs in 'sek' i 'currency' så blir formeln amount / 10,35. Exempel: 100 / 10,35 = 9,66. 
-            Användaren som för över 100 sek till ett USD konto, USD kontot tar då emot 9,66 dollar.
-            
-            Om det förs in 'usd' i istället så blir formeln amount * 10,35 . Exempel: 100 * 10,35 = 1035. 
-            Användaren som för över 100 dollar till SEK konto, SEK kontot tar då emot 1035 kr.
-            */
-
-            //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
-
-            decimal result = amount * 10.28m;
-            return result;
-        }
         public static void WithDraw(int user_id)
         {
             //visar anv konton och saldon
@@ -980,9 +961,9 @@ namespace rabbit_bank
 
             for (int i = 0; i < userAccounts.Count; i++)
             {
-                
+
                 Console.WriteLine($"{i + 1}. {userAccounts[i].name}");
-                
+
                 if (userAccounts[i].currency_name == "SEK")
                 {
                     Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
@@ -1002,7 +983,7 @@ namespace rabbit_bank
             account -= 1;
             Console.WriteLine($"You chose : {userAccounts[account].name} ");
 
-        
+
             Console.Write("How much would you like to withdraw? :");
             decimal.TryParse(Console.ReadLine(), out decimal amount);
 
@@ -1024,30 +1005,7 @@ namespace rabbit_bank
             }
 
         }
-
-        //    decimal usd = 10.35m;
-        //    if (currencyName == "sek")
-        //    {
-        //        decimal result = amount / usd;
-        //        return result.ToString();
-        //    }
-        //    else if (currencyName == "usd")
-        //    {
-        //        decimal result = amount * usd;
-        //        return result.ToString();
-        //    }
-        //    else
-        //    {
-        //        decimal result = amount * 1;
-        //        return result.ToString();
-        //    }
-
-        //}
-
     }
-
-
-
 }
 
 
