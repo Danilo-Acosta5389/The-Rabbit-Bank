@@ -277,6 +277,25 @@ namespace rabbit_bank
 
         }
 
+        public static void UpdateExchangeRate(decimal userInput)
+        {
+            string newUserInput = userInput.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"UPDATE bank_currency SET exchange_rate = {newUserInput} WHERE name = 'USD'");
+
+            }
+        }
+
+        public static void ListExchangeRate()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"SELECT exchange_rate FROM bank_currency WHERE name='USD'");
+
+            }
+        }
+
         public static void SaveBankUser(UserModel user)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -349,6 +368,20 @@ namespace rabbit_bank
                 cnn.Execute($"UPDATE bank_user SET attempts = 3 WHERE id = '{id}'");
             }
         }
+
+        public static List<AccountModel> exchangeR()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+
+                var output = cnn.Query<AccountModel>("select * from bank_currency", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+            // Kopplar upp mot DB:n
+            // läser ut alla Users
+            // Returnerar en lista av Users
+        }
         public static void UpdateAccount(int user_id, int from_account, decimal newBalance)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
@@ -356,6 +389,7 @@ namespace rabbit_bank
                 cnn.Query($"UPDATE bank_account SET balance = '{newBalance.ToString(CultureInfo.CreateSpecificCulture("en-GB"))}' WHERE id = '{from_account}' AND user_id = '{user_id}'", new DynamicParameters());
                 
             }
+
         }
     }
 }

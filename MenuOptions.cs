@@ -4,6 +4,7 @@ namespace rabbit_bank
 {
     public class MenuOptions
     {
+
         public static void UserLoginMenu(UserModel userIndex)
         {
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
@@ -98,7 +99,8 @@ namespace rabbit_bank
                     "\n2. Transaction history [NOT WORKING]" +
                     "\n3. Set exchange rate [NOT WORKING]" +
                     "\n4. Create new user" +
-                    "\n5. Logout ");
+                    "\n5. Set exchange rate" +
+                    "\n6. Logout ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -137,6 +139,9 @@ namespace rabbit_bank
                         break;
 
                     case "3":
+                        // Lets admin change exchange rate for USD
+                        MenuOptions.SetExchangeRate();
+
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("");
                         break;
@@ -146,6 +151,11 @@ namespace rabbit_bank
                         break;
 
                     case "5":
+
+                        MenuOptions.SetExchangeRate();
+                        break;
+
+                    case "6":
                         loggedIn = false;
                         break;
 
@@ -154,6 +164,27 @@ namespace rabbit_bank
                         continue;
                 }
             }
+        }
+
+        // Method for changing exchange rate
+        public static void SetExchangeRate()
+        {
+            //Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Set exchange rate on USD ");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Choose new exchange rate for USD.");
+            decimal userInput = decimal.Parse(Console.ReadLine());
+            DBAccess.UpdateExchangeRate(userInput);
+            List<AccountModel> accounts = DBAccess.exchangeR();
+            foreach (AccountModel ex in accounts)
+            {
+                Console.WriteLine($"exchange rate for {ex.name}: {ex.exchange_rate}");
+            }
+            Console.ReadLine();
         }
 
         public static void CreateNewUser()
