@@ -23,11 +23,12 @@ namespace rabbit_bank
 
                 Console.WriteLine("1. See your accounts and balances" +
                     "\n2. Transfer money" +
-                    "\n3. Add a new account [NOT WORKING]" +
+                    "\n3. Add a new account" +
                     "\n4. Make a bank loan [NOT WORKING]" +
                     "\n5. Transaction history [NOT WORKING]" +
                     "\n6. Withdraw money " +
-                    "\n7. Logout");
+                    "\n7. Deposit money" +
+                    "\n8. Logout");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -62,8 +63,11 @@ namespace rabbit_bank
                         WithDraw(userIndex.id);
                         Console.WriteLine("");
                         break;
-
                     case "7":
+                        Deposit(userIndex.id);
+                        break;
+
+                    case "8":
                         //Logout
                         loggedIn = false;
                         break;
@@ -96,11 +100,9 @@ namespace rabbit_bank
                 Console.WriteLine();
 
                 Console.WriteLine("1. Block/Unblock Users" +
-                    "\n2. Transaction history [NOT WORKING]" +
-                    "\n3. Set exchange rate [NOT WORKING]" +
-                    "\n4. Create new user" +
-                    "\n5. Set exchange rate" +
-                    "\n6. Logout ");
+                    "\n2. Set exchange rate " +
+                    "\n3. Create new user" +
+                    "\n4. Logout ");
                 Console.Write("--> ");
                 string userChoice = Console.ReadLine();
                 switch (userChoice)
@@ -133,12 +135,6 @@ namespace rabbit_bank
                         }
                         break;
                     case "2":
-                        Console.WriteLine("");
-                        //ToDo: skapa funktion för användare att lägga till nytt konto (list med olika konton: ();
-                        //ToDo: sparkonto med ränta
-                        break;
-
-                    case "3":
                         // Lets admin change exchange rate for USD
                         MenuOptions.SetExchangeRate();
 
@@ -146,16 +142,11 @@ namespace rabbit_bank
                         Console.WriteLine("");
                         break;
 
-                    case "4":
+                    case "3":
                         MenuOptions.CreateNewUser();
                         break;
 
-                    case "5":
-
-                        MenuOptions.SetExchangeRate();
-                        break;
-
-                    case "6":
+                    case "4":
                         loggedIn = false;
                         break;
 
@@ -837,7 +828,7 @@ namespace rabbit_bank
 
         public static void CreateAccount(UserModel userIndex)
         {
-            Console.Clear();
+            //Console.Clear();
             double interestRate = 2.85;
             Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -1030,6 +1021,65 @@ namespace rabbit_bank
             else
             {
                 decimal newBalance = userAccounts[account].balance -= amount;
+                Console.WriteLine($"\nYour balance is now: {newBalance} on account: {userAccounts[account].name} ");
+                DBAccess.UpdateAccount(user_id, userAccounts[account].id, newBalance);
+
+            }
+
+        }
+
+        public static void Deposit(int user_id)
+        {
+            //visar anv konton och saldon
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Deposit ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+
+            List<AccountModel> userAccounts = DBAccess.GetUserAccounts(user_id);
+
+            for (int i = 0; i < userAccounts.Count; i++)
+            {
+
+                Console.WriteLine($"{i + 1}. {userAccounts[i].name}");
+
+                if (userAccounts[i].currency_name == "SEK")
+                {
+                    Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                }
+                else if (userAccounts[i].currency_name == "USD")
+                {
+                    Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                }
+                Console.WriteLine("============================================================");
+            }
+
+
+            Console.Write("Which account do you want to deposit to? :");
+            int account = int.Parse(Console.ReadLine());
+
+
+            account -= 1;
+            Console.WriteLine($"You chose : {userAccounts[account].name} ");
+
+
+            Console.Write("How much would you like to deposit? :");
+            decimal.TryParse(Console.ReadLine(), out decimal amount);
+
+
+            if (amount <= 0)
+            {
+                Console.WriteLine("You cannot deposit a negative amount.");
+            }
+            //else if (userAccounts[account].balance < amount)
+            //{
+            //    Console.WriteLine("\nYou don't have enough money on your account");
+            //}
+            else
+            {
+                decimal newBalance = userAccounts[account].balance += amount;
                 Console.WriteLine($"\nYour balance is now: {newBalance} on account: {userAccounts[account].name} ");
                 DBAccess.UpdateAccount(user_id, userAccounts[account].id, newBalance);
 
