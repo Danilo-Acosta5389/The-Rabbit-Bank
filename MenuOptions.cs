@@ -9,6 +9,7 @@ namespace rabbit_bank
         {
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
             Console.WriteLine($"User ID: {userIndex.id}");
+            Api.ImportUSDRate(); // Gets latest USD to SEK rate
 
             bool loggedIn = true;
             while (loggedIn)
@@ -36,7 +37,6 @@ namespace rabbit_bank
                     case "1":
                         MenuOptions.AccountsAndBalances(userIndex);
                         break;
-
                     case "2":
                         MenuOptions.RunTransferMoney(userIndex);
                         break;
@@ -87,6 +87,7 @@ namespace rabbit_bank
             Console.WriteLine($"Welcome back {userIndex.first_name}.");
             Console.WriteLine($"User ID: {userIndex.id}");
             Console.WriteLine($"[Admin account]");
+            Api.ImportUSDRate(); // Gets latest USD to SEK rate
 
             bool loggedIn = true;
             while (loggedIn)

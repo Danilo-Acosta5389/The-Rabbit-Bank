@@ -29,14 +29,14 @@ namespace rabbit_bank
                 //    Console.WriteLine($" {count}. Account ID: {accounts.id}, currency ID: {accounts.currency_id}, currency name: {accounts.currency_name}");
                 //    count++;
                 //}
-                List<UserModel> users = DBAccess.LoadBankUsers();
-                Console.WriteLine($"users length: {users.Count}");
+                //List<UserModel> users = DBAccess.LoadBankUsers();
+                //Console.WriteLine($"users length: {users.Count}");
                 
-                foreach (UserModel user in users)
-                {
-                    string isAdmin = (user.role_id == 1) ? "YES" : "NO";
-                    Console.WriteLine($"Existing user id: {user.id} name: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}, is admin = {isAdmin}");
-                }
+                //foreach (UserModel user in users)
+                //{
+                //    string isAdmin = (user.role_id == 1) ? "YES" : "NO";
+                //    Console.WriteLine($"Existing user id: {user.id} name: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}, is admin = {isAdmin}");
+                //}
 
                 try
                 {
