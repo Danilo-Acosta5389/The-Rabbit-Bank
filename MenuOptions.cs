@@ -66,7 +66,6 @@ namespace rabbit_bank
                     case "7":
                         Deposit(userIndex.id);
                         break;
-
                     case "8":
                         //Logout
                         loggedIn = false;
