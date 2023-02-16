@@ -10,6 +10,9 @@ This is a bank simulator console app that was mainly connected to a Postgresql D
 This is a c# and SQL project made by students of Chas Academy, fullstack dev. program.
 This was an agile group project (or exercise if you will) using mainly the scrum method.
 
+<!-- Table of content -->
+## 
+
 All creds to all five collaborators:</br>
 Rickard, <a href="https://github.com/rieerep">"Rieerep"</a></br> 
 Saga, <a href="https://github.com/sagansagan">"Sagansagan"</a></br>
@@ -38,6 +41,8 @@ NOTE: Our code uses three nuget packeges, Dapper(2.0.123), Npgsql(7.0.1) and Sys
 -- In the file DBdump.sql you will find the SQL code, such as tables, columns and rows that out project was designed to use. It is good for copy and pasting.
 -- It is possible that you will need to add the right usings.
 
+## Overview
+This is a UML diagram showing the general structure of the application:
 
 
 
