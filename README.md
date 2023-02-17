@@ -1,17 +1,20 @@
 <a name="readme-top"></a>
 
 <div align="center">
+<h3>Welcome to the...</h3>
   <img src="https://user-images.githubusercontent.com/113366808/218892735-1271bacf-6840-467c-800a-dad9bca44308.png">
+  <h3>project.</h3>
 </div>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-This is a bank simulator console app that was mainly connected to a Postgresql DB and that does several things such as login, create user, create account, block/unblock user, transfer money, deposit/withdraw and much more! It has an admin panel and a client panel. </br>
-This is a c# and SQL project made by students of Chas Academy, fullstack dev. program.
-This was an agile group project (or exercise if you will) using mainly the scrum method.
-
-<!-- Table of content -->
-## 
+  <p align="left">
+  This is a bank simulator console app that was mainly connected to a Postgresql DB and that does several things such as login, create user,    create account, block/unblock user, transfer money, deposit/withdraw and much more! It has an admin panel and a client panel.
+  This is a c# and SQL project made by students of Chas Academy, fullstack dev. program.
+  This was an agile group project (or exercise if you will) using mainly the scrum method.
+  </p>
+  <BR CLEAR=”left” />
+  <img src="https://user-images.githubusercontent.com/113366808/219718325-d25dd1a3-6030-4d81-8170-1c78bc9be229.gif" height="328" width="515" align="right">
 
 All creds to all five collaborators:</br>
 Rickard, <a href="https://github.com/rieerep">"Rieerep"</a></br> 
