@@ -29,6 +29,13 @@ namespace rabbit_bank
                 //    Console.WriteLine($" {count}. Account ID: {accounts.id}, currency ID: {accounts.currency_id}, currency name: {accounts.currency_name}");
                 //    count++;
                 //}
+
+                //string loanName = Console.ReadLine();
+                //double interestRate = double.Parse(Console.ReadLine());
+                //int userID = int.Parse(Console.ReadLine());
+                //decimal amount = decimal.Parse(Console.ReadLine());
+                DBAccess.BankLoan();
+
                 List<UserModel> users = DBAccess.LoadBankUsers();
                 Console.WriteLine($"users length: {users.Count}");
                 

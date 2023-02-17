@@ -29,6 +29,6 @@ namespace rabbit_bank
     public class bank_currency
     {
         public double exchange_rate { get; set; }
-        public string name { get; set; }
+        public string curr_name { get; set; }
     }
 }

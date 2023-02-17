@@ -49,10 +49,11 @@ namespace rabbit_bank
                         break;
 
                     case "4":
+                        BankLoan(userIndex);
                         // ToDo: skapa ett valutakonto i annan valuta än SEK.
                         Console.WriteLine("==========\nSkapa nytt konto\n========");
                         //CreateAccount(userIndex);
-                        Console.WriteLine("");
+                        Console.WriteLine("Hello there!");
                         break;
                     case "5":
                         //ToDo: skapa en funktion för användare att låna pengar
@@ -966,8 +967,43 @@ namespace rabbit_bank
 
         }
 
+        public static void BankLoan(UserModel banan)
+        {
+            List<Currency_Model> userAccounts = DBAccess.GetExchangeRates();
 
+            Console.WriteLine("You can lend maximum five times your total account balance.");
 
+            decimal totalSum = 0;
+
+            for (int i = 0; i < banan.accounts.Count; i++)
+            {
+                var userAcc = banan.accounts[i];
+                Console.WriteLine($"current exchange rate for {userAcc.name} {userAcc.exchange_rate}");
+                totalSum = totalSum + userAcc.balance;
+                if (userAcc.currency_name != "SEK")
+                {
+                    Console.WriteLine($"Value in SEK: {userAcc.balance * (decimal)userAcc.currency_exchange_rate}");
+                    totalSum = totalSum + userAcc.balance * (decimal)userAcc.currency_exchange_rate;
+                }
+                else
+                {
+                    totalSum = totalSum + userAcc.balance;
+                }
+            }
+            Console.WriteLine($"Total sum in SEK: {totalSum}");
+            Console.WriteLine($"Maximum loan amount is {totalSum * 5} {userAccounts[0].name}");
+            Console.WriteLine("How much do you want to loan?");
+            decimal loanInput = decimal.Parse(Console.ReadLine());
+            if (loanInput > totalSum)
+            {
+                Console.WriteLine("Summan överstiger max vad du får låna");
+            }
+        }
+
+        public static void ConvertToSek()
+        {
+
+        }
 
         public static void WithDraw(int user_id)
         {
@@ -981,6 +1017,10 @@ namespace rabbit_bank
 
             List<AccountModel> userAccounts = DBAccess.GetUserAccounts(user_id);
 
+            // Summera alla konton och multiplicera med fem
+
+            decimal sum = 0;
+
             for (int i = 0; i < userAccounts.Count; i++)
             {
 
@@ -989,14 +1029,17 @@ namespace rabbit_bank
                 if (userAccounts[i].currency_name == "SEK")
                 {
                     Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("sv-SE"))}");
+                    sum = sum + userAccounts[i].balance;
                 }
                 else if (userAccounts[i].currency_name == "USD")
                 {
                     Console.WriteLine($"Balance: {userAccounts[i].balance.ToString("C2", CultureInfo.GetCultureInfo("chr-Cher-US"))}");
+                    sum = sum + userAccounts[i].balance;
                 }
                 Console.WriteLine("============================================================");
             }
-
+            //
+            Console.WriteLine("Du får låna: " + sum * 5); //
 
             Console.Write("Which account do you want to withdraw from? :");
             int account = int.Parse(Console.ReadLine());

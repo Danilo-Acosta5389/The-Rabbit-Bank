@@ -16,7 +16,6 @@ namespace rabbit_bank
         public int branch_id { get; set; }
 
         public bool is_admin { get; set; }
-
         public bool is_client { get; set; }
         public bool blocked_user { get; set; }
         public int attempts { get; set; }

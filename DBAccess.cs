@@ -128,7 +128,16 @@ namespace rabbit_bank
             }
         }
 
+        public static List<Currency_Model> GetExchangeRates()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
 
+                var output = cnn.Query<Currency_Model>("SELECT * FROM bank_currency", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+        }
 
         //====      BELLOW IS THE OLD TransferMoney method
 
@@ -304,6 +313,14 @@ namespace rabbit_bank
 
             }
         }
+        public static void BankLoan(/*string LoanName = "", double interestRate = 0, int userID = 0, decimal amount = 0*/)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                cnn.Execute($"INSERT into bank_loan (name, interest_rate, user_id, amount) values ('Privatlån', 7, 13, 12000", new DynamicParameters());
+
+            }
+        }
 
         public static void SaveNewAccount(AccountModel account)
         {
@@ -323,7 +340,7 @@ namespace rabbit_bank
             }
         }
 
-        private static string LoadConnectionString(string id = "Default")
+        public static string LoadConnectionString(string id = "Default")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
