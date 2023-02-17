@@ -49,11 +49,7 @@ namespace rabbit_bank
                         break;
 
                     case "4":
-                        BankLoan(userIndex);
-                        // ToDo: skapa ett valutakonto i annan valuta än SEK.
-                        Console.WriteLine("==========\nSkapa nytt konto\n========");
-                        //CreateAccount(userIndex);
-                        Console.WriteLine("Hello there!");
+                        RunBankLoan(userIndex);
                         break;
                     case "5":
                         //ToDo: skapa en funktion för användare att låna pengar
@@ -967,22 +963,30 @@ namespace rabbit_bank
 
         }
 
-        public static void BankLoan(UserModel banan)
+        public static void RunBankLoan(UserModel banan)
         {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Bank loan ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+            
             List<Currency_Model> userAccounts = DBAccess.GetExchangeRates();
 
             Console.WriteLine("You can lend maximum five times your total account balance.");
+            Console.WriteLine();
 
             decimal totalSum = 0;
 
             for (int i = 0; i < banan.accounts.Count; i++)
             {
                 var userAcc = banan.accounts[i];
-                Console.WriteLine($"current exchange rate for {userAcc.name} {userAcc.exchange_rate}");
+                Console.WriteLine($"current account: {userAcc.name}, balance: {userAcc.balance} {userAcc.currency_name}");
                 totalSum = totalSum + userAcc.balance;
                 if (userAcc.currency_name != "SEK")
                 {
-                    Console.WriteLine($"Value in SEK: {userAcc.balance * (decimal)userAcc.currency_exchange_rate}");
+                    Console.WriteLine($"    Value in SEK: {userAcc.balance * (decimal)userAcc.currency_exchange_rate}");
                     totalSum = totalSum + userAcc.balance * (decimal)userAcc.currency_exchange_rate;
                 }
                 else
@@ -990,14 +994,49 @@ namespace rabbit_bank
                     totalSum = totalSum + userAcc.balance;
                 }
             }
-            Console.WriteLine($"Total sum in SEK: {totalSum}");
+            Console.WriteLine($"\nTotal sum in SEK: {totalSum}");
             Console.WriteLine($"Maximum loan amount is {totalSum * 5} {userAccounts[0].name}");
-            Console.WriteLine("How much do you want to loan?");
-            decimal loanInput = decimal.Parse(Console.ReadLine());
-            if (loanInput > totalSum)
+            Console.WriteLine("Interest rate is 40%");
+            Console.WriteLine("Do you wish to proceed with rabbid loan?");
+            Console.Write("Y/N: ");
+            
+            
+            try
             {
-                Console.WriteLine("Summan överstiger max vad du får låna");
+
+                string yesNo = Console.ReadLine();
+                if (yesNo.ToLower() == "y")
+                {
+                    Console.WriteLine("How much do you want to loan?");
+                    decimal loanInput = decimal.Parse(Console.ReadLine());
+                    if (loanInput > totalSum)
+                    {
+                        Console.WriteLine("Summan överstiger max vad du får låna");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Loan acquired: {loanInput} SEK\nInterest rate: 40%");
+                        Console.WriteLine("\nThank you for using Rabbit Bank loan services.");
+                        DBAccess.BankLoan("Private loan", 40, banan.id, loanInput);
+                    }
+                }
+                else if (yesNo.ToLower() == "n")
+                {
+                    Console.WriteLine("You choosed not to proceed.");
+                }
+                else
+                {
+                    Console.WriteLine("\nInvalid input");
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine();
+                Console.WriteLine(e.Message);
+                Console.WriteLine("Error. PLease try again.");
+                
+            }
+            
         }
 
         public static void ConvertToSek()

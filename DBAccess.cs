@@ -313,11 +313,11 @@ namespace rabbit_bank
 
             }
         }
-        public static void BankLoan(/*string LoanName = "", double interestRate = 0, int userID = 0, decimal amount = 0*/)
+        public static void BankLoan(string LoanName = "", double interestRate = 0, int userID = 13, decimal amount = 0)
         {
             using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
             {
-                cnn.Execute($"INSERT into bank_loan (name, interest_rate, user_id, amount) values ('Privatlån', 7, 13, 12000", new DynamicParameters());
+                cnn.Execute($"INSERT into bank_loan (name, interest_rate, user_id, amount) values ('{LoanName}', {interestRate}, {userID}, {amount})");
 
             }
         }

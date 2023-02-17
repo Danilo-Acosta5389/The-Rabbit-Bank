@@ -34,7 +34,7 @@ namespace rabbit_bank
                 //double interestRate = double.Parse(Console.ReadLine());
                 //int userID = int.Parse(Console.ReadLine());
                 //decimal amount = decimal.Parse(Console.ReadLine());
-                DBAccess.BankLoan();
+                //DBAccess.BankLoan();
 
                 List<UserModel> users = DBAccess.LoadBankUsers();
                 Console.WriteLine($"users length: {users.Count}");
