@@ -23,7 +23,8 @@ Dariusz, <a href="https://github.com/T140K">"T140K"</a></br>
 Natasja, <a href="https://github.com/NatasjaK">"NatasjaK"</a></br>
 Danilo, <a href="https://github.com/Danilo-Acosta5389">"Danilo-Acosta5389"</a>
 
-And of course, thanks to Chas Academy and our teacher and mentor Krille, aka <a href="https://github.com/juiceghost">"Juiceghost"</a>.
+And of course, thanks to Chas Academy and 
+<br/> our teacher/mentor Krille, aka <a href="https://github.com/juiceghost">"Juiceghost"</a>.
 
 <!-- CODE EXPLAINED --> 
 ## Code
