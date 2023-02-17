@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -31,12 +32,20 @@ namespace rabbit_bank
                 //}
                 //List<UserModel> users = DBAccess.LoadBankUsers();
                 //Console.WriteLine($"users length: {users.Count}");
-                
+
                 //foreach (UserModel user in users)
                 //{
                 //    string isAdmin = (user.role_id == 1) ? "YES" : "NO";
                 //    Console.WriteLine($"Existing user id: {user.id} name: {user.first_name} with pincode: {user.pin_code}, account lock:{user.blocked_user}, attempts left: {user.attempts}, is admin = {isAdmin}");
                 //}
+
+
+                //Console.WriteLine(GlobalItems.dollarRate[0].exchange_rate.ToString(CultureInfo.GetCultureInfo("en-GB")));
+                //Console.WriteLine("Enter amount");
+                //decimal amount = decimal.Parse(Console.ReadLine());
+                //Console.WriteLine(MenuOptions.convertCurrency(amount, "sek"));
+
+
 
                 try
                 {

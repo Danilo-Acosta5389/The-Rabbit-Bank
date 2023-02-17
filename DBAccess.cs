@@ -16,7 +16,93 @@ namespace rabbit_bank
     public class DBAccess
     {
 
-        public static bool TransferMoney(int user_id, int other_user_id, int currency_id, int from_account_id, int to_account_id, decimal amount)
+        //public static bool TransferSameCurrency(int user_id, int other_user_id, int from_account_id, int to_account_id, decimal amount)
+        //{
+        //    if (other_user_id == 0)
+        //    {
+        //        if (currency_id == 1) //CURRENCY ID 1 IS SEK, THIS WILL CHECK IF:    SEK TO SEK,   OR    SEK TO USD
+        //        {
+        //            try
+        //            {
+        //                string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB")); //THIS STRING MAKES amount look brittish eg. 100,00 becomes 100.00
+        //                var output = cnn.Query<UserModel>($@"
+        //                        BEGIN TRANSACTION;
+        //                        UPDATE bank_account SET balance = CASE
+        //                             when id = {from_account_id} AND user_id = {user_id} AND currency_id = 1 AND balance >= {newAmount} then balance - {newAmount}
+        //                             when id = {to_account_id} AND currency_id = 1 then balance + {newAmount}
+        //                             when id = {to_account_id} AND currency_id = 2 then balance + round({newAmount} / 10.35, 2)
+        //                        END
+        //                        WHERE id IN({from_account_id}, {to_account_id});
+        //                        INSERT INTO bank_transaction (name, from_account_id, to_account_id, amount) VALUES ('Överföring', {from_account_id}, {to_account_id}, round(100 / 10.35, 2));
+        //                        COMMIT;    
+        //                        ", new DynamicParameters());    //RIGHT ABOVE HERE IS WHERE CONVERSION IS ACTUALLY BEING MADE
+
+        //                Console.WriteLine("\nSuccessful transfer");
+        //            }
+        //            catch (Npgsql.PostgresException e)
+        //            {
+        //                Console.WriteLine();
+        //                Console.WriteLine(e.ErrorCode);
+        //                Console.WriteLine(e.MessageText);
+        //                Console.WriteLine("\nTransfer was not successful. ");
+        //            }
+        //        }
+        //        else if (currency_id == 2)    //CURRENCY ID 2 IS USD, SAME PROCEDURE AS ABOVE WILL HAPPEN BUT WITH SMALL CHANGES
+        //        {
+        //            try
+        //            {
+        //                string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+        //                var output = cnn.Query<UserModel>($@"
+        //                        UPDATE bank_account SET balance = CASE
+        //                             when id = {from_account_id} AND user_id = {user_id} AND currency_id = 2 AND balance >= {newAmount} then balance - {newAmount}
+        //                             when id = {to_account_id} AND currency_id = 1 then balance + round({newAmount} * 10.35, 2)
+        //                             when id = {to_account_id} AND currency_id = 2 then balance + {newAmount}
+        //                        END
+        //                        WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());
+        //                Console.WriteLine("\nSuccessful transfer");
+        //            }
+        //            catch (Npgsql.PostgresException e)
+        //            {
+        //                Console.WriteLine();
+        //                Console.WriteLine(e.ErrorCode);
+        //                Console.WriteLine(e.MessageText);
+        //                Console.WriteLine("\nTransfer was not successful. ");
+        //            }
+
+        //        }
+        //    }
+        //    else //IF other_user_id IS ONE SELF THEN THIS BLOCK WILL RUN
+        //    {
+        //        try
+        //        {
+        //            string newAmount = Math.Round(amount, 2).ToString(CultureInfo.CreateSpecificCulture("en-GB"));
+        //            var output = cnn.Query<UserModel>($@"
+        //                        UPDATE bank_account SET balance = CASE
+        //                             when id = {from_account_id} AND user_id = {user_id} AND currency_id = 1 AND balance >= {newAmount} then balance - {newAmount}
+        //                             when id = {to_account_id} AND currency_id = 1 AND user_id = {other_user_id} then balance + {newAmount}
+        //                             when id = {to_account_id} AND currency_id = 2 AND user_id = {other_user_id} then balance + round({newAmount} / 10.35, 2)
+        //                        END
+        //                        WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());
+
+        //            Console.WriteLine("\nSuccessful transfer");
+        //        }
+        //        catch (Npgsql.PostgresException e)
+        //        {
+        //            Console.WriteLine();
+        //            Console.WriteLine(e.ErrorCode);
+        //            Console.WriteLine(e.MessageText);
+        //            Console.WriteLine("\nTransfer was not successful. ");
+        //        }
+        //    }
+        //    return true;
+        //}
+
+        //public static bool TransferDIfferentCurrencies(int user_id, int other_user_id,int currency_id, int from_account_id, int to_account_id, decimal amount)
+        //{
+
+        //}
+
+        public static bool TransferMoney(int user_id, int other_user_id, int currency_id, int from_account_id, int to_account_id, decimal amount, string logEx)
         {
             //In this method, money is being transfered to self or others
             //Money also gets converted here
@@ -33,13 +119,16 @@ namespace rabbit_bank
                         try
                         {
                             string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB")); //THIS STRING MAKES amount look brittish eg. 100,00 becomes 100.00
-                            var output = cnn.Query<UserModel>($@"
+                            var output = cnn.Query($@"
+                                BEGIN TRANSACTION;
                                 UPDATE bank_account SET balance = CASE
-                                     when id = {from_account_id} AND user_id = {user_id} AND currency_id = 1 AND balance >= {newAmount} then balance - {newAmount}
+                                     when id = {from_account_id} AND user_id = {user_id} AND currency_id = 1 AND balance >= '{newAmount}' then balance - '{newAmount}'
                                      when id = {to_account_id} AND currency_id = 1 then balance + {newAmount}
                                      when id = {to_account_id} AND currency_id = 2 then balance + round({newAmount} / 10.35, 2)
                                 END
-                                WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());    //RIGHT ABOVE HERE IS WHERE CONVERSION IS ACTUALLY BEING MADE
+                                WHERE id IN ({from_account_id}, {to_account_id});
+                                INSERT INTO bank_transaction (name, from_account_id, to_account_id, amount) VALUES ('Överföring', {from_account_id}, {to_account_id}, '{newAmount}');
+                                COMMIT;", new DynamicParameters());    //RIGHT ABOVE HERE IS WHERE CONVERSION IS ACTUALLY BEING MADE
 
                             Console.WriteLine("\nSuccessful transfer");
                         }
@@ -57,12 +146,15 @@ namespace rabbit_bank
                         {
                             string newAmount = amount.ToString(CultureInfo.CreateSpecificCulture("en-GB"));
                             var output = cnn.Query<UserModel>($@"
+                                BEGIN TRANSACTION;
                                 UPDATE bank_account SET balance = CASE
                                      when id = {from_account_id} AND user_id = {user_id} AND currency_id = 2 AND balance >= {newAmount} then balance - {newAmount}
                                      when id = {to_account_id} AND currency_id = 1 then balance + round({newAmount} * 10.35, 2)
                                      when id = {to_account_id} AND currency_id = 2 then balance + {newAmount}
                                 END
-                                WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());
+                                WHERE id IN({from_account_id}, {to_account_id});
+                                INSERT INTO bank_transaction (name, from_account_id, to_account_id, amount) VALUES ('Överföring', {from_account_id}, {to_account_id}, '{newAmount}');
+                                COMMIT;", new DynamicParameters());
                             Console.WriteLine("\nSuccessful transfer");
                         }
                         catch (Npgsql.PostgresException e)
@@ -83,12 +175,15 @@ namespace rabbit_bank
                         {
                             string newAmount = Math.Round(amount, 2).ToString(CultureInfo.CreateSpecificCulture("en-GB"));
                             var output = cnn.Query<UserModel>($@"
+                                BEGIN TRANSACTION;
                                 UPDATE bank_account SET balance = CASE
                                      when id = {from_account_id} AND user_id = {user_id} AND currency_id = 1 AND balance >= {newAmount} then balance - {newAmount}
                                      when id = {to_account_id} AND currency_id = 1 AND user_id = {other_user_id} then balance + {newAmount}
                                      when id = {to_account_id} AND currency_id = 2 AND user_id = {other_user_id} then balance + round({newAmount} / 10.35, 2)
                                 END
-                                WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());
+                                WHERE id IN({from_account_id}, {to_account_id});
+                                INSERT INTO bank_transaction (name, from_account_id, to_account_id, amount) VALUES ('Överföring', {from_account_id}, {to_account_id}, '{newAmount}');
+                                COMMIT;", new DynamicParameters());
 
                             Console.WriteLine("\nSuccessful transfer");
                         }
@@ -106,12 +201,15 @@ namespace rabbit_bank
                         {
                             string newAmount = Math.Round(amount, 2).ToString(CultureInfo.CreateSpecificCulture("en-GB"));
                             var output = cnn.Query<UserModel>($@"
+                                BEGIN TRANSACTION;
                                 UPDATE bank_account SET balance = CASE
                                      when id = {from_account_id} AND user_id = {user_id} AND currency_id = 2 AND balance >= {newAmount} then balance - {newAmount}
                                      when id = {to_account_id} AND currency_id = 1 AND user_id = {other_user_id} then balance + round({newAmount} * 10.35, 2)
                                      when id = {to_account_id} AND currency_id = 2 AND user_id = {other_user_id} then balance + {newAmount}
                                 END
-                                WHERE id IN({from_account_id}, {to_account_id})", new DynamicParameters());
+                                WHERE id IN({from_account_id}, {to_account_id});
+                                INSERT INTO bank_transaction (name, from_account_id, to_account_id, amount) VALUES ('Överföring', {from_account_id}, {to_account_id}, '{newAmount}');
+                                COMMIT;", new DynamicParameters());
                             Console.WriteLine("\nSuccessful transfer");
                         }
                         catch (Npgsql.PostgresException e)
@@ -391,5 +489,48 @@ namespace rabbit_bank
             }
 
         }
+        public static List<AccountModel> getUSDrate()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<AccountModel>("select exchange_rate from bank_currency where id = 2", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+        }
+
+        public static List<TransactionModel> GetTransactionByAccountId(int account_id)
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+
+                var output = cnn.Query<TransactionModel>($"SELECT * FROM bank_transaction WHERE from_account_id = {account_id} OR to_account_id = {account_id} ORDER BY timestamp DESC", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+            // denna funktion ska leta upp användarens konton från databas och returnera dessa som en lista
+            // vad behöver denna funktion för information för att veta vems konto den ska hämta
+            // vad har den för information att tillgå?
+            // vilken typ av sql-query bör vi använda, INSERT, UPDATE eller SELECT?
+            // ...?
+
+        }
+        public static List<TransactionModel> GetTransactionsAll()
+        {
+            using (IDbConnection cnn = new NpgsqlConnection(LoadConnectionString()))
+            {
+
+                var output = cnn.Query<TransactionModel>($"SELECT * FROM bank_transaction ORDER BY timestamp DESC", new DynamicParameters());
+                //Console.WriteLine(output);
+                return output.ToList();
+            }
+            // denna funktion ska leta upp användarens konton från databas och returnera dessa som en lista
+            // vad behöver denna funktion för information för att veta vems konto den ska hämta
+            // vad har den för information att tillgå?
+            // vilken typ av sql-query bör vi använda, INSERT, UPDATE eller SELECT?
+            // ...?
+
+        }
+
     }
 }

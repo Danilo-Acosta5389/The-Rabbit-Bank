@@ -55,8 +55,7 @@ namespace rabbit_bank
                         Console.WriteLine("");
                         break;
                     case "5":
-                        //ToDo: skapa en funktion för användare att låna pengar
-                        Console.WriteLine("");
+                        RunTransferLog(userIndex);
                         break;
 
                     case "6":
@@ -443,7 +442,7 @@ namespace rabbit_bank
 
                     Console.Write("\nPlease input amount: ");
                     decimal amount = decimal.Parse(Console.ReadLine());
-
+                    string logEx = string.Empty;
 
 
                     // ==========BELOW IS THE ALGORITM THAT WILL CONVERT CURRENCY FROM ACCOUNTS ON TRANSFER========
@@ -554,7 +553,7 @@ namespace rabbit_bank
 
                     if (yesNo.ToLower() == "y")
                     {
-                        return DBAccess.TransferMoney(userIndex.id, 0, currencyID, fromAccount, toAccount, amount); // NEW
+                        return DBAccess.TransferMoney(userIndex.id, 0, currencyID, fromAccount, toAccount, amount, logEx); // NEW
 
                         //return DBAccess.TransferMoney(userIndex.id, 0, fromAccount, toAccount, newAmount); OLD
                     }
@@ -681,7 +680,7 @@ namespace rabbit_bank
 
                     //Below loops and if-statemnts check if the 'from' account has SEK or USD currency and then the same with 'To' account.
                     //A conversion is being made if the from account has SEK and the recieving has USD
-
+                    string logEx = string.Empty;
                     int currencyID = 0; //This will determine if FROM SEK or FROM USD 
 
                     for (int i = 0; i < tempCurrList.Count; i++)
@@ -696,20 +695,22 @@ namespace rabbit_bank
                             Console.WriteLine("From account is swedish");
                             currencyID = 1;
 
-                            //for (int j = 0; j < tempIDlist.Count; j++)
-                            //{
-                            //    if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
-                            //    {
-                            //        Console.WriteLine("To account is swedish");
-                            //    }
-                            //    else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
-                            //    {
-                            //Console.WriteLine("To account is american");
-                            //Console.WriteLine($"{convertCurrency(amount, "in sek")}");
-                            //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
-                            //Console.WriteLine("LOOOK HERE! USD");
-                            //}
-                            //}
+                            for (int j = 0; j < tempIDlist.Count; j++)
+                            {
+                                if (toAccount == tempIDlist[j] && tempCurrList[j] == "SEK")
+                                {
+                                    Console.WriteLine("To account is swedish");
+                                }
+                                else if (toAccount == tempIDlist[j] && tempCurrList[j] == "USD")
+                                {
+                                    Console.WriteLine("To account is american");
+                                    //Console.WriteLine($"{convertCurrency(amount, "in sek")}");
+                                    logEx = convertCurrency(amount, "sek");
+                                    Console.WriteLine(logEx);
+                                    //amount = Convert.ToDecimal(convertCurrency(amount, "sek"));
+                                    //Console.WriteLine("LOOOK HERE! USD");
+                                }
+                            }
 
                         }
                         else if (fromAccount == tempIDlist[i] && tempCurrList[i] == "USD")
@@ -734,12 +735,12 @@ namespace rabbit_bank
                             //}
                         }
                     }
-
+                    Console.WriteLine(logEx + " Again");
                     //decimal newAmount = Math.Round(amount, 2);
                     //Console.WriteLine();
                     //Console.WriteLine(Math.Round(amount, 2) + "Will be transfered");
                     //Console.WriteLine();
-                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, currencyID, fromAccount, toAccount, amount); // NEW
+                    return DBAccess.TransferMoney(userIndex.id, userIndex.id, currencyID, fromAccount, toAccount, amount, logEx); // NEW
 
                     //return DBAccess.TransferMoney(userIndex.id, userIndex.id, fromAccount, toAccount, amount);  OLD
                 }
@@ -1085,6 +1086,58 @@ namespace rabbit_bank
 
             }
 
+        }
+
+        public static string convertCurrency(decimal amount, string currencyName)
+        {
+            /*
+            Tar in SEK och konverterar till USD och vice versa
+            10,35 sek = 1 usd
+            returnera resultat för USD till SEK eller från SEK till USD
+
+            Om det förs in 'sek' i 'currency' så blir formeln amount / 10,35. Exempel: 100 / 10,35 = 9,66. 
+            Användaren som för över 100 sek till ett USD konto, USD kontot tar då emot 9,66 dollar.
+
+            Om det förs in 'usd' i istället så blir formeln amount * 10,35 . Exempel: 100 * 10,35 = 1035. 
+            Användaren som för över 100 dollar till SEK konto, SEK kontot tar då emot 1035 kr.
+            */
+
+            //decimal converted_USD_currency = Convert.ToDecimal(USD_currency);
+            decimal usd = GlobalItems.dollarRate[0].exchange_rate;
+            if (currencyName == "sek")
+            {
+                decimal result = amount / usd;
+                return Math.Round(result, 2).ToString(CultureInfo.GetCultureInfo("en-GB"));
+            }
+            else if (currencyName == "usd")
+            {
+                decimal result = amount * usd;
+                return Math.Round(result, 2).ToString(CultureInfo.GetCultureInfo("en-GB"));
+            }
+            else
+            {
+                decimal result = amount * 1;
+                return Math.Round(result, 2).ToString(CultureInfo.GetCultureInfo("en-GB"));
+            }
+
+        }
+
+
+        public static void RunTransferLog(UserModel userIndex)
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Write(" Transfer log ");
+            Console.ResetColor();
+            Console.WriteLine("\n");
+            //Console.WriteLine();
+            var transLog = GlobalItems.TransactionLog;
+            for (int i = 0; i < transLog.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {transLog[i].name} | From: {transLog[i].from_account_id} | To: {transLog[i].to_account_id} | Amount: {transLog[i].amount} | {transLog[i].timestamp.ToString(CultureInfo.GetCultureInfo("sv-SE"))}");
+            }
+            Console.ReadLine();
         }
     }
 }

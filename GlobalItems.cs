@@ -9,7 +9,6 @@ namespace rabbit_bank
 {
     public static class GlobalItems
     {
-
         public static TextInfo currentTextInfo = CultureInfo.CurrentCulture.TextInfo;
         public static List<int> accountsList = new List<int>();
         public static List<string> accountNameList = new List<string>();
@@ -18,6 +17,7 @@ namespace rabbit_bank
         public static List<double> currencyRateList = new List<double>();
         public static List<double> interestRateList = new List<double>();
         public static List<AccountModel> globalAccountsList = DBAccess.GetAllAccountsIdAndCurrency();
-
+        public static List<AccountModel> dollarRate = DBAccess.getUSDrate();
+        public static List<TransactionModel> TransactionLog = DBAccess.GetTransactionsAll();
     }
 }
