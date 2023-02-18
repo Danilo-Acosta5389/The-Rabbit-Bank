@@ -46,8 +46,15 @@ NOTE: Our code uses three nuget packeges, Dapper(2.0.123), Npgsql(7.0.1) and Sys
 -- It is possible that you will need to add the right usings.
 
 ## Overview
-This is a UML diagram showing the general structure of the application:
+This is a UML diagram showing the general structure of the application following the [C4 Model](https://c4model.com/) (we only implemented three C's):
 
+### Level 1: System Context diagram
+##
+![enter image description here](https://user-images.githubusercontent.com/114030611/219856801-5238d5fe-1a63-422b-8e2f-55797c13ebce.svg)
 
-
-
+### Level 2: Container diagram
+##
+![enter image description here](https://user-images.githubusercontent.com/114030611/219856907-21acd1c7-0150-458f-97c6-af13d3930bf8.svg)
+### Level 3: Component diagram
+##
+![enter image description here](https://user-images.githubusercontent.com/114030611/219856910-b9b9ce97-282b-42f6-bbbf-801609f3e29c.svg)
