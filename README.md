@@ -2,7 +2,7 @@
 
 <div align="center">
 <h3>Welcome to the...</h3>
-  <img src="https://user-images.githubusercontent.com/113366808/218892735-1271bacf-6840-467c-800a-dad9bca44308.png">
+  <img src="https://user-images.githubusercontent.com/113366808/218892735-1271bacf-6840-467c-800a-dad9bca44308.png" alt="Rabbit-Bank">
   <h3>project.</h3>
 </div>
 
@@ -60,22 +60,27 @@ NOTE: Our code uses three nuget packeges, Dapper(2.0.123), Npgsql(7.0.1) and Sys
 
 <!-- AGILE PROJECT -->
 ## Agile project
-This project was created using agile project mathod, fokusing mainly on the scrum method. We used a "scrum-board" in order to plan ahead and also a way to track the process of the development and to track what each team member was currently working on. Our scrum-board contained columns in wich they contained "cards", each card representing a backlog or a "story". Going from right to left: Story/Backlog - contained what ever functionality that the client desires, sprint - containing what the team planned to achive in a short period of time, in our case a sprint lasted a week. Doing - what team members were currently working on, up for review - finnished sprints that were up for the client/product owner to review, done - cards that have been accepted by the product owner and are concidered done and deployed.
-There are two more cards following the order, one is daily stand up - where the team members write what they did yesterday, what they are currently working on and what/if they need help with something. And lastly Links and notes, just a place to keep good links, info and thoughts.
+This project was created using agile project mathod, focusing mainly on the scrum method. We used a "scrum-board" in order to plan ahead and also a way to track the process of our development and to track what each of the team member was currently working on. Our scrum-board containes columns in wich they contain "cards", each card representing a backlog or a "story". Going from left to right: Story/Backlog - contained what ever functionality that the client desires, Sprint - containing what the team planned to achive in a short period of time, in our case a sprint lasted a week. Doing - what team members were currently working on, Up for review - finnished sprints that were up for the client/product owner to review and Done - cards that have been accepted by the product owner and are concidered done and deployed.
+There are two more cards following the order, one is Daily stand up - where the team members write what they did the day before, what they are currently working on and what/if they need help with something. And lastly Links and notes, just a place to keep good links, info and thoughts.
 
 Each card was usually divided into smaller tasks, the cards were commented on and descriptions and thoughts were added. 
 
 The team had daily correspondence through slack, and a couple times a week coded together through discord (using screenshare) and/or had physical gatherings.
-Once a week the team met with product owner to check the progress of the project, to show a demo and to talk about how the team was performing and what could improve.
-After thoes meetings, the team would gather and discuss about the progress and improvements, a retrospective was introduced and the team used this to analyze the progress and make improvements for the upcomming week.
+Once a week the team met with the product owner to check the progress of the project, to demo and talk about how the team was performing and what could improve.
+After the meeting the team would gather and discuss about the progress and improvements, retrospective was introduced and the team used this to analyse the progress and make improvements for the upcomming week.
 
-The duration of the project was five week. The first week was a classic "sprint zero" where the team focused heavely on establishing good communication, work routines, version control and creating an enviroment for the project. A scrum master was choosen but only had a necessary role during the first week, the team member had their goals clear for the whole rest of the project from week two and and onward.
+The duration of the project was five weeks. The first week was a classic "sprint zero" where the team focused heavily on establishing good communication, work routines, version control system and creating an enviroment for the project. A scrum master was choosen but only had a necessary role during the first week, the team member had their goals clear for the whole rest of the project from week two and onward.
+All team members contributed with code, changes and commits. Some more than others, whenever someone made a change, the changes where explained to the rest of the team and so discussion could take place.
 
-All team members contributed with code, changes and commits. Some more than others, whenever someone made a change there was a presentation for the rest of the team.
-The scrum-method proved to be a very efficient way of working.
+The scrum-method proved to be a very efficient way for working as a team and helped make integration of code and deployment more continues.
 
-The project is not fully finnished, and might never be, however this excercise was a good way to learn how to work as a team using agile work method and scrum.
+The project is not fully finnished and it might never be, however this excercise was a good way to learn how to work as a team using agile work method and scrum.
+</br>
 
+<div align="center">
 <a href="https://trello.com/b/8vWkyY4a" align="center">Link to Team Rabbits scrum-board</a>
-
-<img src="https://user-images.githubusercontent.com/113366808/219974425-181f1930-ee2a-46d9-adf2-182911c65fe9.png" align="center" height="300" width="450">
+</div>
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/113366808/219974425-181f1930-ee2a-46d9-adf2-182911c65fe9.png" height="300"      width="450" alt="picture of scrum board in Trello">
+  <p>(Observe! Some parts may be written in swedish)</p>
+</div>
