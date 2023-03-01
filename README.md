@@ -14,7 +14,7 @@
   This was an agile group project (or exercise if you will) using mainly the scrum method.
   </p>
   <BR CLEAR=”left” />
-  <img src="https://user-images.githubusercontent.com/113366808/219718325-d25dd1a3-6030-4d81-8170-1c78bc9be229.gif" height="328" width="515" align="right">
+  <img src="https://user-images.githubusercontent.com/113366808/219718325-d25dd1a3-6030-4d81-8170-1c78bc9be229.gif" height="228" width="415" align="right">
 
 All creds to all five collaborators:</br>
 Rickard, <a href="https://github.com/rieerep">"Rieerep"</a></br> 
